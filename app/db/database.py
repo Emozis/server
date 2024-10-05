@@ -1,44 +1,24 @@
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import Column, Integer, String
 
-from ..core import settings, setup_logger
+DATABASE_URL = "postgresql+asyncpg://user:password@localhost/dbname"
 
-logger = setup_logger()
+# SQLAlchemy 비동기 엔진 생성
+engine = create_async_engine(DATABASE_URL, echo=True)
 
-DATABASE_URL = settings.database_url
-DROP_TABLE = settings.drop_table
+# SessionMaker 생성
+AsyncSessionLocal = sessionmaker(
+    autocommit=False, autoflush=False, bind=engine, class_=AsyncSession
+)
 
-db_name = DATABASE_URL.split('/')[-1].split('?')[0]
-
-base_db_url = DATABASE_URL.rsplit('/', 1)[0]
-
-engine = create_engine(base_db_url)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Base 클래스 선언
 Base = declarative_base()
 
-def create_database():
-    with engine.connect() as connection:
-        connection.execute(text(f"CREATE DATABASE IF NOT EXISTS {db_name}"))
+# 예시 모델
+class User(Base):
+    __tablename__ = "users"
 
-def create_schema():
-    global engine
-    engine = create_engine(DATABASE_URL)
-    SessionLocal.configure(bind=engine)
-    with engine.connect() as connection:
-        connection.execute(text(f"CREATE SCHEMA IF NOT EXISTS {db_name}"))
-
-def drop_tables():
-    if DROP_TABLE:
-        logger.info("📌 Dropping all tables in the database.")
-        Base.metadata.drop_all(bind=engine)
-
-def create_tables():
-    Base.metadata.create_all(bind=engine)
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    email = Column(String, unique=True, index=True)

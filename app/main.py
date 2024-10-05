@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core import lifespan, SwaggerConfig
-from app.api.v1 import auth_router, user_router, character_router, chat_router, etc_router, chat_log_router, chatting_router, default_image_router, relation_router
+# from app.api.v1 import auth_router, user_router, character_router, chat_router, etc_router, chat_log_router, chatting_router, default_image_router, relation_router
 
 swagger_config = SwaggerConfig()
 config = swagger_config.get_config()
@@ -26,15 +26,15 @@ app.add_middleware(
 )
 
 # Including API routers
-app.include_router(auth_router.router)
-app.include_router(user_router.router)
-app.include_router(character_router.router)
-app.include_router(chat_router.router)
-app.include_router(chat_log_router.router)
-app.include_router(chatting_router.router)
-app.include_router(default_image_router.router)
-app.include_router(relation_router.router)
-app.include_router(etc_router.router)
+# app.include_router(auth_router.router)
+# app.include_router(user_router.router)
+# app.include_router(character_router.router)
+# app.include_router(chat_router.router)
+# app.include_router(chat_log_router.router)
+# app.include_router(chatting_router.router)
+# app.include_router(default_image_router.router)
+# app.include_router(relation_router.router)
+# app.include_router(etc_router.router)
 
 
 if __name__ == "__main__":
