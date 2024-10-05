@@ -20,6 +20,7 @@ class Database:
         self.Base = declarative_base()
 
     async def create_database(self):
+        """데이터베이스가 없으면 새로운 데이터베이스를 생성하는 함수"""
         db_name = settings.db_name
         conn = await asyncpg.connect(user=settings.db_user, password=settings.db_password, host=settings.db_host, port=settings.db_port, database='postgres')
 
@@ -35,40 +36,46 @@ class Database:
         self.engine = create_async_engine(self.database_url, echo=self.echo)
 
     async def init_db(self):
-        """Initialize the database by creating all tables."""
+        """모든 테이블을 생성하여 데이터베이스 초기화"""
         async with self.engine.begin() as conn:
             await conn.run_sync(self.Base.metadata.create_all)
     
-    async def execute_sql_file(self):
+    async def clear_all_tables(self):
+        """모든 테이블의 데이터를 삭제하는 함수"""
+        async with self.engine.begin() as conn:
+            for table in reversed(self.Base.metadata.sorted_tables):
+                await conn.execute(text(f"TRUNCATE TABLE {table.name} RESTART IDENTITY CASCADE"))
+            logger.info("🗑️  Cleared all data from all tables.")
+
+    async def execute_sql_file(self, sql_folder_path: str):
         """주어진 SQL 파일을 읽어 SQL 문을 실행하는 함수."""
         try:
-            base_dir = Path(__file__).resolve().parent
-            sql_folder_path = base_dir.parent / 'resources' / 'sql'
+            base_dir = Path.cwd()
+            sql_folder_path = base_dir / sql_folder_path
 
             sql_files = list(sql_folder_path.glob('*.sql'))
 
             if any(sql_files):
-                for file_path in sql_files:
-                    if file_path.exists():
-                        sql_script = file_path.read_text(encoding='utf-8')
+                async with self.engine.begin() as conn:
+                    for file_path in sql_files:
+                        if file_path.exists():
+                            sql_script = file_path.read_text(encoding='utf-8')
 
-                        sql_statements = sql_script.split(';')
+                            sql_statements = sql_script.split(';')
 
-                        async with self.engine.begin() as conn:
                             for statement in sql_statements:
                                 statement = statement.strip()
                                 if statement:
                                     await conn.execute(text(statement))
                                     logger.debug(f"Executed: {statement}")
-
-                            logger.info(f"✅ SQL script from '{file_path}' executed successfully.")
+                logger.info(f"✅ All SQL scripts in '{sql_folder_path}' executed successfully.")
             else:
                 logger.warning(f"⚠️  No SQL files found in '{sql_folder_path}'.")
         except Exception as e:
             logger.warning(f"⚠️  Error executing SQL file: {str(e.orig).splitlines()[0]}")
 
     async def get_db(self):
-        """Yield a database session."""
+        """데이터베이스 세션을 반환하는 함수"""
         async with self.AsyncSessionLocal() as session:
             yield session
 
