@@ -6,7 +6,6 @@ from . import logger
 class Settings(BaseSettings):
     # DATABASE
     database_url: str
-    drop_table: bool
 
     model_config = ConfigDict(
         env_file=".env",
@@ -15,10 +14,11 @@ class Settings(BaseSettings):
 
     @classmethod
     def load_and_validate(cls):
+        global settings
         try:
             settings = cls()
             logger.info("📌 Settings loaded successfully.")
-            return settings
+            return True
         except ValidationError as e:
             logger.error("❌ Error loading settings:")
 
@@ -30,3 +30,5 @@ class Settings(BaseSettings):
                 component_list.append(f"- `{loc}`: {msg}")
             
             raise e
+
+settings = Settings() if Settings.load_and_validate() else None

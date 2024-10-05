@@ -1,15 +1,13 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-import signal, os
 
-from . import Settings
+from ..db import init_db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        settings = Settings.load_and_validate()
-        app.state.settings = settings
-        
+        await init_db()
+
         yield
-    except:
-        os.kill(os.getpid(), signal.SIGTERM)
+    except Exception as e:
+        print(f"Error during startup: {e}")
