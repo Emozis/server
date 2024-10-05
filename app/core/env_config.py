@@ -5,7 +5,12 @@ from . import logger
 
 class Settings(BaseSettings):
     # DATABASE
-    database_url: str
+    # database_url: str
+    db_user: str
+    db_password: str
+    db_host: str
+    db_port: str
+    db_name: str
 
     model_config = ConfigDict(
         env_file=".env",

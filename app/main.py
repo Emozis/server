@@ -36,6 +36,7 @@ app.add_middleware(
 # app.include_router(relation_router.router)
 # app.include_router(etc_router.router)
 
+from .models import User
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from ..db import init_db
+from ..db import db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        await init_db()
+        await db.create_database()
+        # await db.init_db()
 
         yield
     except Exception as e:
