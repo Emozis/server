@@ -7,7 +7,8 @@ from ..db import db
 async def lifespan(app: FastAPI):
     try:
         await db.create_database()
-        # await db.init_db()
+        await db.init_db()
+        await db.execute_sql_file()
 
         yield
     except Exception as e:

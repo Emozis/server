@@ -3,8 +3,8 @@ from enum import Enum
 # users.py
 class UserGenderEnum(Enum):
     male = "male"
-    FEMALE = "female"
-    OTHER = "other"
+    female = "female"
+    other = "other"
 
 # charaters.py
 class CharacterGenderEnum(Enum):
