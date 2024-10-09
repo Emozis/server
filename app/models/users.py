@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String, DateTime, Enum
+from sqlalchemy import Boolean, Column, String, DateTime, Enum, BigInteger
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
@@ -9,7 +9,7 @@ from .enums import UserGenderEnum
 class User(db.Base):
     __tablename__ = "users"
 
-    user_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(BigInteger, primary_key=True, autoincrement=True)
     user_email = Column(String(255), unique=True, nullable=True)
     user_password = Column(String(255))
     user_name = Column(String(255))

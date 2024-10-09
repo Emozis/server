@@ -8,8 +8,8 @@ from ..db import db
 async def lifespan(app: FastAPI):
     try:
         await db.create_database()
-        await db.clear_all_tables()
         await db.init_db()
+        await db.clear_all_tables()
         await db.execute_sql_file(constants.SQL_FOLDER_PATH)
 
         yield

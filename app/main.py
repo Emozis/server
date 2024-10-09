@@ -36,7 +36,7 @@ app.add_middleware(
 # app.include_router(relation_router.router)
 # app.include_router(etc_router.router)
 
-from .models import User
+from .models import User, Character, CharacterRelationship, Relationship, DefaultImages, Chat, ChatLog
 
 if __name__ == "__main__":
     import uvicorn
