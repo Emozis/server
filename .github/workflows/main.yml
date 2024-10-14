@@ -1,8 +1,8 @@
 name: CI/CD Pipeline
 
 env:
-  IMAGE_NAME: persona-ai-app
-  CONTAINER_NAME: persona-ai-app
+  IMAGE_NAME: emogi-app
+  CONTAINER_NAME: emogi-app
 
 on:
   push:
@@ -44,17 +44,15 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            podman login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} docker.io
-
             # Pull the latest image
-            podman pull docker.io/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Stop and remove the existing container
-            podman stop ${{ env.CONTAINER_NAME }} || true
-            podman rm ${{ env.CONTAINER_NAME }} || true
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
 
             # Run the new container
-            podman run -d --name ${{ env.CONTAINER_NAME }} -p 7070:8000 -v /root/security/persona-app/.env:/app/.env -e TZ=Asia/Seoul docker.io/${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            docker run -d --name ${{ env.CONTAINER_NAME }} -p 8100:8000 -v /home/isakin/project/emogi/.env:/app/.env -e TZ=Asia/Seoul ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             # Clean up unused Docker images
-            podman image prune -af
+            docker image prune -af
