@@ -1,24 +1,56 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from sqlalchemy.orm import Session
 
-from ..models import User
-from ..db import get_db
+from ..models.users import User
+from ..schemas.user import UserUpdate
 
-app = FastAPI()
+# select
+def get_all_users(db: Session) -> list[User]:
+    return db.query(User).all()
 
-# 사용자를 생성하는 API
-@app.post("/users/")
-async def create_user(name: str, email: str, db: AsyncSession = Depends(get_db)):
-    new_user = User(name=name, email=email)
-    db.add(new_user)
-    await db.commit()  # 비동기식 데이터베이스 커밋
-    await db.refresh(new_user)  # 비동기식 세션 새로고침
-    return {"id": new_user.id, "name": new_user.name, "email": new_user.email}
+def get_user_by_id(user_id: int, db: Session) -> User:
+    return db.query(User).filter(
+        User.user_id == user_id,
+        User.user_is_active == True
+        ).first()
 
-# 사용자 목록을 조회하는 API
-@app.get("/users/")
-async def read_users(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(User))  # 비동기식 쿼리 실행
-    users = result.scalars().all()
-    return users
+def get_user_by_email(email: str, db: Session) -> User:
+    return db.query(User).filter(
+        User.user_email == email,
+        User.user_is_active == True
+        ).first()
+
+# update
+def update_user_by_id(user_id: int, user_data: UserUpdate, db: Session) -> User:
+    user_to_update = db.query(User).filter(
+        User.user_id == user_id,
+        User.user_is_active == True
+        ).first()
+    if user_to_update:
+        for attr, value in vars(user_data).items():
+            if value is not None and attr != "_sa_instance_state":
+                setattr(user_to_update, attr, value)
+        db.commit()
+        return user_to_update
+    return None
+
+# delete
+def delete_user_by_id(user_id: int, db: Session) -> bool:
+    user_to_delete = db.query(User).filter(User.user_id == user_id).first()
+    if user_to_delete:
+        db.delete(user_to_delete)
+        db.commit()
+        return True
+    return False
+
+# deactivate
+def deactivate_user_by_id(user_id: int, db: Session):
+    user_to_deactivate = db.query(User).filter(
+        User.user_id == user_id,
+        User.user_is_active == True
+        ).first()
+    if user_to_deactivate:
+        user_to_deactivate.user_is_active = False
+        user_to_deactivate.user_email = None
+        db.commit()
+        return user_to_deactivate
+    return None
