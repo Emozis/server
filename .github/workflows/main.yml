@@ -60,3 +60,4 @@ jobs:
 
             # Clean up unused Docker images
             docker image prune -af
+
