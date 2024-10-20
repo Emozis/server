@@ -49,6 +49,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             # Pull the latest image
+            echo ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
 
             # Stop and remove the existing container
