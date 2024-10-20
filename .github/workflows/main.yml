@@ -30,7 +30,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha::7 }}
 
   deploy-to-server:
     needs: build-and-push
@@ -45,14 +45,14 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             # Pull the latest image
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha::7 }}
 
             # Stop and remove the existing container
-            docker stop ${{ env.CONTAINER_NAME }} || true
-            docker rm ${{ env.CONTAINER_NAME }} || true
+            sudo docker stop ${{ env.CONTAINER_NAME }} || true
+            sudo docker rm ${{ env.CONTAINER_NAME }} || true
 
             # Run the new container
-            docker run -d --name ${{ env.CONTAINER_NAME }} -p 8100:8000 -v /home/isakin/project/emogi/.env:/app/.env -e TZ=Asia/Seoul ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            sudo docker run -d --name ${{ env.CONTAINER_NAME }} -p 8100:8000 -v /home/isakin/project/emogi/.env:/app/.env -e TZ=Asia/Seoul ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha::7 }}
 
             # Clean up unused Docker images
-            docker image prune -af
+            sudo docker image prune -af
