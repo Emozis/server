@@ -31,6 +31,7 @@ async def authenticate_user(websocket: WebSocket, db: Session) -> User:
     try:
         auth_message = await websocket.receive_text()
         auth_data = AuthMessage(**json.loads(auth_message))
+        print(auth_data)
 
         if auth_data.type != "auth" or not auth_data.token:
             raise HTTPException(status_code=1008, detail="Authentication failed: Invalid authentication type or missing token")
@@ -42,7 +43,6 @@ async def authenticate_user(websocket: WebSocket, db: Session) -> User:
     except json.JSONDecodeError:
         raise HTTPException(status_code=1008, detail="Authentication failed: Invalid JSON format")
     except HTTPException as e:
-        print(e)
         raise HTTPException(status_code=1008, detail=f"Token validation failed: {e.detail}")
     except Exception as e:
         raise HTTPException(status_code=1008, detail=f"Authentication failed: {str(e)}")
