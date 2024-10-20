@@ -49,14 +49,14 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             # Pull the latest image
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
 
             # Stop and remove the existing container
-            sudo docker stop ${{ env.CONTAINER_NAME }} || true
-            sudo docker rm ${{ env.CONTAINER_NAME }} || true
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
 
             # Run the new container
-            sudo docker run -d --name ${{ env.CONTAINER_NAME }} -p 8100:8000 -v /home/isakin/project/emogi/.env:/app/.env -e TZ=Asia/Seoul ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
+            docker run -d --name ${{ env.CONTAINER_NAME }} -p 8100:8000 -v /home/isakin/project/emogi/.env:/app/.env -e TZ=Asia/Seoul ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.SHORT_SHA }}
 
             # Clean up unused Docker images
-            sudo docker image prune -af
+            docker image prune -af
