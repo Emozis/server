@@ -28,6 +28,15 @@ class UserNotFoundException(CustomException):
             details={"user_id": user_id}
         )
 
+class UserConflictException(CustomException):
+    def __init__(self, user_email: str):
+        super().__init__(
+            status_code=409,
+            message="이미 존재하는 이메일입니다.",
+            code="EMAIL_CONFLICT",
+            details={"email": user_email}
+        )
+
 class InternalServerError(CustomException):
     def __init__(self, error: Exception):
         super().__init__(

@@ -1,1 +1,1 @@
-from .exceptions import UserNotFoundException, InternalServerError
+from .exceptions import UserNotFoundException, UserConflictException, InternalServerError

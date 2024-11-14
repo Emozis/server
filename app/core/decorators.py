@@ -13,5 +13,5 @@ def handle_exceptions(func):
             raise he
         except Exception as e:
             logger.error(f"❌ Internal server error: {str(e)}")
-            raise InternalServerError()
+            raise InternalServerError(e)
     return wrapper
