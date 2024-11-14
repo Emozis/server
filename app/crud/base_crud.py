@@ -39,7 +39,7 @@ class BaseCRUD(Generic[ModelType]):
         Args:
             id: 조회할 레코드의 ID
         """
-        return self.db.query(self.model).filter(self.model.user_id == id).first()
+        return self.db.query(self.model).filter(getattr(self.model, self.id_field) == id).first()
 
     def update(self, id: int, instance: ModelType) -> Optional[ModelType]:
         """

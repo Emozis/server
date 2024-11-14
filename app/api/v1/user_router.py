@@ -1,25 +1,28 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 
-from app.core.dependencies import get_db
-from app.services.user_service import UserService
+from app.core import handle_exceptions, UserServiceDep
+from app.schemas import UserCreate, ErrorResponse
+
 
 router = APIRouter(
     prefix="/api/v1/user",
     tags=["User"]
 )
 
-@router.get("/")
-async def read_users(db: Session = Depends(get_db)):
+@router.post("/")
+@handle_exceptions
+async def create_users(user: UserCreate, user_service: UserServiceDep):
     """새로운 유저 생성 엔드포인트"""
-    try:
-        user_service = UserService(db)
-        user = user_service.create_user()
-        return user
-    except HTTPException as he:
-        raise he
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Internal server error: {str(e)}"
-        )
+    user = user_service.create_user(user)
+    return user
+
+@router.get(
+        path="/{user_id}",
+        responses={
+            404: {"model": ErrorResponse, "description": "User not found"},
+            500: {"model": ErrorResponse, "description": "Internal server error"}
+        }
+    )
+@handle_exceptions
+async def read_users(user_id: int, user_service: UserServiceDep):
+    return user_service.get_user_id(user_id)
