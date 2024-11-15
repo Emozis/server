@@ -1,5 +1,5 @@
 from fastapi_camelcase import CamelModel
 
 
-class LoginGoogleIdToken(CamelModel):
+class LoginGoogleRequest(CamelModel):
     id_token: str

@@ -1,12 +1,12 @@
 from .base_exception import BaseException
 
 class UserNotFoundException(BaseException):
-    def __init__(self, user_id: int):
+    def __init__(self, user_id: int = None, user_email: str = None):
         super().__init__(
             status_code=404,
             message="사용자를 찾을 수 없습니다.",
             code="USER_NOT_FOUND",
-            details={"user_id": user_id}
+            details={"user_id": user_id, "user_email": user_email}
         )
 
 class UserConflictException(BaseException):

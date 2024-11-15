@@ -16,6 +16,12 @@ def create_app() -> FastAPI:
         lifespan=lifespan
     )
 
+    app.swagger_ui_init_oauth = {
+        "usePkceWithAuthorizationCodeGrant": True,
+        "clientId": "admin",
+        "clientSecret": "1234"
+    }
+
     router_scanner = RouterScanner(app)
     router_scanner.scan_and_register_routers()
 

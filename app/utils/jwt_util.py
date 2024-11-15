@@ -22,10 +22,8 @@ class JwtUtil:
 
     @staticmethod
     def verify_token(token: str) -> int:
-        token = token.split(' ')[1]
-
         try:
-            payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
+            payload = jwt.decode(token, key=settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
             user_id: str = payload.get("sub")
             if user_id is None:
                 raise JWTError
@@ -34,5 +32,5 @@ class JwtUtil:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token",
-                headers={"WWW-Authenticate": "Bearer"},
+                headers={"WWW-Authenticate": "Bearer"}
             )

@@ -1,7 +1,8 @@
 from .error_schema import ErrorResponse
 from .message_response import MessageResponse
 
-from .auth.google_login_request import LoginGoogleIdToken
+from .auth.login_request import LoginRequest
+from .auth.login_google_request import LoginGoogleRequest
 from .auth.login_response import LoginResponse
 
 from .user.create_user_request import UserCreate

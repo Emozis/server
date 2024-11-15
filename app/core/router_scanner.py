@@ -36,5 +36,5 @@ class RouterScanner:
                 if isinstance(router, APIRouter):
                     # 라우터 등록
                     prefix = f"{self.api_prefix}/{version}"
-                    self.app.include_router(router, prefix=prefix)
+                    self.app.include_router(router)
                     logger.info(f"🚀 Registered router: {module_info.name} with prefix {prefix}")

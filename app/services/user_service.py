@@ -5,6 +5,7 @@ from ..crud import UserCRUD
 from ..models import User
 from ..mappers import UserMapper
 from ..schemas import UserCreate, UserUpdate, UserResponse
+from ..utils import password_hasher
 from ..exceptions import (
     UserNotFoundException, 
     UserConflictException
@@ -26,6 +27,9 @@ class UserService:
         if existing_user:
             logger.warning(f"❌ Email already exists: {user.user_email}")
             raise UserConflictException(user.user_email)
+        
+        if user.user_password:
+            user.user_password = password_hasher.hash_password(user.user_password)
         
         return self.user_crud.create(UserMapper.user_create_to_model(user))
 
