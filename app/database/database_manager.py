@@ -11,11 +11,11 @@ from ..database.base import Base
 
 class DatabaseManager:
     def __init__(self):
-        self.host = settings.postgres_host
-        self.port = settings.postgres_port
-        self.db_name = settings.postgres_db
-        self.user = settings.postgres_user
-        self.password = settings.postgres_password
+        self.host = settings.POSTGRES_HOST
+        self.port = settings.POSTGRES_PORT
+        self.db_name = settings.POSTGRES_DB
+        self.user = settings.POSTGRES_USER
+        self.password = settings.POSTGRES_PASSWORD
 
         self.Base = Base
         self.engine = None

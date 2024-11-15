@@ -1,25 +1,6 @@
-from fastapi import HTTPException
-from datetime import datetime
+from .base_exception import BaseException
 
-class CustomException(HTTPException):
-    def __init__(
-        self, 
-        status_code: int,
-        message: str,
-        code: str,
-        details: dict = None
-    ):
-        super().__init__(
-            status_code=status_code,
-            detail={
-                "message": message,
-                "code": code,
-                "timestamp": datetime.now().isoformat(),
-                "details": details
-            }
-        )
-
-class UserNotFoundException(CustomException):
+class UserNotFoundException(BaseException):
     def __init__(self, user_id: int):
         super().__init__(
             status_code=404,
@@ -28,7 +9,7 @@ class UserNotFoundException(CustomException):
             details={"user_id": user_id}
         )
 
-class UserConflictException(CustomException):
+class UserConflictException(BaseException):
     def __init__(self, user_email: str):
         super().__init__(
             status_code=409,
@@ -37,7 +18,7 @@ class UserConflictException(CustomException):
             details={"email": user_email}
         )
 
-class InternalServerError(CustomException):
+class InternalServerError(BaseException):
     def __init__(self, error: Exception):
         super().__init__(
             status_code=500,

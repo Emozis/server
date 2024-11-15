@@ -5,12 +5,21 @@ from . import logger
 
 class Settings(BaseSettings):
     # DATABASE
-    postgres_host: str
-    postgres_port: str
-    postgres_db: str
-    postgres_user: str
-    postgres_password: str
+    POSTGRES_HOST: str
+    POSTGRES_PORT: str
+    POSTGRES_DB: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
 
+    #JWT
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int
+
+    # GOOGLE LOGIN
+    GOOGLE_CLIENT_ID: str
+    GOOGLE_CLIENT_SECRET: set
+    
     model_config = ConfigDict(
         env_file=".env",
         env_file_encoding='utf-8'
