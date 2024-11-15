@@ -20,8 +20,7 @@ router = APIRouter(
 @handle_exceptions
 async def create_user(user: UserCreate, user_service: UserServiceDep):
     """새로운 유저 생성 엔드포인트"""
-    user = user_service.create_user(user)
-    return user
+    return user_service.create_user(user)
 
 @router.get(
         path="/{user_id}",

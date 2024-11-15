@@ -18,7 +18,7 @@ class Settings(BaseSettings):
 
     # GOOGLE LOGIN
     GOOGLE_CLIENT_ID: str
-    GOOGLE_CLIENT_SECRET: set
+    GOOGLE_CLIENT_SECRET: str
     
     model_config = ConfigDict(
         env_file=".env",

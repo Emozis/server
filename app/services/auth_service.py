@@ -2,11 +2,11 @@ from sqlalchemy.orm import Session
 
 from ..core import logger
 from ..crud import UserCRUD
-from ..services import UserService
 from ..schemas import UserCreate, UserResponse, LoginResponse
 from ..utils import decode_id_token, JwtUtil
 from ..mappers import UserMapper
 from ..exceptions import auth_exceptions
+from .user_service import UserService
 
 
 class AuthService:
@@ -25,7 +25,7 @@ class AuthService:
 
         return user
     
-    def _login(self, user: UserCreate):
+    def _login(self, user: UserCreate) -> LoginResponse:
         existing_user = self.user_service.get_user_by_email(user.user_email)
         if existing_user:
             user = existing_user
@@ -41,18 +41,26 @@ class AuthService:
         response = {
             "status": status,
             "message": message,
-            "user": user,
+            "user": {
+                "user_id": user.user_id,
+                "user_email": user.user_email,
+                "user_name": user.user_name,
+                "user_profile": user.user_profile
+            },
             "access_token": JwtUtil.create_access_token(user.user_id)
         }
         return LoginResponse(**response)
     
-    def login_google(self, id_token: str):
+    def login_google(self, id_token: str) -> LoginResponse:
         google_user = decode_id_token(id_token)
         if not google_user:
             raise auth_exceptions.InvalidGoogleTokenException(id_token)
         
         return self._login(google_user)
     
-    def login_test(self):
+    def login_test(self) -> LoginResponse:
         test_user = UserCreate(user_email="test@example.com", user_password="test", user_name="Test User", user_profile="test.jpg")
         return self._login(test_user)
+    
+    def decode_token(self, token: str) -> int:
+        return JwtUtil.verify_token(token)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.core import handle_exceptions, UserServiceDep
-from app.schemas import UserCreate, UserUpdate, UserResponse, ErrorResponse, MessageResponse
+from app.core import handle_exceptions, AuthServiceDep
+from app.schemas import LoginGoogleIdToken
 
 
 router = APIRouter(
@@ -13,8 +13,21 @@ router = APIRouter(
     path="/login/google/id-token",
     description="구글 로그인시 발급되는 id-token을 사용하여 인증합니다."
     )
-async def auth_google_token(data: auth_request_schema.LoginGoogleIdToken, db: Session = Depends(get_db)):
-    response = AuthService.auth_google_id_token(data.id_token, db)
-    logger.info(f"📌 return access token - {response['access_token']}")
+@handle_exceptions
+async def login_goole(data: LoginGoogleIdToken, auth_service: AuthServiceDep):
+    return auth_service.login_google(data.id_token)
 
-    return response
+@router.post(
+    path="/token/test",
+    description="테스트용 access-token을 반환합니다."
+    )
+async def login_test(auth_service: AuthServiceDep):
+    return auth_service.login_test()
+
+@router.get(
+    path="/token",
+    description="발급된 access-token에서 사용자 정보를 반환합니다."
+    )
+async def get_user_info_from_token(auth_service: AuthServiceDep):
+    auth_service.decode_token()
+    return {"user_id": "aaaa", "message": "This is a protected route"}
