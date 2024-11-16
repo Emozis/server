@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 
-from app.core import handle_exceptions, UserServiceDep
-from app.schemas import UserCreate, UserUpdate, UserResponse, ErrorResponse, MessageResponse
+from app.core import handle_exceptions
+from app.core.dependencies import CurrentUser, UserServiceDep
+from app.schemas import UserUpdate, UserResponse, ErrorResponse
 
 
 router = APIRouter(
@@ -9,69 +10,9 @@ router = APIRouter(
     tags=["User"]
 )
 
-@router.post(
-        path="/",
-        responses={
-            200: {"model": UserResponse, "description": "Successful Response"},
-            409: {"model": ErrorResponse, "description": "User already exists"},
-            500: {"model": ErrorResponse, "description": "Internal server error"}
-        }
-        )
-@handle_exceptions
-async def create_user(user: UserCreate, user_service: UserServiceDep):
-    """새로운 유저 생성 엔드포인트"""
-    return user_service.create_user(user)
-
 @router.get(
-        path="/{user_id}",
-        responses={
-            200: {"model": UserResponse, "description": "Successful Response"},
-            404: {"model": ErrorResponse, "description": "User not found"},
-            500: {"model": ErrorResponse, "description": "Internal server error"}
-        }
-    )
-@handle_exceptions
-async def read_user_by_id(user_id: int, user_service: UserServiceDep):
-    return user_service.get_user_by_id(user_id)
-
-@router.get(
-        path="/email/{user_email}",
-        responses={
-            200: {"model": UserResponse, "description": "Successful Response"},
-            404: {"model": ErrorResponse, "description": "User not found"},
-            500: {"model": ErrorResponse, "description": "Internal server error"}
-        }
-    )
-@handle_exceptions
-async def read_user_by_email(user_email: str, user_service: UserServiceDep):
-    return user_service.get_user_by_email(user_email)
-
-@router.put(
-        path="/{user_id}",
-        responses={
-            200: {"model": UserResponse, "description": "Successful Response"},
-            500: {"model": ErrorResponse, "description": "Internal server error"}
-        }
-    )
-@handle_exceptions
-async def update_user(user_id: int, user: UserUpdate, user_service: UserServiceDep):
-    return user_service.update_user(user_id, user)
-
-@router.delete(
-    path="/{user_id}",
-    responses={
-        200: {"model": bool, "description": "Successful Response"},
-        404: {"model": ErrorResponse, "description": "User not found"},
-        500: {"model": ErrorResponse, "description": "Internal server error"}
-    }
-)
-@handle_exceptions
-async def delete_user(user_id: int, user_service: UserServiceDep):
-    """사용자 삭제 엔드포인트"""
-    return user_service.delete_user_by_id(user_id)
-
-@router.patch(
-    path="/{user_id}/deactivate",
+    path="/me",
+    description="현재 로그인된 유저 정보를 조회합니다.",
     responses={
         200: {"model": UserResponse, "description": "Successful Response"},
         404: {"model": ErrorResponse, "description": "User not found"},
@@ -79,6 +20,31 @@ async def delete_user(user_id: int, user_service: UserServiceDep):
     }
 )
 @handle_exceptions
-async def deactivate_user(user_id: int, user_service: UserServiceDep):
+async def read_user_by_id(user_id: CurrentUser, user_service: UserServiceDep):
+    return user_service.get_user_by_id(user_id)
+
+@router.put(
+    path="/me",
+    description="현재 로그인된 유저 정보를 업데이트합니다.",
+    responses={
+        200: {"model": UserResponse, "description": "Successful Response"},
+        500: {"model": ErrorResponse, "description": "Internal server error"}
+    }
+)
+@handle_exceptions
+async def update_user(user_id: CurrentUser, user: UserUpdate, user_service: UserServiceDep):
+    return user_service.update_user(user_id, user)
+
+@router.patch(
+    path="/me/deactivate",
+    description="현재 로그인된 유저를 비활성화합니다.(탈퇴)",
+    responses={
+        200: {"model": UserResponse, "description": "Successful Response"},
+        404: {"model": ErrorResponse, "description": "User not found"},
+        500: {"model": ErrorResponse, "description": "Internal server error"}
+    }
+)
+@handle_exceptions
+async def deactivate_user(user_id: CurrentUser, user_service: UserServiceDep):
     """사용자 비활성화 엔드포인트"""
     return user_service.deactivate_user_by_id(user_id)

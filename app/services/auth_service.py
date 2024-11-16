@@ -65,7 +65,7 @@ class AuthService:
         logger.info(f"✅ login complete! - id: {user.user_id}, name: {user.user_name}")
         return self._make_auth_respone(status, message, user)
     
-    def login_id_password(self, request: LoginRequest):
+    def login_id_password(self, request: LoginRequest) -> LoginResponse:
         existing_user = self.user_crud.get_user_by_email(request.user_email)
         if not existing_user:
             raise user_exceptions.UserNotFoundException(user_email=request.user_email)
@@ -74,7 +74,6 @@ class AuthService:
             raise auth_exceptions.InvalidPasswordException()
 
         return self._make_auth_respone(status="success", message="로그인에 성공하였습니다.", user=existing_user)
-
     
     def login_google(self, id_token: str) -> LoginResponse:
         google_user = decode_id_token(id_token)
