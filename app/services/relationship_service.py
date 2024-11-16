@@ -2,17 +2,31 @@ from sqlalchemy.orm import Session
 
 from ..core import logger
 from ..crud import UserCRUD
+from ..models import User
 from ..mappers import UserMapper
-from ..schemas import UserUpdate, UserResponse, MessageResponse
+from ..schemas import UserCreate, UserUpdate, UserResponse
+from ..utils import password_hasher
 from ..exceptions import (
-    UserNotFoundException
+    UserNotFoundException, 
+    UserConflictException
 )
 
 
-class UserService:
+class RelationshipService:
     def __init__(self, db: Session):
         self.db = db
         self.user_crud = UserCRUD(db)
+
+    def create_user(self, user: UserCreate) -> User:
+        existing_user = self.user_crud.get_user_by_email(user.user_email)
+        if existing_user:
+            logger.warning(f"❌ Email already exists: {user.user_email}")
+            raise UserConflictException(user.user_email)
+        
+        if user.user_password:
+            user.user_password = password_hasher.hash_password(user.user_password)
+        
+        return self.user_crud.create(UserMapper.user_create_to_model(user))
 
     def get_user_by_id(self, user_id: int) -> UserResponse:
         """
@@ -24,7 +38,7 @@ class UserService:
         Raises:
             UserNotFoundException: 사용자를 찾을 수 없는 경우
         """
-        user = self.user_crud.get_active_user_by_id(user_id)
+        user = self.user_crud.get_by_id(user_id)
         if not user:
             logger.warning(f"❌ Failed to find user with id {user_id}")
             raise UserNotFoundException(user_id)
@@ -40,7 +54,7 @@ class UserService:
         Raises:
             UserNotFoundException: 사용자를 찾을 수 없는 경우
         """
-        user = self.user_crud.get_active_user_by_email(user_email)
+        user = self.user_crud.get_user_by_email(user_email)
         if not user:
             logger.warning(f"❌ Failed to find user with email {user_email}")
             raise UserNotFoundException(user_email)
@@ -74,7 +88,7 @@ class UserService:
         self.get_user_by_id(user_id)
         return self.user_crud.delete(user_id)
 
-    def deactivate_user_by_id(self, user_id: int) -> MessageResponse:
+    def deactivate_user_by_id(self, user_id: int) -> UserResponse:
         """
         사용자 비활성화 (soft delete)
         Args:
@@ -85,5 +99,4 @@ class UserService:
             UserNotFoundException: 사용자를 찾을 수 없는 경우
         """
         self.get_user_by_id(user_id)
-        if self.user_crud.deactivate_user(user_id):
-            return MessageResponse(message="성공적으로 탈퇴 되셨습니다.")
+        return UserMapper.to_dto(self.user_crud.deactivate_user(user_id))

@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from typing import Optional, List
+from typing import Optional
+from datetime import datetime
 
 from ..models import User
 from .base_crud import BaseCRUD
@@ -17,24 +18,35 @@ class UserCRUD(BaseCRUD[User]):
     def get_user_by_email(self, email: str) -> Optional[User]:
         """이메일로 유저 조회"""
         return self.db.query(self.model).filter(self.model.user_email == email).first()
+    
+    def get_active_user_by_email(self, user_email: str) -> Optional[User]:
+        """활성화된 유저를 user_email로 조회"""
+        return self.db.query(self.model)\
+            .filter(
+                self.model.user_email == user_email,
+                self.model.user_is_active == True
+            ).first()
+    
+    def get_active_user_by_id(self, user_id: int) -> Optional[User]:
+        """활성화된 유저를 user_id로 조회"""
+        return self.db.query(self.model)\
+            .filter(
+                self.model.user_id == user_id,
+                self.model.user_is_active == True
+            ).first()
 
-    def get_active_users(self, skip: int = 0, limit: int = 100) -> List[User]:
-        """활성 상태인 유저만 조회"""
-        return self.db.query(self.model).filter(
-            self.model.user_is_active == True
-        ).offset(skip).limit(limit).all()
-
-    def deactivate_user(self, user_id: int) -> Optional[User]:
+    def deactivate_user(self, user_id: int) -> bool:
         """유저 비활성화 (soft delete)"""
         try:
             user = self.get_by_id(user_id)
             if not user:
-                return None
+                return False
 
             user.user_is_active = False
+            user.user_deactived_at = datetime.now()
             self.db.commit()
             self.db.refresh(user)
-            return user
+            return True
 
         except Exception as e:
             self.db.rollback()

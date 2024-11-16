@@ -14,8 +14,9 @@ class User(Base):
     user_password = Column(String(255))
     user_name = Column(String(255))
     user_profile = Column(String(255))
-    user_join_date = Column(DateTime, default=datetime.now)
+    user_created_at = Column(DateTime, default=datetime.now)
     user_is_active = Column(Boolean, default=True)
+    user_deactived_at = Column(DateTime)
 
     user_gender = Column(Enum(UserGenderEnum), nullable=True)
     user_birthdate = Column(DateTime, nullable=True)

@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
 from app.core import handle_exceptions
-from app.core.dependencies import AuthServiceDep, CurrentUser, UserServiceDep
-from app.schemas import LoginRequest, LoginGoogleRequest, UserResponse, ErrorResponse, LoginResponse
+from app.core.dependencies import AuthServiceDep
+from app.schemas import LoginRequest, LoginGoogleRequest, ErrorResponse, LoginResponse
 
 
 router = APIRouter(
@@ -17,7 +17,7 @@ router = APIRouter(
         200: {"model": LoginResponse, "description": "Successful Response"},
         500: {"model": ErrorResponse, "description": "Internal server error"}
     }
-    )
+)
 @handle_exceptions
 async def login(request: LoginRequest, auth_service: AuthServiceDep):
     return auth_service.login_id_password(request)
@@ -41,17 +41,7 @@ async def login_goole(request: LoginGoogleRequest, auth_service: AuthServiceDep)
         200: {"model": LoginResponse, "description": "Successful Response"},
         500: {"model": ErrorResponse, "description": "Internal server error"}
     }
-    )
+)
+@handle_exceptions
 async def login_test(auth_service: AuthServiceDep):
     return auth_service.login_test()
-
-@router.get(
-    path="/",
-    description="발급된 access-token에서 사용자 정보를 반환합니다.",
-    responses={
-        200: {"model": UserResponse, "description": "Successful Response"},
-        500: {"model": ErrorResponse, "description": "Internal server error"}
-    }
-)
-async def get_user_info_from_token(user_id: CurrentUser, user_service: UserServiceDep):
-    return user_service.get_user_by_id(user_id)

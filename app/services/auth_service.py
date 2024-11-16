@@ -7,18 +7,16 @@ from ..utils import decode_id_token, JwtUtil, password_hasher
 from ..models import User
 from ..mappers import UserMapper
 from ..exceptions import auth_exceptions, user_exceptions
-from .user_service import UserService
 
 
 class AuthService:
     def __init__(self, db: Session):
         self.db = db
         self.user_crud = UserCRUD(db)
-        self.user_service = UserService(db)
 
     def _signin(self, user: UserCreate) -> UserResponse:
-        existing_user = self.user_service.get_user_by_email(user.user_email)
-        if existing_user:
+        existing_user = self.user_crud.get_user_by_email(user.user_email)
+        if existing_user and existing_user.user_is_active:
             raise auth_exceptions.UserAlreadyExistsException(existing_user.user_email)
         
         # 비밀번호 해시화
@@ -32,10 +30,10 @@ class AuthService:
             temp_password = ''.join(secrets.choice(alphabet) for _ in range(16))
             user.user_password = password_hasher.hash_password(temp_password)
 
-        user = UserMapper.to_dto(self.user_crud.create(user))
-        logger.info(f"✅ successfully sign in - id: {user.user_id}, name: {user.user_name}, email: {user.user_email}")
+        db_user = self.user_crud.create(UserMapper.user_create_to_model(user))
+        logger.info(f"✅ successfully sign in - id: {db_user.user_id}, name: {db_user.user_name}, email: {db_user.user_email}")
 
-        return user
+        return UserMapper.to_dto(db_user)
     
     def _make_auth_respone(self, status: str, message: str, user: User):
         response = {
@@ -52,7 +50,7 @@ class AuthService:
         return LoginResponse(**response)
     
     def _login(self, user: UserCreate) -> LoginResponse:
-        existing_user = self.user_crud.get_user_by_email(user.user_email)
+        existing_user = self.user_crud.get_active_user_by_email(user.user_email)
         if existing_user:
             user = existing_user
             status = "success"
@@ -66,7 +64,7 @@ class AuthService:
         return self._make_auth_respone(status, message, user)
     
     def login_id_password(self, request: LoginRequest) -> LoginResponse:
-        existing_user = self.user_crud.get_user_by_email(request.user_email)
+        existing_user = self.user_crud.get_active_user_by_email(request.user_email)
         if not existing_user:
             raise user_exceptions.UserNotFoundException(user_email=request.user_email)
         
