@@ -4,7 +4,7 @@ from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 
 from ..database import DatabaseManager
-from ..services import UserService, AuthService
+from ..services import UserService, AuthService, RelationshipService
 from ..exceptions import InvalidTokenException
 from ..utils import JwtUtil
 
@@ -25,12 +25,6 @@ def get_db() -> Generator[Session, None, None]:
     finally:
         db.close()
 
-def get_auth_service(db: Session = Depends(get_db)) -> AuthService:
-    return AuthService(db)
-
-def get_user_service(db: Session = Depends(get_db)) -> UserService:
-    return UserService(db)
-
 async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
     """현재 인증된 사용자의 ID를 반환하는 의존성 함수"""
     token = auth_header.replace("Bearer ", "") if auth_header.startswith("Bearer ") else auth_header
@@ -43,7 +37,18 @@ async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
         return user_id
     except Exception as e:
         raise InvalidTokenException(token)
+    
+def get_auth_service(db: Session = Depends(get_db)) -> AuthService:
+    return AuthService(db)
+
+def get_user_service(db: Session = Depends(get_db)) -> UserService:
+    return UserService(db)
+
+def get_relationship_service(db: Session = Depends(get_db)) -> RelationshipService:
+    return RelationshipService(db)
+
+CurrentUser = Annotated[int, Depends(get_current_user)]
 
 AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
 UserServiceDep = Annotated[UserService, Depends(get_user_service)]
-CurrentUser = Annotated[int, Depends(get_current_user)]
+RelationshipServiceDep = Annotated[RelationshipService, Depends(get_relationship_service)]

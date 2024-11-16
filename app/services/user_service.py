@@ -80,7 +80,7 @@ class UserService:
         Args:
             user_id (int): 비활성화할 사용자 ID
         Returns:
-            UserResponse: 비활성화된 사용자 정보
+            MessageResponse: 비활성화 성공 메세지
         Raises:
             UserNotFoundException: 사용자를 찾을 수 없는 경우
         """

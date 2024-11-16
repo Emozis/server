@@ -12,6 +12,7 @@ class UserMapper:
             user_profile=dto.user_profile
         )
     
+    @staticmethod
     def user_update_to_model(dto: UserUpdate) -> User:
         """DTO를 Model로 변환"""
         return User(
