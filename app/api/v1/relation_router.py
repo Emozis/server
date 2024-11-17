@@ -44,7 +44,7 @@ async def get_relationships(relationship_service: RelationshipServiceDep):
     }
 )
 @handle_exceptions
-async def get_relationships(relationship_id: int, relationship_service: RelationshipServiceDep):
+async def get_relationship(relationship_id: int, relationship_service: RelationshipServiceDep):
     return relationship_service.get_relationship_by_id(relationship_id)
 
 @router.put(
