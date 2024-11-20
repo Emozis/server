@@ -31,7 +31,9 @@ class UserService:
         if user.user_password:
             user.user_password = password_hasher.hash_password(user.user_password)
         
-        return self.user_crud.create(UserMapper.user_create_to_model(user))
+        created_user = self.user_crud.create(UserMapper.user_create_to_model(user))
+        logger.info(f"✅ Successfully created user: {created_user.user_name} (ID: {created_user.user_id})")
+        return created_user
 
     def get_user_by_id(self, user_id: int) -> UserResponse:
         """
@@ -47,6 +49,8 @@ class UserService:
         if not user:
             logger.warning(f"❌ Failed to find user with id {user_id}")
             raise UserNotFoundException(user_id)
+        
+        logger.info(f"🙋‍♂️ Found user: {user.user_name} (ID: {user_id})")
         return UserMapper.to_dto(user)
     
     def get_user_by_email(self, user_email: str) -> UserResponse:
@@ -63,6 +67,8 @@ class UserService:
         if not user:
             logger.warning(f"❌ Failed to find user with email {user_email}")
             raise UserNotFoundException(user_email)
+        
+        logger.info(f"🙋‍♂️ Found user by email: {user.user_name} ({user_email})")
         return UserMapper.to_dto(user)
 
     def update_user(self, user_id: int, user_data: UserUpdate) -> UserResponse:
@@ -90,8 +96,11 @@ class UserService:
         Raises:
             UserNotFoundException: 사용자를 찾을 수 없는 경우
         """
-        self.get_user_by_id(user_id)
-        return self.user_crud.delete(user_id)
+        user = self.get_user_by_id(user_id)
+        if self.user_crud.delete(user_id):
+            logger.info(f"✅ Successfully deleted user: {user.user_name} (ID: {user_id})")
+            return True
+        return False
 
     def deactivate_user_by_id(self, user_id: int) -> MessageResponse:
         """
@@ -103,6 +112,7 @@ class UserService:
         Raises:
             UserNotFoundException: 사용자를 찾을 수 없는 경우
         """
-        self.get_user_by_id(user_id)
+        user = self.get_user_by_id(user_id)
         if self.user_crud.deactivate_user(user_id):
+            logger.info(f"🚫 Successfully deactivated user: {user.user_name} (ID: {user_id})")
             return MessageResponse(message="성공적으로 탈퇴 되셨습니다.")

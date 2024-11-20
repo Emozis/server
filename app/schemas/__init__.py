@@ -16,3 +16,7 @@ from .relationship.relationship_response import RelationshipResponse
 from .default_image.create_default_image import DefaultImageCreate
 from .default_image.update_default_image import DefaultImageUpdate
 from .default_image.default_image_response import DefaultImageResponse
+
+from .character.create_character_request import CharacterCreate
+from .character.update_character_request import CharacterUpdate
+from .character.character_response import CharacterResponse

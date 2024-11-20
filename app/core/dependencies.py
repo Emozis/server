@@ -4,7 +4,7 @@ from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 
 from ..database import DatabaseManager
-from ..services import UserService, AuthService, RelationshipService, DefaultImageService
+from .. import services
 from ..exceptions import InvalidTokenException
 from ..utils import JwtUtil
 
@@ -27,7 +27,7 @@ def get_db() -> Generator[Session, None, None]:
 
 async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
     """현재 인증된 사용자의 ID를 반환하는 의존성 함수"""
-    token = auth_header.replace("Bearer ", "") if auth_header.startswith("Bearer ") else auth_header
+    token = auth_header.replace("Bearer ", "") if auth_header and auth_header.startswith("Bearer ") else auth_header
     if not token:
         raise InvalidTokenException(None, "인증 정보가 제공되지 않았습니다.")
     try:
@@ -38,21 +38,25 @@ async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
     except Exception as e:
         raise InvalidTokenException(token)
     
-def get_auth_service(db: Session = Depends(get_db)) -> AuthService:
-    return AuthService(db)
+def get_auth_service(db: Session = Depends(get_db)) -> services.AuthService:
+    return services.AuthService(db)
 
-def get_user_service(db: Session = Depends(get_db)) -> UserService:
-    return UserService(db)
+def get_user_service(db: Session = Depends(get_db)) -> services.UserService:
+    return services.UserService(db)
 
-def get_relationship_service(db: Session = Depends(get_db)) -> RelationshipService:
-    return RelationshipService(db)
+def get_relationship_service(db: Session = Depends(get_db)) -> services.RelationshipService:
+    return services.RelationshipService(db)
 
-def get_default_image_service(db: Session = Depends(get_db)) -> DefaultImageService:
-    return DefaultImageService(db)
+def get_default_image_service(db: Session = Depends(get_db)) -> services.DefaultImageService:
+    return services.DefaultImageService(db)
+
+def get_character_service(db: Session = Depends(get_db)) -> services.CharacterService:
+    return services.CharacterService(db)
 
 CurrentUser = Annotated[int, Depends(get_current_user)]
 
-AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
-UserServiceDep = Annotated[UserService, Depends(get_user_service)]
-RelationshipServiceDep = Annotated[RelationshipService, Depends(get_relationship_service)]
-DefaultImageServiceDep = Annotated[DefaultImageService, Depends(get_default_image_service)]
+AuthServiceDep = Annotated[services.AuthService, Depends(get_auth_service)]
+UserServiceDep = Annotated[services.UserService, Depends(get_user_service)]
+RelationshipServiceDep = Annotated[services.RelationshipService, Depends(get_relationship_service)]
+DefaultImageServiceDep = Annotated[services.DefaultImageService, Depends(get_default_image_service)]
+CharacterServiceDep = Annotated[services.CharacterService, Depends(get_character_service)]
