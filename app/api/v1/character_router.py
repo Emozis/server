@@ -12,7 +12,7 @@ from app.exceptions.default_image_exception import (
 
 
 router = APIRouter(
-    prefix="/api/v1/characters",
+    prefix="/api/v1/character",
     tags=["Characters"]
 )
 
@@ -30,15 +30,15 @@ async def create_character(charater: CharacterCreate, user_id: CurrentUser, char
 )
 @handle_exceptions
 async def get_characters(chararter_service: CharacterServiceDep):
-    return
+    return chararter_service.get_characters()
 
 @router.get(
     path="/{character_id}",
     description="특정 캐릭터를 조회하는 API입니다.",
 )
 @handle_exceptions
-async def get_character(chararter_service: CharacterServiceDep):
-    return 
+async def get_character(chararter_id: int, chararter_service: CharacterServiceDep):
+    return chararter_service.get_character(chararter_id)
 
 @router.put(
     path="/{character_id}",
