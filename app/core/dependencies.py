@@ -4,7 +4,7 @@ from fastapi.security import APIKeyHeader
 from sqlalchemy.orm import Session
 
 from ..database import DatabaseManager
-from ..services import UserService, AuthService, RelationshipService
+from ..services import UserService, AuthService, RelationshipService, DefaultImageService
 from ..exceptions import InvalidTokenException
 from ..utils import JwtUtil
 
@@ -47,8 +47,12 @@ def get_user_service(db: Session = Depends(get_db)) -> UserService:
 def get_relationship_service(db: Session = Depends(get_db)) -> RelationshipService:
     return RelationshipService(db)
 
+def get_default_image_service(db: Session = Depends(get_db)) -> DefaultImageService:
+    return DefaultImageService(db)
+
 CurrentUser = Annotated[int, Depends(get_current_user)]
 
 AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
 UserServiceDep = Annotated[UserService, Depends(get_user_service)]
 RelationshipServiceDep = Annotated[RelationshipService, Depends(get_relationship_service)]
+DefaultImageServiceDep = Annotated[DefaultImageService, Depends(get_default_image_service)]

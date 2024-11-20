@@ -1,11 +1,14 @@
 from sqlalchemy.orm import Session
 
 from ..core import logger
+from ..models import User
 from ..crud import UserCRUD
 from ..mappers import UserMapper
-from ..schemas import UserUpdate, UserResponse, MessageResponse
+from ..schemas import UserCreate, UserUpdate, UserResponse, MessageResponse
+from ..utils import password_hasher
 from ..exceptions import (
-    UserNotFoundException
+    UserNotFoundException,
+    UserConflictException
 )
 
 
@@ -13,6 +16,22 @@ class UserService:
     def __init__(self, db: Session):
         self.db = db
         self.user_crud = UserCRUD(db)
+
+    def create_user(self, user: UserCreate) -> User:
+        """
+        새로운 유저 생성 서비스
+        Args:
+            user_data (dict): 유저 생성에 필요한 데이터
+        """
+        existing_user = self.user_crud.get_user_by_email(user.user_email)
+        if existing_user:
+            logger.warning(f"❌ Email already exists: {user.user_email}")
+            raise UserConflictException(user.user_email)
+
+        if user.user_password:
+            user.user_password = password_hasher.hash_password(user.user_password)
+        
+        return self.user_crud.create(UserMapper.user_create_to_model(user))
 
     def get_user_by_id(self, user_id: int) -> UserResponse:
         """

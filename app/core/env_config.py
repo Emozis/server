@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
-    #JWT
+    # JWT
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int
@@ -19,6 +19,12 @@ class Settings(BaseSettings):
     # GOOGLE LOGIN
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
+
+    # S3
+    S3_ACCESS_KEY: str
+    S3_SECRET_KEY: str
+    S3_REGION_NAME: str
+    S3_BUCKET_NAME: str
     
     model_config = ConfigDict(
         env_file=".env",
