@@ -21,8 +21,8 @@ router = APIRouter(
     description="기본 이미지을 저장하는 API입니다.",
     responses={
         200: {"model": MessageResponse, "description": "Successful Response"},
-        400: {"model": ErrorResponse, "description": "Bad Request"},
         415: {"model": ErrorResponse, "description": "Unsupported Media Type"},
+        422: {"model": ErrorResponse, "description": "Unprocessable Entity"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
     }
 )
@@ -48,6 +48,7 @@ async def create_default_image(
         if enum_error is not None:
             raise enum_error
         raise
+
     return await default_image_service.create_default_image(default_image, image)
 
 @router.get(

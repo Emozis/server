@@ -80,7 +80,7 @@ class CharacterService:
         
         return CharacterMapper.to_dto(charater)
 
-    def update_character(self, character_id: int, character :CharacterUpdate, user_id: int):
+    def update_character(self, character_id: int, character :CharacterUpdate, user_id: int) -> MessageResponse:
         """
         캐릭터 정보 업데이트
         Args:
@@ -115,7 +115,7 @@ class CharacterService:
         
         return MessageResponse(message="캐릭터가 성공적으로 수정되었습니다.")
     
-    def deactive_charactor(self, character_id: int, user_id: int):
+    def deactive_charactor(self, character_id: int, user_id: int) -> MessageResponse:
         """
         캐릭터 비활성화 (soft delete)
         Args:
@@ -140,7 +140,7 @@ class CharacterService:
             logger.info(f"🚫 Successfully deactivated character: {character.character_name} (ID: {character_id})")
             return MessageResponse(message="성공적으로 캐릭터를 비활성화 하였습니다.")
     
-    def delete_charactor(self, character_id: int, user_id: int):
+    def delete_charactor(self, character_id: int, user_id: int) -> MessageResponse:
         """
         캐릭터 완전 삭제
         Args:
