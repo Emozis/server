@@ -47,7 +47,7 @@ class RelationshipService:
         db_relationship = self.relationship_crud.get_by_id(relationship_id)
         if not db_relationship:
             logger.warning(f"❌ Failed to find relationship with id {relationship_id}")
-            raise NotFoundException("관계를 찾을 수 없습니다.")
+            raise NotFoundException("관계를 찾을 수 없습니다.", "relationship_id", relationship_id)
 
         logger.info(f"🤝 Found relationship: {db_relationship.relationship_name} (ID: {relationship_id})")
         return RelationshipMapper.to_dto(self.relationship_crud.get_by_id(relationship_id))

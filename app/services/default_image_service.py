@@ -59,7 +59,7 @@ class DefaultImageService:
         db_default_image = self.default_image_crud.get_by_id(image_id)
         if not db_default_image:
             logger.warning(f"❌ Failed to find default image with id {image_id}")
-            raise NotFoundException("이미지를 찾을 수 없습니다.")
+            raise NotFoundException("이미지를 찾을 수 없습니다.", "image_id", image_id)
 
         logger.info(f"📸 Found default image: {db_default_image.image_name} (ID: {image_id})")
         return DefaultImageMapper.to_dto(db_default_image)

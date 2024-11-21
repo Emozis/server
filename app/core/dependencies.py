@@ -34,7 +34,7 @@ async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
         user_id = JwtUtil.verify_token(token)
         if not user_id:
             raise InvalidTokenException(token)
-        return user_id
+        return int(user_id)
     except Exception as e:
         raise InvalidTokenException(token)
     
