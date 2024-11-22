@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.core import lifespan, SwaggerConfig
 from app.core.router_scanner import RouterScanner
@@ -14,6 +15,14 @@ def create_app() -> FastAPI:
         license_info=config["license_info"],
         openapi_tags=config["tags_metadata"],
         lifespan=lifespan
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # 실제 운영환경에서는 구체적인 origin을 지정하세요
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     router_scanner = RouterScanner(app)

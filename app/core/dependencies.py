@@ -31,7 +31,7 @@ async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
     if not token:
         raise InvalidTokenException(None, "인증 정보가 제공되지 않았습니다.")
     try:
-        user_id = JwtUtil.verify_token(token)
+        user_id = await JwtUtil.verify_token(token)
         if not user_id:
             raise InvalidTokenException(token)
         return int(user_id)
@@ -59,6 +59,9 @@ def get_chat_service(db: Session = Depends(get_db)) -> services.ChatService:
 def get_chat_log_service(db: Session = Depends(get_db)) -> services.ChatLogService:
     return services.ChatLogService(db)
 
+def get_chatting_log_service(db: Session = Depends(get_db)) -> services.ChattingService:
+    return services.ChattingService(db)
+
 CurrentUser = Annotated[int, Depends(get_current_user)]
 
 AuthServiceDep = Annotated[services.AuthService, Depends(get_auth_service)]
@@ -68,3 +71,4 @@ DefaultImageServiceDep = Annotated[services.DefaultImageService, Depends(get_def
 CharacterServiceDep = Annotated[services.CharacterService, Depends(get_character_service)]
 ChatServiceDep = Annotated[services.ChatService, Depends(get_chat_service)]
 ChatLogServiceDep = Annotated[services.ChatLogService, Depends(get_chat_log_service)]
+ChattingServiceDep = Annotated[services.ChattingService, Depends(get_chatting_log_service)]

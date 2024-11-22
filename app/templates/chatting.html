@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket 채팅 테스트</title>
+    <style>
+        body {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .chat-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        #messageContainer {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .message {
+            margin: 5px 0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+        }
+
+        .system-message {
+            color: #666;
+            font-style: italic;
+            background-color: #f8f9fa;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .status {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #userInfo {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <div id="userInfo">사용자 정보 로딩중...</div>
+        <div id="connectionStatus" class="status disconnected">연결 상태: 연결되지 않음</div>
+        <div id="messageContainer"></div>
+        <div class="input-container">
+            <input type="text" id="messageInput" placeholder="메시지를 입력하세요..." />
+            <button onclick="sendMessage()">전송</button>
+            <button onclick="connect()" id="connectButton">연결</button>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+        let userInfo = null;
+        const messageContainer = document.getElementById('messageContainer');
+        const messageInput = document.getElementById('messageInput');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const connectButton = document.getElementById('connectButton');
+        const userInfoDiv = document.getElementById('userInfo');
+
+        // 페이지 로드 시 자동 로그인 및 연결
+        async function init() {
+            try {
+                const response = await fetch('/api/v1/auth/login/test', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // body는 비어있어도 됩니다. 테스트 로그인이므로
+                    body: JSON.stringify({})
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    userInfo = data.user;
+                    localStorage.setItem('token', data.accessToken);
+                    userInfoDiv.textContent = `로그인 됨: ${data.user.userName} (${data.user.userEmail})`;
+
+                    // 로그인 성공 후 웹소켓 연결
+                    connect();
+                } else {
+                    userInfoDiv.textContent = '로그인 실패';
+                }
+            } catch (error) {
+                userInfoDiv.textContent = '로그인 오류: ' + error.message;
+                console.error('Login error:', error);
+            }
+        }
+        
+        function connect() {
+            if (ws) {
+                ws.close();
+            }
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                appendMessage('시스템', '로그인이 필요합니다.');
+                return;
+            }
+
+            ws = new WebSocket(`ws://localhost:8000/api/v1/chatting/ws/1`);
+
+            ws.onopen = function () {
+                const token = localStorage.getItem('token');
+                ws.send(JSON.stringify({ type: "auth", token: token }));
+                
+                connectionStatus.textContent = '연결 상태: 연결됨';
+                connectionStatus.className = 'status connected';
+                connectButton.textContent = '재연결';
+                appendMessage('시스템', '채팅방에 연결되었습니다.');
+            };
+
+            ws.onclose = function () {
+                connectionStatus.textContent = '연결 상태: 연결이 끊어졌습니다.';
+                connectionStatus.className = 'status disconnected';
+                connectButton.textContent = '연결';
+                appendMessage('시스템', '채팅방 연결이 끊어졌습니다.');
+            };
+
+            ws.onerror = function (error) {
+                appendMessage('시스템', '에러가 발생했습니다');
+            };
+
+            ws.onmessage = function (event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'chat') {
+                        appendMessage(data.username, data.message);
+                    } else if (data.type === 'system') {
+                        appendMessage('시스템', data.message, true);
+                    }
+                } catch (e) {
+                    // JSON 파싱 실패 시 일반 텍스트로 표시
+                    appendMessage('받은 메시지', event.data);
+                }
+            };
+        }
+
+        function sendMessage() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                alert('서버에 연결되어 있지 않습니다.');
+                return;
+            }
+
+            const message = messageInput.value.trim();
+            if (message) {
+                ws.send(message);
+                messageInput.value = '';
+            }
+        }
+
+        function appendMessage(sender, message, isSystem = false) {
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${isSystem ? 'system-message' : ''}`;
+
+            const time = new Date().toLocaleTimeString();
+            messageElement.textContent = `[${time}] ${sender}: ${message}`;
+
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        // Enter 키로 메시지 전송
+        messageInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // 페이지 로드 시 자동 실행
+        init();
+    </script>
+</body>
+
+</html>

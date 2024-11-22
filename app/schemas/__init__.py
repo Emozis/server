@@ -27,3 +27,5 @@ from .chat.chat_response import ChatResponse
 
 from .chat_log.create_chat_log_request import ChatLogCreate
 from .chat_log.chat_log_response import ChatLogResponse
+
+from .chatting.chatting_schema import AuthMessage, SystemMessage, UserMessage, CharacterMessage

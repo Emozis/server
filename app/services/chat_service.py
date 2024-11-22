@@ -48,6 +48,25 @@ class ChatService:
         logger.info(f"🏠 Found {len(chats)} chat rooms for user {user_id}")
         return ChatMapper.to_dto_list(chats)
 
+    def get_chat_by_chat_id_and_user_id(self, chat_id: int, user_id: int) -> list[ChatResponse]:
+        """
+        채팅방 ID와 사용자 ID로 특정 채팅방 조회
+        Args:
+            chat_id (int): 조회할 채팅방 ID
+            user_id (int): 조회할 사용자 ID
+        Returns:
+            ChatResponse: 조회된 채팅방 정보
+        Raises:
+            NotFoundException: 채팅방을 찾을 수 없는 경우 
+        """
+        chat = self.chat_crud.get_chat_by_chat_id_and_user_id(chat_id, user_id)
+        if not chat:
+            logger.warning(f"❌ Failed to find chat with id {chat_id} for user {user_id}")
+            raise NotFoundException("채팅방을 찾을 수 없습니다.", "chat_id", chat_id)
+        
+        logger.info(f"🏠 Successfully retrieved chat: room {chat_id} for user {user_id}")
+        return ChatMapper.to_dto(chat)
+
     def delete_chat(self, chat_id: int, user_id: int) -> ResponseSchema:
         """
         채팅방 삭제

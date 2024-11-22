@@ -21,7 +21,7 @@ class JwtUtil:
         return encoded_jwt
 
     @staticmethod
-    def verify_token(token: str) -> int:
+    async def verify_token(token: str) -> int:
         try:
             payload = jwt.decode(token, key=settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALGORITHM])
             user_id: str = payload.get("sub")

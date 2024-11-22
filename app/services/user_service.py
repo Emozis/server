@@ -50,7 +50,7 @@ class UserService:
             logger.warning(f"❌ Failed to find user with id {user_id}")
             raise UserNotFoundException(user_id)
         
-        logger.info(f"🙋‍♂️ Found user: {user.user_name} (ID: {user_id})")
+        logger.info(f"🙋 Found user: {user.user_name} (ID: {user_id})")
         return UserMapper.to_dto(user)
     
     def get_user_by_email(self, user_email: str) -> UserResponse:
@@ -68,7 +68,7 @@ class UserService:
             logger.warning(f"❌ Failed to find user with email {user_email}")
             raise UserNotFoundException(user_email)
         
-        logger.info(f"🙋‍♂️ Found user by email: {user.user_name} ({user_email})")
+        logger.info(f"🙋 Found user by email: {user.user_name} ({user_email})")
         return UserMapper.to_dto(user)
 
     def update_user(self, user_id: int, user_data: UserUpdate) -> UserResponse:
