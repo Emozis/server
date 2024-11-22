@@ -1,5 +1,5 @@
-from sqlalchemy import Column, BigInteger, String, Enum, DateTime
-from datetime import datetime
+from sqlalchemy import Column, BigInteger, String, Enum, TIMESTAMP
+from sqlalchemy.sql import func
 
 from ..database.base import Base
 from .enums import ImageAgeGroupEnum, ImageGenderEnum
@@ -14,5 +14,5 @@ class DefaultImages(Base):
     image_age_group = Column(Enum(ImageAgeGroupEnum), nullable=True)
     image_emotion = Column(String(255), nullable=True)
 
-    image_created_at = Column(DateTime, default=datetime.now)
-    image_updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    image_created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    image_updated_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now()) 

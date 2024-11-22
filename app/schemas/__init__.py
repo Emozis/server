@@ -1,5 +1,6 @@
 from .error_schema import ErrorResponse
 from .message_response import MessageResponse
+from .response_schema import ResponseSchema
 
 from .auth.login_request import LoginRequest
 from .auth.login_google_request import LoginGoogleRequest
@@ -20,3 +21,6 @@ from .default_image.default_image_response import DefaultImageResponse
 from .character.create_character_request import CharacterCreate
 from .character.update_character_request import CharacterUpdate
 from .character.character_response import CharacterResponse
+
+from .chat.create_chat_request import ChatCreate
+from .chat.chat_response import ChatResponse

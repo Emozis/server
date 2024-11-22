@@ -30,6 +30,7 @@ class CharacterService:
         for relationship_id in character.relationships:
             self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship_id))
         
+        logger.info(f"✨ Successfully created character: {db_charater.character_name} (ID: {db_charater.character_id})")
         return MessageResponse(message="캐릭터가 성공적으로 생성되었습니다.")
     
     def get_public_characters(self) -> list[CharacterResponse]:
@@ -39,6 +40,7 @@ class CharacterService:
             list[CharacterResponse]: 공개된 캐릭터 목록
         """
         charaters = self.character_crud.get_public_characters()
+        logger.info(f"😊 Total {len(charaters)} public characters found")
         return CharacterMapper.to_dto_list(charaters)
     
     def get_top_used_public_characters(self, limit: int) -> list[CharacterResponse]:
@@ -50,6 +52,7 @@ class CharacterService:
             list[CharacterResponse]: 상위 사용된 캐릭터 목록
         """
         charaters = self.character_crud.get_top_used_public_characters(limit)
+        logger.info(f"😊 Found top {len(charaters)} most used public characters")
         return CharacterMapper.to_dto_list(charaters)
     
     def get_characters_by_user_id(self, user_id: int) -> list[CharacterResponse]:
@@ -61,6 +64,7 @@ class CharacterService:
             list[CharacterResponse]: 사용자의 캐릭터 목록
         """
         charaters = self.character_crud.get_characters_by_user_id(user_id)
+        logger.info(f"😊 Found {len(charaters)} characters for user {user_id}")
         return CharacterMapper.to_dto_list(charaters)
 
     def get_character_by_id(self, character_id: int) -> CharacterResponse:
@@ -78,6 +82,7 @@ class CharacterService:
             logger.warning(f"❌ Failed to find character with id {character_id}")
             raise NotFoundException("캐릭터를 찾을 수 없습니다.", "character_id", character_id)
         
+        logger.info(f"😊 Found character: {charater.character_name} (ID: {character_id})")
         return CharacterMapper.to_dto(charater)
 
     def update_character(self, character_id: int, character :CharacterUpdate, user_id: int) -> MessageResponse:
@@ -113,6 +118,7 @@ class CharacterService:
         for relationship_id in character.relationships:
             self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship_id))
         
+        logger.info(f"🔄 Successfully updated character: {db_charater.character_name} (ID: {character_id})")
         return MessageResponse(message="캐릭터가 성공적으로 수정되었습니다.")
     
     def deactive_charactor(self, character_id: int, user_id: int) -> MessageResponse:
@@ -162,5 +168,5 @@ class CharacterService:
             raise ForbiddenException("자신의 캐릭터만 삭제할 수 있습니다.")
         
         if self.character_crud.delete(character_id):
-            logger.info(f"✅ Successfully deleted character: {character.character_name} (ID: {character_id})")
+            logger.info(f"🗑️  Successfully deleted character: {character.character_name} (ID: {character_id})")
             return MessageResponse(message="캐릭터가 성공적으로 삭제되었습니다.")

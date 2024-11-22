@@ -1,6 +1,6 @@
-from sqlalchemy import Boolean, Column, String, DateTime, Enum, BigInteger
+from sqlalchemy import Boolean, Column, String, TIMESTAMP, Enum, BigInteger, Date
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy.sql import func
 
 from ..database.base import Base
 from .enums import UserGenderEnum
@@ -14,12 +14,12 @@ class User(Base):
     user_password = Column(String(255))
     user_name = Column(String(255))
     user_profile = Column(String(255))
-    user_created_at = Column(DateTime, default=datetime.now)
+    user_created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
     user_is_active = Column(Boolean, default=True)
-    user_deactived_at = Column(DateTime)
+    user_deactived_at = Column(TIMESTAMP(timezone=True))
 
     user_gender = Column(Enum(UserGenderEnum), nullable=True)
-    user_birthdate = Column(DateTime, nullable=True)
+    user_birthdate = Column(Date, nullable=True)
 
     chats = relationship("Chat", back_populates="user")
     chat_logs = relationship("ChatLog", back_populates="user")

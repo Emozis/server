@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, BigInteger, DateTime
+from sqlalchemy import Column, String, BigInteger, TIMESTAMP
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from sqlalchemy.sql import func
 
 from ..database.base import Base
 
@@ -10,6 +10,6 @@ class Relationship(Base):
 
     relationship_id = Column(BigInteger, primary_key=True, autoincrement=True)
     relationship_name = Column(String(255), nullable=False)
-    relationship_created_at = Column(DateTime, default=datetime.now)
+    relationship_created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
     character_relationships = relationship("CharacterRelationship", back_populates="relationship", cascade="all, delete-orphan")

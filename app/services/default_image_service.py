@@ -43,7 +43,7 @@ class DefaultImageService:
             list[DefaultImageResponse]: 조회된 모든 기본 이미지 정보 리스트
         """
         images = self.default_image_crud.get_all()
-        logger.info(f"🖼️ Total {len(images)} default images found")
+        logger.info(f"📸 Total {len(images)} default images found")
         return DefaultImageMapper.to_dto_list(images)
     
     def get_default_image(self, image_id: int) -> DefaultImageResponse:

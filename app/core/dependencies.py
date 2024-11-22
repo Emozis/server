@@ -53,6 +53,9 @@ def get_default_image_service(db: Session = Depends(get_db)) -> services.Default
 def get_character_service(db: Session = Depends(get_db)) -> services.CharacterService:
     return services.CharacterService(db)
 
+def get_chat_service(db: Session = Depends(get_db)) -> services.ChatService:
+    return services.ChatService(db)
+
 CurrentUser = Annotated[int, Depends(get_current_user)]
 
 AuthServiceDep = Annotated[services.AuthService, Depends(get_auth_service)]
@@ -60,3 +63,4 @@ UserServiceDep = Annotated[services.UserService, Depends(get_user_service)]
 RelationshipServiceDep = Annotated[services.RelationshipService, Depends(get_relationship_service)]
 DefaultImageServiceDep = Annotated[services.DefaultImageService, Depends(get_default_image_service)]
 CharacterServiceDep = Annotated[services.CharacterService, Depends(get_character_service)]
+ChatServiceDep = Annotated[services.ChatService, Depends(get_chat_service)]

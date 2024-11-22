@@ -18,8 +18,8 @@ class Character(Base):
     character_description = Column(String(255), nullable=True)
     character_greeting = Column(Text, nullable=True)
 
-    character_created_at = Column(TIMESTAMP, server_default=func.now())
-    character_updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now()) 
+    character_created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+    character_updated_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), onupdate=func.now()) 
 
     character_is_public = Column(Boolean, default=True, nullable=False)
     character_likes = Column(Integer, default=0, nullable=False)
