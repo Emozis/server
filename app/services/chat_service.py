@@ -48,7 +48,7 @@ class ChatService:
         logger.info(f"🏠 Found {len(chats)} chat rooms for user {user_id}")
         return ChatMapper.to_dto_list(chats)
 
-    def delete_charactor(self, chat_id: int, user_id: int) -> ResponseSchema:
+    def delete_chat(self, chat_id: int, user_id: int) -> ResponseSchema:
         """
         채팅방 삭제
         Args:

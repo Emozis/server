@@ -69,3 +69,5 @@ class ImageEmotionEnum(str, Enum):
     @classmethod
     def get_korean_name(cls, emotion_code: str) -> list[str]:
         return cls.get_emotion_groups().get(emotion_code, [])
+    
+

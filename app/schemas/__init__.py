@@ -24,3 +24,6 @@ from .character.character_response import CharacterResponse
 
 from .chat.create_chat_request import ChatCreate
 from .chat.chat_response import ChatResponse
+
+from .chat_log.create_chat_log_request import ChatLogCreate
+from .chat_log.chat_log_response import ChatLogResponse
