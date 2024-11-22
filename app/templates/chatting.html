@@ -158,7 +158,7 @@
 
             ws.onopen = function () {
                 const token = localStorage.getItem('token');
-                ws.send(JSON.stringify({ type: "auth", token: token }));
+                ws.send(JSON.stringify({ type: "auth1", token: token }));
                 
                 connectionStatus.textContent = '연결 상태: 연결됨';
                 connectionStatus.className = 'status connected';

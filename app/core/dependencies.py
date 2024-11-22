@@ -31,7 +31,7 @@ async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
     if not token:
         raise InvalidTokenException(None, "인증 정보가 제공되지 않았습니다.")
     try:
-        user_id = await JwtUtil.verify_token(token)
+        user_id, name, role = await JwtUtil.verify_token(token)
         if not user_id:
             raise InvalidTokenException(token)
         return int(user_id)

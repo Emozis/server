@@ -1,6 +1,5 @@
 from typing import List
 from fastapi import WebSocket
-import json
 
 from ..schemas import SystemMessage
 
@@ -13,7 +12,7 @@ class ConnectionManager:
         await websocket.accept()
         self.active_connections.append(websocket)
 
-    def disconnect(self, websocket: WebSocket):
+    async def disconnect(self, websocket: WebSocket):
         self.active_connections.remove(websocket)
 
     async def broadcast(self, message: str):

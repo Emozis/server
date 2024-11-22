@@ -63,7 +63,7 @@ class AuthService:
                 "user_name": user.user_name,
                 "user_profile": user.user_profile
             },
-            "access_token": JwtUtil.create_access_token(user.user_id)
+            "access_token": JwtUtil.create_access_token(user.user_id, user.user_name)
         }
         return LoginResponse(**response)
     
