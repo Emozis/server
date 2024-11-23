@@ -12,8 +12,8 @@ class Chat(Base):
     chat_create_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
     last_message_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
 
-    user_id = Column(BigInteger, ForeignKey('users.user_id'), nullable=False)
-    character_id = Column(BigInteger, ForeignKey('characters.character_id'), nullable=False)
+    user_id = Column(BigInteger, ForeignKey('users.user_id'), nullable=True)
+    character_id = Column(BigInteger, ForeignKey('characters.character_id'), nullable=True)
 
     user = relationship("User", back_populates="chats", lazy='selectin')
     character = relationship("Character", back_populates="chats", lazy='selectin')

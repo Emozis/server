@@ -6,3 +6,4 @@ from .character_service import CharacterService
 from .chat_service import ChatService
 from .chat_log_service import ChatLogService
 from .chatting_service import ChattingService
+from .chatting_session_service import ChattingSessionService

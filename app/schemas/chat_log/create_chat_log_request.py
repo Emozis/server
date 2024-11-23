@@ -8,6 +8,6 @@ class ChatLogRoolEnum(str, Enum):
 
 class ChatLogCreate(CamelModel):
     chat_id: int
-    character_id: int
+    character_id: int | None = None
     role: ChatLogRoolEnum
     contents: str

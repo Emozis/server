@@ -6,18 +6,20 @@ import traceback
 
 from ..core import logger
 from ..services import UserService, ChatService
+from ..services.chatting_session_service import ChattingSessionService
 from ..crud import ChatCRUD
 from ..models import Chat
-from ..schemas import AuthMessage, UserMessage
-from ..chatbot import data_converter, Gemini
+from ..schemas import AuthMessage
 from ..utils import JwtUtil, RoomManager
 
 
 class ChattingService:
     def __init__(self, db: Session, room_manager: RoomManager):
+        self.db = db
         self.room_manager = room_manager
         self.user_service = UserService(db)
         self.chat_service = ChatService(db)
+        # self.chatting_session_service = ChattingSessionService(db, room_manager)
         self.chat_crud = ChatCRUD(db)
         self.AUTH_TIMEOUT = 5
 
@@ -59,24 +61,12 @@ class ChattingService:
             
             # 채팅방 접근 권한 확인
             chat = await self._validate_chat_access(chat_id, user_id)
-            
-            # Make Initial Data
-            user_info, character_info, chat_history = await data_converter(chat.user, chat.character, chat.chat_logs)
 
-            # Make Gemini Chain
-            gemini = Gemini(
-                user_info = user_info,
-                character_info = character_info, 
-                chat_history = chat_history
-            )
+            chatting_session_service = await ChattingSessionService.create(self.db, room, chat)
 
             # 채팅 세션 시작
             logger.info(f"🚀 Chatting Start: User {user_name}({user_id}) started chatting with {chat.character.character_name}({chat.character.character_id}) in room {chat_id}")
-            
-            while True:
-                data = await websocket.receive_text()
-                user_message = UserMessage(**json.loads(data))
-                await room.broadcast("dddd")
+            await chatting_session_service.handle_session(websocket, chat, user_id)
 
         except WebSocketDisconnect:
             logger.info(f"👋 WebSocket disconnected normally: User {user_name}({user_id}) left chat room {chat_id} with {chat.character.character_name}({chat.character.character_id})")

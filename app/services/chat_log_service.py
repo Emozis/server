@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from ..core import logger
 from ..crud import ChatLogCRUD
+from ..models import Chat
 from ..mappers import ChatLogMapper
 from ..schemas import ResponseSchema, ChatLogCreate, ChatLogResponse
 from ..exceptions import NotFoundException, ForbiddenException
@@ -21,8 +22,22 @@ class ChatLogService:
         Returns:
             ResponseSchema: 생성된 채팅 로그 ID를 포함한 응답
         """
-        chat_log = self.chat_log_crud.create(ChatLogMapper(chat_log, user_id))
-        logger.info(f"✨ Successfully created chat log: {chat_log.log_id} by user {user_id}")
+        chat_log = self.chat_log_crud.create(ChatLogMapper.create_to_model(chat_log, user_id))
+        logger.info(f"✨ Successfully created chat log: id {chat_log.log_id} by user {user_id} \'{chat_log.contents}\'")
+        return ResponseSchema(
+            message="채팅 로그가 성공적으로 생성되었습니다.",
+            data={"chat_id" : chat_log.log_id}
+        )
+
+    def create_chat_log_for_socket(self, chat_id: int, character_id: int, user_id: int, role: str, content: str) -> ResponseSchema:
+        chat_log = ChatLogCreate(
+            chat_id=chat_id,
+            character_id=character_id,
+            role=role,
+            contents=content
+        )
+        chat_log = self.chat_log_crud.create(ChatLogMapper.create_to_model(chat_log, user_id))
+        logger.info(f"✨ Successfully created chat log: id {chat_log.log_id} by {role}(id: {user_id if user_id else character_id}) \'{chat_log.contents[:30]}{'...' if len(chat_log.contents) > 30 else ''}\'")
         return ResponseSchema(
             message="채팅 로그가 성공적으로 생성되었습니다.",
             data={"chat_id" : chat_log.log_id}
