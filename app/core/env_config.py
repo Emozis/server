@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     S3_SECRET_KEY: str
     S3_REGION_NAME: str
     S3_BUCKET_NAME: str
+
+    # GEMINI
+    GOOGLE_API_KEY: str
     
     model_config = ConfigDict(
         env_file=".env",

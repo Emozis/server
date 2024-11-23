@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from ..core import constants
-from .dependencies import db_manager
+from .dependencies import db_manager, room_manager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -11,3 +11,5 @@ async def lifespan(app: FastAPI):
     db_manager.execute_sql_files(constants.SQL_FOLDER_PATH)
 
     yield
+
+    await room_manager.shutdown()

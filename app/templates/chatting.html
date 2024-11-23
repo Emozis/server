@@ -142,7 +142,7 @@
                 console.error('Login error:', error);
             }
         }
-        
+
         function connect() {
             if (ws) {
                 ws.close();
@@ -158,8 +158,8 @@
 
             ws.onopen = function () {
                 const token = localStorage.getItem('token');
-                ws.send(JSON.stringify({ type: "auth1", token: token }));
-                
+                ws.send(JSON.stringify({ type: "auth", token: token }));
+
                 connectionStatus.textContent = '연결 상태: 연결됨';
                 connectionStatus.className = 'status connected';
                 connectButton.textContent = '재연결';
@@ -200,7 +200,14 @@
 
             const message = messageInput.value.trim();
             if (message) {
-                ws.send(message);
+                // JSON 형태로 메시지 구성
+                const messageData = {
+                    type: 'user',
+                    content: message
+                };
+
+                // JSON 문자열로 변환하여 전송
+                ws.send(JSON.stringify(messageData));
                 messageInput.value = '';
             }
         }

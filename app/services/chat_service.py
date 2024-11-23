@@ -48,7 +48,7 @@ class ChatService:
         logger.info(f"🏠 Found {len(chats)} chat rooms for user {user_id}")
         return ChatMapper.to_dto_list(chats)
 
-    def get_chat_by_chat_id_and_user_id(self, chat_id: int, user_id: int) -> list[ChatResponse]:
+    def get_chat_by_chat_id_and_user_id(self, chat_id: int, user_id: int) -> ChatResponse:
         """
         채팅방 ID와 사용자 ID로 특정 채팅방 조회
         Args:
