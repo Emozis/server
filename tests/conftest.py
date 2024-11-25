@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.core import constants
 from app.core.dependencies import get_db
 from tests.database.database_manager import DatabaseManagerForTest
 
@@ -11,6 +12,7 @@ def db_manager():
     manager = DatabaseManagerForTest()
     manager.create_database()
     manager.setup_database()
+    manager.execute_sql_files(constants.SQL_FOLDER_PATH)
     
     yield manager
     

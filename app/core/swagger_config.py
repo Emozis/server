@@ -2,7 +2,7 @@ import textwrap
 
 class SwaggerConfig:
     def __init__(self):
-        self.title = "eMoGi"
+        self.title = "EMOG!"
         self.version = "0.0.1"
         self.description = textwrap.dedent("""\
             기능 목록:
@@ -29,7 +29,7 @@ class SwaggerConfig:
                 "description": "유저 관련 API입니다."
             },
             {
-                "name": "Characters",
+                "name": "Character",
                 "description": "캐릭터 관련 API입니다."
             },
             {

@@ -12,7 +12,7 @@ from app.exceptions.default_image_exception import (
 
 
 router = APIRouter(
-    prefix="/api/v1/default-images",
+    prefix="/api/v1/default-image",
     tags=["Default image"]
 )
 

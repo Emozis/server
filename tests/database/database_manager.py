@@ -1,11 +1,12 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 
 from app.database.base import Base
+from app.core import logger
 
 # .env.test 파일 로드
 load_dotenv('.env.test')
@@ -91,3 +92,43 @@ class DatabaseManagerForTest:
                 cursor.close()
             if 'conn' in locals():
                 conn.close()
+
+    def execute_sql_files(self, sql_directory):
+        """지정된 디렉토리의 SQL 파일들을 실행"""
+        try:
+            if not os.path.exists(sql_directory):
+                logger.warning(f"⚠️ Test SQL directory not found: {sql_directory}")
+                return False
+
+            sql_files = sorted([f for f in os.listdir(sql_directory) if f.endswith('.sql')])
+            
+            if not sql_files:
+                logger.warning(f"⚠️ No SQL files found in {sql_directory}")
+                return False
+
+            logger.info(f"🔄 Executing {len(sql_files)} SQL files for test data")
+            
+            with self.engine.connect() as conn:
+                for sql_file in sql_files:
+                    file_path = os.path.join(sql_directory, sql_file)
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            sql_content = f.read()
+
+                        if sql_content.strip():
+                            conn.execute(text(sql_content))
+                            conn.commit()
+                            logger.info(f"   ✅ Executed {sql_file}")
+                        else:
+                            logger.warning(f"   ⚠️ Skipped empty file: {sql_file}")
+
+                    except Exception as e:
+                        logger.error(f"   ❌ Error executing {sql_file}: {str(e)}")
+                        continue
+
+            logger.info("✅ Test SQL files execution completed")
+            return True
+
+        except Exception as e:
+            logger.error(f"❌ Failed to execute test SQL files: {str(e)}")
+            return False

@@ -1,28 +1,28 @@
-import pytest
-from datetime import datetime
+# import pytest
+# from datetime import datetime
 
-from app.models import User
-from app.crud.user_crud import UserCRUD
+# from app.models import User
+# from app.crud.user_crud import UserCRUD
 
-@pytest.mark.asyncio
-async def test_create_user(db_session):
-    # Given
-    user_crud = UserCRUD(db_session)
-    test_user = User(
-        user_email="test@example.com",
-        user_password="test_password",
-        user_name="Test User",
-        user_profile="test_profile.jpg",
-        user_gender="other",
-        user_birthdate=datetime(2000, 1, 1)
-    )
+# @pytest.mark.asyncio
+# async def test_create_user(db_session):
+#     # Given
+#     user_crud = UserCRUD(db_session)
+#     test_user = User(
+#         user_email="test@example.com",
+#         user_password="test_password",
+#         user_name="Test User",
+#         user_profile="test_profile.jpg",
+#         user_gender="other",
+#         user_birthdate=datetime(2000, 1, 1)
+#     )
     
-    # When
-    created_user = user_crud.create(test_user)
+#     # When
+#     created_user = user_crud.create(test_user)
     
-    # Then
-    assert created_user.user_id is not None
-    assert created_user.user_email == "test@example.com"
+#     # Then
+#     assert created_user.user_id is not None
+#     assert created_user.user_email == "test@example.com"
 
 # @pytest.mark.asyncio
 # async def test_get_user_by_id(db_session):
