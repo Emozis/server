@@ -2,7 +2,6 @@ from sqlalchemy.orm import Session
 
 from ..core import logger
 from ..crud import ChatLogCRUD
-from ..models import Chat
 from ..mappers import ChatLogMapper
 from ..schemas import ResponseSchema, ChatLogCreate, ChatLogResponse
 from ..exceptions import NotFoundException, ForbiddenException
@@ -56,7 +55,7 @@ class ChatLogService:
         logger.info(f"📜 Found {len(chat_logs)} chat logs for chat {chat_id} and user {user_id}")
         return ChatLogMapper.to_dto_list(chat_logs)
 
-    def delete_chat(self, log_id: int, user_id: int) -> ResponseSchema:
+    def delete_chat_log(self, log_id: int, user_id: int) -> ResponseSchema:
         """
         채팅 로그 삭제
         Args:
