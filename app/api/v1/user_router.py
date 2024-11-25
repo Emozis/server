@@ -28,6 +28,7 @@ async def read_user_by_id(user_id: CurrentUser, user_service: UserServiceDep):
     description="현재 로그인된 유저 정보를 업데이트합니다.",
     responses={
         200: {"model": UserResponse, "description": "Successful Response"},
+        404: {"model": ErrorResponse, "description": "User not found"},
         500: {"model": ErrorResponse, "description": "Internal server error"}
     }
 )
