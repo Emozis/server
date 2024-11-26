@@ -17,7 +17,7 @@ def db_manager():
     yield manager
     
     # 테스트 완료 후 데이터베이스 삭제
-    # manager.drop_database()
+    manager.drop_database()
 
 @pytest.fixture(scope="function")
 def db_session(db_manager):
@@ -26,7 +26,7 @@ def db_session(db_manager):
     try:
         yield session
     finally:
-        # session.rollback()  # 각 테스트 후 롤백
+        session.rollback()  # 각 테스트 후 롤백
         session.close()
 
 @pytest.fixture(scope="function")

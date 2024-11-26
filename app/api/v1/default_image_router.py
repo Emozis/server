@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 @router.post(
-    path="/",
+    path="",
     description="기본 이미지을 저장하는 API입니다.",
     responses={
         200: {"model": MessageResponse, "description": "Successful Response"},
@@ -52,7 +52,7 @@ async def create_default_image(
     return await default_image_service.create_default_image(default_image, image)
 
 @router.get(
-    path="/",
+    path="",
     description="기본 이미지 전부를 불러오는 API입니다.",
     responses={
         200: {"model": list[DefaultImageResponse], "description": "Successful Response"},

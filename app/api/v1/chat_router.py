@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 @router.post(
-    path="/",
+    path="",
     description="새 채팅방을 생성하는 API입니다.",
     responses={
         200: {"model": ResponseSchema, "description": "Successful Response"},
@@ -24,7 +24,7 @@ async def create_chat(chat: ChatCreate, user_id: CurrentUser, chat_service: Chat
     return chat_service.create_chat(chat, user_id)
 
 @router.get(
-    path="/me/",
+    path="/me",
     description="인증된 사용자의 모든 채팅방를 조회하는 API입니다.",
     responses={
         200: {"model": MessageResponse, "description": "Successful Response"},

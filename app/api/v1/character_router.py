@@ -7,11 +7,11 @@ from app.schemas import CharacterCreate, CharacterUpdate, CharacterResponse, Mes
 
 router = APIRouter(
     prefix="/api/v1/character",
-    tags=["Characters"]
+    tags=["Character"]
 )
 
 @router.post(
-    path="/",
+    path="",
     description="새 캐릭터를 생성하는 API입니다.",
     responses={
         200: {"model": MessageResponse, "description": "Successful Response"},
@@ -23,7 +23,7 @@ async def create_character(charater: CharacterCreate, user_id: CurrentUser, char
     return chararter_service.create_character(charater, user_id)
 
 @router.get(
-    path="/",
+    path="",
     description="공개된 모든 캐릭터를 조회하는 API입니다.",
     responses={
         200: {"model": list[CharacterResponse], "description": "Successful Response"},
@@ -35,7 +35,7 @@ async def get_public_characters(chararter_service: CharacterServiceDep) -> list[
     return chararter_service.get_public_characters()
 
 @router.get(
-    path="/rank/",
+    path="/rank",
     description="사용 횟수가 높은 상위 5개의 공개된 캐릭터를 조회하는 API입니다.",
     responses={
         200: {"model": list[CharacterResponse], "description": "Successful Response"},
@@ -47,7 +47,7 @@ async def get_top_used_public_characters(chararter_service: CharacterServiceDep)
     return chararter_service.get_top_used_public_characters(limit=5)
 
 @router.get(
-    path="/me/",
+    path="/me",
     description="인증된 사용자의 모든 캐릭터를 조회하는 API입니다.",
     responses={
         200: {"model": list[CharacterResponse], "description": "Successful Response"},

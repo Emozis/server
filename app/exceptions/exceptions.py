@@ -7,7 +7,7 @@ class NotFoundException(BaseException):
             status_code=404,
             message=message,
             code="NOT_FOUND",
-            details={id_name: id}
+            data={id_name: id}
         )
 
 class InternalServerError(BaseException):
@@ -16,7 +16,7 @@ class InternalServerError(BaseException):
             status_code=500,
             message="내부 서버 오류가 발생했습니다.",
             code="INTERNAL_SERVER_ERROR",
-            details={"error": str(error)}
+            data={"error": str(error)}
         )
 
 class ForbiddenException(BaseException):
@@ -25,5 +25,5 @@ class ForbiddenException(BaseException):
             status_code=403,
             message=message,
             code="FORBIDDEN",
-            details={}
+            data={}
         )

@@ -8,7 +8,7 @@ from ..models.enums import ImageGenderEnum, ImageAgeGroupEnum, ImageEmotionEnum
 
 class UnsupportedImageFormatException(BaseException):
     def __init__(self, content_type: str = None):
-        details = {
+        data = {
             "content_type": content_type,
             "supported_formats": ["image/jpeg", "image/png", "image/gif"]
         }
@@ -16,7 +16,7 @@ class UnsupportedImageFormatException(BaseException):
             status_code=415,
             message="지원하지 않는 파일 형식입니다.",
             code="UNSUPPORTED_IMAGE_FORMAT",
-            details=details
+            data=data
         )
 
 class ImageNotFoundException(BaseException):
@@ -25,7 +25,7 @@ class ImageNotFoundException(BaseException):
             status_code=404,
             message="이미지를 찾을 수 없습니다.",
             code="IMAGE_NOT_FOUND",
-            details={
+            data={
                 "image_id": image_id
             }
         )
@@ -102,7 +102,7 @@ class InvalidEnumValueException(BaseException):
             allowed_values: 허용된 값들의 리스트
             field_name: 표시될 필드 이름 (선택사항)
         """
-        details = {
+        data = {
             "field": field,
             "field_name": field_name or field,
             "provided_value": provided_value,
@@ -113,5 +113,5 @@ class InvalidEnumValueException(BaseException):
             status_code=422,
             message=f"잘못된 {field_name or field} 값입니다.",
             code="INVALID_ENUM_VALUE",
-            details=details
+            data=data
         )

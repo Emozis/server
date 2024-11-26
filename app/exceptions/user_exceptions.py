@@ -7,5 +7,5 @@ class UserConflictException(BaseException):
             status_code=409,
             message="이미 존재하는 이메일입니다.",
             code="EMAIL_CONFLICT",
-            details={"email": user_email}
+            data={"email": user_email}
         )

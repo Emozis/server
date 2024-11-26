@@ -7,8 +7,8 @@ class BaseException(HTTPException):
         status_code: int,
         message: str,
         code: str,
-        headers: dict = None,
-        details: dict = None
+        data: dict = None,
+        headers: dict = None
     ):
         super().__init__(
             status_code=status_code,
@@ -16,7 +16,7 @@ class BaseException(HTTPException):
                 "message": message,
                 "code": code,
                 "timestamp": datetime.now().isoformat(),
-                "details": details
+                **(data or {})
             },
             headers=headers
         )
