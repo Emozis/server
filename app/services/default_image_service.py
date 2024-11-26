@@ -4,7 +4,7 @@ from fastapi import UploadFile
 from ..core import logger
 from ..crud import DefaultImageCRUD
 from ..mappers import DefaultImageMapper
-from ..schemas import MessageResponse, DefaultImageCreate, DefaultImageResponse
+from ..schemas import ResponseSchema, DefaultImageCreate, DefaultImageResponse
 from ..exceptions import NotFoundException
 from ..utils import upload_to_s3
 
@@ -14,7 +14,7 @@ class DefaultImageService:
         self.db = db
         self.default_image_crud = DefaultImageCRUD(db)
 
-    async def create_default_image(self, default_image: DefaultImageCreate, image: UploadFile) -> MessageResponse:
+    async def create_default_image(self, default_image: DefaultImageCreate, image: UploadFile) -> ResponseSchema:
         """
         새로운 기본 이미지 생성 서비스
         Args:
@@ -34,7 +34,10 @@ class DefaultImageService:
         created_image = self.default_image_crud.create(DefaultImageMapper.create_to_model(default_image))
 
         logger.info(f"✅ Successfully created default image: {created_image.image_name} (ID: {created_image.image_id})")
-        return MessageResponse(message="기본 이미지가 성공적으로 저장되었습니다.")
+        return ResponseSchema(
+            message="기본 이미지가 성공적으로 저장되었습니다.",
+            data={"image_id": created_image.image_id}
+        )
     
     def get_default_images(self) -> list[DefaultImageResponse]:
         """
@@ -64,7 +67,7 @@ class DefaultImageService:
         logger.info(f"📸 Found default image: {db_default_image.image_name} (ID: {image_id})")
         return DefaultImageMapper.to_dto(db_default_image)
     
-    async def update_default_image(self,  image_id: int, default_image: DefaultImageCreate, image: UploadFile):
+    async def update_default_image(self,  image_id: int, default_image: DefaultImageCreate, image: UploadFile) -> ResponseSchema:
         """
         기본 이미지 정보 업데이트
         Args:
@@ -89,9 +92,12 @@ class DefaultImageService:
         self.default_image_crud.update(image_id, DefaultImageMapper.update_to_model(default_image))
 
         logger.info(f"✅ Successfully updated default image: {default_image.image_name} (ID: {image_id})")
-        return MessageResponse(message="기본 이미지가 성공적으로 저장되었습니다.")
+        return ResponseSchema(
+            message="기본 이미지가 성공적으로 수정되었습니다.",
+            data={"image_id": image_id}
+        )
     
-    def delete_default_image(self,  image_id: int):
+    def delete_default_image(self,  image_id: int) -> ResponseSchema:
         """
         기본 이미지 삭제
         Args:
@@ -104,4 +110,7 @@ class DefaultImageService:
         image = self.get_default_image(image_id)
         if self.default_image_crud.delete(image_id):
             logger.info(f"✅ Successfully deleted default image: {image.image_name} (ID: {image_id})")
-            return MessageResponse(message="이미지가 성공적으로 삭제되었습니다.")
+            return ResponseSchema(
+                message="기본 이미지가 성공적으로 삭제되었습니다.",
+                data={"image_id": image_id}
+            )
