@@ -88,7 +88,7 @@ class CharacterCRUD(BaseCRUD[Character]):
             .filter(Character.character_is_active == True)\
             .all()
     
-    def get_charater_by_id(self, character_id: int) -> Character:
+    def get_public_charater_by_id(self, character_id: int) -> Character:
         return self.db.query(Character)\
             .options(
                 joinedload(Character.user), 
@@ -97,6 +97,16 @@ class CharacterCRUD(BaseCRUD[Character]):
             )\
             .filter(Character.character_id == character_id)\
             .filter(Character.character_is_active == True)\
+            .first()
+    
+    def get_charater_by_id(self, character_id: int) -> Character:
+        return self.db.query(Character)\
+            .options(
+                joinedload(Character.user), 
+                joinedload(Character.character_relationships)\
+                    .joinedload(CharacterRelationship.relationship)
+            )\
+            .filter(Character.character_id == character_id)\
             .first()
     
     def deactivate_character(self, character_id: int) -> bool:

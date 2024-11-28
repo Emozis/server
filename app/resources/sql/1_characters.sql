@@ -2,5 +2,8 @@ INSERT INTO characters (character_name, character_profile, character_gender, cha
 VALUES 
 ('Alice', 'profile1.png', 'female', 'Friendly', 'Loves nature and animals', 'A friendly character with a deep love for the environment.', 'Hello! Let''s save the planet together!', NOW(), NOW(), true, 10, 5, true, 1),
 ('Bob', 'profile2.png', 'male', 'Brave', 'Always stands up for others', 'A brave character who never backs down from challenges.', 'Ready for adventure? Let''s go!', NOW(), NOW(), true, 15, 8, true, 1),
-('Charlie', 'profile3.png', 'other', 'Curious', 'Wants to explore the world', 'A curious character who is always asking questions.', 'What are we going to discover today?', NOW(), NOW(), true, 20, 12, true, 1)
+('Charlie', 'profile3.png', 'other', 'Curious', 'Wants to explore the world', 'A curious character who is always asking questions.', 'What are we going to discover today?', NOW(), NOW(), true, 20, 12, true, 1),
+('Diana', 'profile4.png', 'female', 'Creative', 'Talented artist and musician', 'A creative soul who expresses herself through various art forms.', 'Let''s create something beautiful today!', NOW(), NOW(), true, 8, 3, true, 1),
+('Ethan', 'profile5.png', 'male', 'Wise', 'Loves reading and sharing knowledge', 'A thoughtful character who enjoys meaningful conversations.', 'Knowledge is power. What shall we learn today?', NOW(), NOW(), true, 12, 6, true, 1),
+('Fiona', 'profile6.png', 'female', 'Energetic', 'Sports enthusiast and team player', 'An active character who brings energy and enthusiasm to every situation.', 'Ready to take on any challenge with a smile!', NOW(), NOW(), true, 18, 9, true, 1)
 ;

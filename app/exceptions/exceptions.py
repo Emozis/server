@@ -20,10 +20,10 @@ class InternalServerError(BaseException):
         )
 
 class ForbiddenException(BaseException):
-    def __init__(self, message: str):
+    def __init__(self, message: str, id_name: str = None, id: int = None):
         super().__init__(
             status_code=403,
             message=message,
             code="FORBIDDEN",
-            data={}
+            data={id_name: id} if id_name else {}
         )
