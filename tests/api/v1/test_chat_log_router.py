@@ -3,9 +3,15 @@ import pytest
 
 
 class TestChatLog:
-
     @pytest.mark.asyncio
     async def test_get_chat_logs_by_chat_id_success(self, auth_client: TestClient):
+        """
+        채팅 ID로 채팅 로그 조회 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 채팅 로그 존재 확인
+        """
         # Set
         chat_id = 1
 
@@ -19,6 +25,14 @@ class TestChatLog:
 
     @pytest.mark.asyncio
     async def test_delete_chat_log_success(self, auth_client: TestClient):
+        """
+        채팅 로그 삭제 성공 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 삭제 성공 메시지 확인
+        - 삭제된 로그 ID 확인
+        """
         # Set
         log_id = 1
 
@@ -33,6 +47,14 @@ class TestChatLog:
 
     @pytest.mark.asyncio
     async def test_delete_chat_log_access_denied(self, auth_client: TestClient):
+        """
+        타인의 채팅 로그 삭제 시도 테스트
+        
+        검증 항목:
+        - 403 상태 코드 반환
+        - 접근 거부 메시지 확인
+        - 에러 코드 및 로그 ID 확인
+        """
         # Set
         log_id = 3
 
@@ -48,6 +70,14 @@ class TestChatLog:
 
     @pytest.mark.asyncio
     async def test_delete_chat_log_not_found(self, auth_client: TestClient):
+        """
+        존재하지 않는 채팅 로그 삭제 시도 테스트
+        
+        검증 항목:
+        - 404 상태 코드 반환
+        - 에러 메시지 확인
+        - 에러 코드 및 로그 ID 확인
+        """
         # Set
         log_id = 999
 

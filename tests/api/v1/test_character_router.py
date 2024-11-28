@@ -18,6 +18,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_create_character_success(self, auth_client: TestClient):
+        """
+        캐릭터 생성 성공 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 성공 메시지 확인
+        - 생성된 캐릭터 ID 존재 확인
+        """
         # Set
         data = self.test_character
 
@@ -34,6 +42,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_get_public_characters_success(self, auth_client: TestClient):
+        """
+        공개 캐릭터 목록 조회 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 생성된 캐릭터 존재 확인
+        - 캐릭터 정보 일치 여부 확인
+        """
         # When
         response = auth_client.get("/api/v1/character")
         response_data: dict = response.json()
@@ -47,6 +63,13 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_get_public_characters_public(self, auth_client: TestClient):
+        """
+        비공개 캐릭터 목록 제외 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 비공개 캐릭터 미포함 확인
+        """
         # Set
         data = self.test_character.copy()
         data["characterIsPublic"] = False
@@ -66,6 +89,13 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_get_top_used_public_characters_success(self, auth_client: TestClient):
+        """
+        인기 캐릭터 상위 5개 조회 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 정확히 5개의 캐릭터 반환 확인
+        """
         # When
         response = auth_client.get("/api/v1/character/rank")
         response_data: dict = response.json()
@@ -76,6 +106,13 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_get_characters_by_user_id_success(self, auth_client: TestClient):
+        """
+        사용자별 캐릭터 목록 조회 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 사용자의 캐릭터 2개 존재 확인
+        """
         # When
         response = auth_client.get("/api/v1/character/me")
         response_data: dict = response.json()
@@ -85,6 +122,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_get_character_by_id_success(self, auth_client: TestClient):
+        """
+        캐릭터 상세 정보 조회 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 캐릭터 정보 일치 확인
+        - 관계 정보 일치 확인
+        """
         # When
         response = auth_client.get(f"/api/v1/character/{self.character_id}")
         response_data: dict = response.json()
@@ -97,6 +142,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_get_character_by_id_not_found(self, auth_client: TestClient):
+        """
+        존재하지 않는 캐릭터 조회 테스트
+        
+        검증 항목:
+        - 404 상태 코드 반환
+        - 에러 메시지 확인
+        - 에러 코드 및 캐릭터 ID 확인
+        """
         # Set
         character_id = 999
         
@@ -112,6 +165,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_update_character_success(self, auth_client: TestClient):
+        """
+        캐릭터 정보 수정 성공 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 수정 성공 메시지 확인
+        - 수정된 캐릭터 ID 확인
+        """
         # Set
         data = self.test_character.copy()
         data["characterName"] = "updated test character"
@@ -129,6 +190,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_update_character_access_denied(self, auth_client: TestClient):
+        """
+        타인의 캐릭터 수정 시도 테스트
+        
+        검증 항목:
+        - 403 상태 코드 반환
+        - 접근 거부 메시지 확인
+        - 에러 코드 및 캐릭터 ID 확인
+        """
         # Set
         character_id = 2
         data = self.test_character.copy()
@@ -148,6 +217,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_update_character_not_found(self, auth_client: TestClient):
+        """
+        존재하지 않는 캐릭터 수정 시도 테스트
+        
+        검증 항목:
+        - 404 상태 코드 반환
+        - 에러 메시지 확인
+        - 에러 코드 및 캐릭터 ID 확인
+        """
         # Set
         character_id = 999
         data = self.test_character.copy()
@@ -167,6 +244,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_deactivate_character_success(self, auth_client: TestClient):
+        """
+        캐릭터 비활성화 성공 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 비활성화 성공 메시지 확인
+        - 비활성화된 캐릭터 ID 확인
+        """
         # Set
         character_id = self.character_id
 
@@ -181,6 +266,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_deactivate_character_access_denied(self, auth_client: TestClient):
+        """
+        타인의 캐릭터 비활성화 시도 테스트
+        
+        검증 항목:
+        - 403 상태 코드 반환
+        - 접근 거부 메시지 확인
+        - 에러 코드 및 캐릭터 ID 확인
+        """
         # Set
         character_id = 2
 
@@ -196,6 +289,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_deactivate_character_not_found(self, auth_client: TestClient):
+        """
+        존재하지 않는 캐릭터 비활성화 시도 테스트
+        
+        검증 항목:
+        - 404 상태 코드 반환
+        - 에러 메시지 확인
+        - 에러 코드 및 캐릭터 ID 확인
+        """
         # Set
         character_id = 999
 
@@ -211,6 +312,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_delete_character_success(self, auth_client: TestClient):
+        """
+        캐릭터 삭제 성공 테스트
+        
+        검증 항목:
+        - 200 상태 코드 반환
+        - 삭제 성공 메시지 확인
+        - 삭제된 캐릭터 ID 확인
+        """
         # Set
         character_id = self.character_id
 
@@ -225,6 +334,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_delete_character_access_denied(self, auth_client: TestClient):
+        """
+        타인의 캐릭터 삭제 시도 테스트
+        
+        검증 항목:
+        - 403 상태 코드 반환
+        - 접근 거부 메시지 확인
+        - 에러 코드 및 캐릭터 ID 확인
+        """
         # Set
         character_id = 2
 
@@ -240,6 +357,14 @@ class TestCharacter:
 
     @pytest.mark.asyncio
     async def test_delete_character_not_found(self, auth_client: TestClient):
+        """
+        존재하지 않는 캐릭터 삭제 시도 테스트
+        
+        검증 항목:
+        - 404 상태 코드 반환
+        - 에러 메시지 확인
+        - 에러 코드 및 캐릭터 ID 확인
+        """
         # Set
         character_id = 999
 
