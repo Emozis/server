@@ -86,7 +86,7 @@ class ChatService:
         
         if user_id != chat.user_id:
             logger.warning(f"❌ User {user_id} attempted to modify chat {chat_id} owned by user {chat.user_id}")
-            raise ForbiddenException("자신의 채팅방만 삭제할 수 있습니다.")
+            raise ForbiddenException("자신의 채팅방만 삭제할 수 있습니다.", "chat_id", chat_id)
         
         if self.chat_crud.delete(chat_id):
             logger.info(f"🗑️  Successfully deleted chat: room{chat_id} (ID: {chat_id})")
