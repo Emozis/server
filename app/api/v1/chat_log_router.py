@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 @router.get(
-    path="/chats",
+    path="/chats/{chat_id}",
     description="특정 채팅방의 채팅 로그를 조회하는 API입니다. 인증된 사용자가 자신의 채팅 로그를 조회할 수 있습니다.",
     responses={
         200: {"model": list[ChatLogResponse], "description": "Successful Response"},

@@ -87,7 +87,6 @@ class TestChat:
         # When
         response = auth_client.delete(f"/api/v1/chat/{chat_id}")
         response_data: dict = response.json()
-        print(response_data)
         
         # Then
         assert response.status_code == 404

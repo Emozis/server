@@ -74,7 +74,7 @@ class ChatLogService:
         
         if user_id != log.user_id:
             logger.warning(f"❌ User {user_id} attempted to modify chat log {log_id} owned by user {log.user_id}")
-            raise ForbiddenException("자신의 채팅 로그만 삭제할 수 있습니다.")
+            raise ForbiddenException("자신의 채팅 로그만 삭제할 수 있습니다.", "log_id", log_id)
 
         if self.chat_log_crud.delete(log_id):
             logger.info(f"🗑️  Successfully deleted chat log: log{log_id} (ID: {log_id})")
