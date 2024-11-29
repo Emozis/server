@@ -23,8 +23,9 @@ jobs:
             run: poetry install --with dev
 
           - name: Create env file
-            run: |
-                echo '${{ secrets.ENV_FILE }}' | base64 -d > .env
+            env:
+                ENV_CONTENT: ${{ secrets.ENV_FILE }}
+            run: echo "$ENV_CONTENT" > .env
                 
           - name: Run tests
             run: |
