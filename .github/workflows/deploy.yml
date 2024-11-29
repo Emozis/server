@@ -85,7 +85,7 @@ jobs:
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
-    deploy-to-server:
+    deploy:
         needs: build-and-push
         runs-on: ubuntu-latest
         steps:
