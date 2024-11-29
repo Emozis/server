@@ -12,6 +12,21 @@ on:
 jobs:
     test:
         runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:16.4-bullseye
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: postgres
+                ports:
+                  - 5432:5432
+                options: >-
+                  --health-cmd pg_isready
+                  --health-interval 10s
+                  --health-timeout 5s
+                  --health-retries 5
+
         steps:
           - uses: actions/checkout@v4
 
@@ -28,9 +43,13 @@ jobs:
             run: echo "$ENV_CONTENT" > .env
                 
           - name: Run tests
-            run: |
-                cat .env
-                poetry run pytest
+            env:
+                POSTGRES_HOST: localhost
+                POSTGRES_PORT: 5432
+                POSTGRES_USER: postgres
+                POSTGRES_PASSWORD: postgres
+                POSTGRES_DB: postgres
+            run: poetry run pytest
 
     build-and-push:
         needs: test
