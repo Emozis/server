@@ -50,7 +50,7 @@ jobs:
                 DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
                 DISCORD_EMBEDS: |
                     [{
-                        "title": "배포 결과 알림",
+                        "title": "🚀 ${{ github.repository }} 배포 결과",
                         "description": "GitHub Actions 워크플로우 실행 결과",
                         "color": "${{ job.status == 'success' && '5763719' || '15548997' }}",
                         "fields": [
