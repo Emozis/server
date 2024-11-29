@@ -1,9 +1,11 @@
+from pathlib import Path
 import textwrap
+import tomli
 
 class SwaggerConfig:
     def __init__(self):
         self.title = "EMOG!"
-        self.version = "0.0.1"
+        self.version = self._set_version_from_poetry()
         self.description = textwrap.dedent("""\
             기능 목록:
 
@@ -49,6 +51,15 @@ class SwaggerConfig:
                 "description": "채팅 기록에 관한 API입니다."
             },
         ]
+
+    def _set_version_from_poetry(self):
+        try:
+            pyproject_path = Path("pyproject.toml")
+            with open(pyproject_path, "rb") as f:
+                pyproject = tomli.load(f)
+            return pyproject["tool"]["poetry"]["version"]
+        except Exception:
+            return "0.0.1"  # 기본값
 
     def get_config(self):
         return {

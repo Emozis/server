@@ -155,7 +155,7 @@
                 return;
             }
 
-            ws = new WebSocket(`ws://localhost:8000/api/v1/chatting/ws/1`);
+            ws = new WebSocket(`ws://${window.location.host}/api/v1/chatting/ws/1`);
 
             ws.onopen = function () {
                 const token = localStorage.getItem('token');
