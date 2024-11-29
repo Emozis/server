@@ -1,0 +1,40 @@
+services:
+  app:
+    image: isakin/emogi-app:latest
+    container_name: emogi-app-2
+    environment:
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ${PROJECT_PATH}/.env.app:/.env
+    ports:
+      - "8200:8000"
+    depends_on:
+      - db
+    networks:
+      - emogi-network
+
+  db:
+    image: postgres:16.4-bullseye
+    container_name: emogi-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    expose:
+      - "5432"
+    volumes:
+      - emogi-data:/var/lib/postgresql/data
+      - ${PROJECT_PATH}/data/db-backup:/backup
+    networks:
+      - emogi-network
+
+networks:
+  emogi-network:
+    driver: bridge
+
+volumes:
+  emogi-data:
