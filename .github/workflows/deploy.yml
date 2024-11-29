@@ -57,25 +57,16 @@ jobs:
                 port: ${{ secrets.SSH_PORT }}
                 username: ${{ secrets.SSH_USERNAME }}
                 password: ${{ secrets.SSH_PASSWORD }}
+                source: "docker-compose.yml,scripts/deploy.sh"
                 script: |
-                    # Create project directory if it doesn't exist
+                    # Copy files to project directory
                     mkdir -p ${{ env.PROJECT_PATH }}
-
-                    # Copy docker-compose file using scp
-                    scp $GITHUB_WORKSPACE/docker-compose.yml ${{ env.PROJECT_PATH }}/docker-compose.yml
-
-                    # Move to project directory and update containers
+                    cp docker-compose.yml ${{ env.PROJECT_PATH }}/
+                    cp scripts/deploy.sh ${{ env.PROJECT_PATH }}/
+                    
+                    # Move to project directory and execute deploy script
                     cd ${{ env.PROJECT_PATH }}
-
-                    # Update image tag in docker-compose.yml
-                    sed -i "s|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:.*|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.version }}|" docker-compose.yml
-
-                    # Pull and restart containers
-                    docker compose pull
-                    docker compose up -d
-
-                    # Clean up unused Docker images
-                    docker image prune -af
+                    bash ./deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build-and-push.outputs.version }}"
 
     notify:
         needs: [build-and-push, deploy-to-server]
