@@ -48,15 +48,39 @@ jobs:
             if: always()
             env:
                 DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                DISCORD_EMBEDS: |
+                    [{
+                        "title": "배포 결과 알림",
+                        "description": "GitHub Actions 워크플로우 실행 결과",
+                        "color": "${{ job.status == 'success' && '5763719' || '15548997' }}",
+                        "fields": [
+                            {
+                                "name": "저장소",
+                                "value": "${{ github.repository }}",
+                                "inline": true
+                            },
+                            {
+                                "name": "브랜치",
+                                "value": "`${{ github.ref_name }}`",
+                                "inline": true
+                            },
+                            {
+                                "name": "버전",
+                                "value": "`${{ steps.version.outputs.version }}`",
+                                "inline": true
+                            },
+                            {
+                                "name": "커밋 메시지",
+                                "value": "${{ github.event.head_commit.message }}"
+                            },
+                            {
+                                "name": "상태",
+                                "value": "${{ job.status == 'success' && '✅ 성공' || '❌ 실패' }}"
+                            }
+                        ],
+                        "footer": {
+                            "text": "GitHub Actions"
+                        },
+                        "timestamp": "${{ github.event.head_commit.timestamp }}"
+                    }]
             uses: Ilshidur/action-discord@master
-            with:
-                args: |
-                    🚀 **${{ github.repository }}** 배포 결과
-                    
-                    브랜치: `${{ github.ref_name }}`
-                    버전: `${{ steps.version.outputs.version }}`
-                    커밋: ${{ github.event.head_commit.message }}
-                    
-                    상태: ${{ job.status }}
-                    
-                    자세히 보기: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
