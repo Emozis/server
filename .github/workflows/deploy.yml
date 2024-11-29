@@ -91,7 +91,7 @@ jobs:
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
     deploy:
-        needs: build
+        needs: [build]
         if: |
             success() && github.ref == 'refs/heads/develop'
         runs-on: ubuntu-latest
