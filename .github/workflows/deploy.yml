@@ -69,7 +69,7 @@ jobs:
                 password: ${{ secrets.SSH_PASSWORD }}
                 script: |
                     cd ${{ env.PROJECT_PATH }}
-                    bash ./deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build-and-push.outputs.version }}"
+                    bash ./scripts/deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build-and-push.outputs.version }}"
 
     notify:
         needs: [build-and-push, deploy-to-server]
