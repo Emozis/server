@@ -50,21 +50,24 @@ jobs:
           - name: Checkout code
             uses: actions/checkout@v4
 
-          - name: Deploy to server and update containers
-            uses: appleboy/ssh-action@master
+          - name: Copy deployment files
+            uses: appleboy/scp-action@master
             with:
                 host: ${{ secrets.SSH_HOST }}
                 port: ${{ secrets.SSH_PORT }}
                 username: ${{ secrets.SSH_USERNAME }}
                 password: ${{ secrets.SSH_PASSWORD }}
                 source: "docker-compose.yml,scripts/deploy.sh"
+                target: ${{ env.PROJECT_PATH }}
+
+          - name: Execute deploy script
+            uses: appleboy/ssh-action@master
+            with:
+                host: ${{ secrets.SSH_HOST }}
+                port: ${{ secrets.SSH_PORT }}
+                username: ${{ secrets.SSH_USERNAME }}
+                password: ${{ secrets.SSH_PASSWORD }}
                 script: |
-                    # Copy files to project directory
-                    mkdir -p ${{ env.PROJECT_PATH }}
-                    cp docker-compose.yml ${{ env.PROJECT_PATH }}/
-                    cp scripts/deploy.sh ${{ env.PROJECT_PATH }}/
-                    
-                    # Move to project directory and execute deploy script
                     cd ${{ env.PROJECT_PATH }}
                     bash ./deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build-and-push.outputs.version }}"
 
