@@ -11,6 +11,8 @@ on:
 jobs:
     build-and-push:
         runs-on: ubuntu-latest
+        outputs:
+            version: ${{ steps.version.outputs.version }}
         steps:
           - name: Checkout code
             uses: actions/checkout@v4
@@ -84,3 +86,18 @@ jobs:
                         "timestamp": "${{ github.event.head_commit.timestamp }}"
                     }]
             uses: Ilshidur/action-discord@master
+    
+    deploy-to-server:
+        needs: build-and-push
+        runs-on: ubuntu-latest
+        steps:
+          - name: Deploy to server
+            uses: appleboy/ssh-action@master
+            with:
+                host: ${{ secrets.SSH_HOST }}
+                port: ${{ secrets.SSH_PORT }}
+                username: ${{ secrets.SSH_USERNAME }}
+                password: ${{ secrets.SSH_PASSWORD }}
+                script: |
+                    # Pull the latest image
+                    docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.version }}
