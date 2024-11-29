@@ -10,6 +10,20 @@ on:
         branches: ["main", "develop"]
 
 jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+
+          - name: Install poetry
+            run: |
+                curl -sSL https://install.python-poetry.org | python3 -
+          - name: Install dependencies
+            run: poetry install --with dev
+                
+          - name: Run tests
+            run: poetry run pytest
+
     build-and-push:
         runs-on: ubuntu-latest
         outputs:
