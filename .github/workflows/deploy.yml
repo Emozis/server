@@ -11,7 +11,6 @@ on:
 
 jobs:
     test:
-        if: github.ref == 'refs/heads/main'
         runs-on: ubuntu-latest
         services:
             postgres:
@@ -53,11 +52,7 @@ jobs:
             run: poetry run pytest
 
     build:
-        needs: [test]
-        if: |
-            success() &&
-            (github.ref == 'refs/heads/main' && needs.test.result == 'success') ||
-            (github.ref == 'refs/heads/develop')
+        needs: test
         runs-on: ubuntu-latest
         outputs:
             version: ${{ steps.version.outputs.version }}
@@ -91,9 +86,7 @@ jobs:
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
     deploy:
-        needs: [build]
-        if: |
-            success() && github.ref == 'refs/heads/develop'
+        needs: build
         runs-on: ubuntu-latest
         steps:
           - name: Checkout code
