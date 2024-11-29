@@ -28,7 +28,6 @@ services:
       - "5432"
     volumes:
       - emogi-data:/var/lib/postgresql/data
-      - ${PROJECT_PATH}/data/db-backup:/backup
     networks:
       - emogi-network
 
