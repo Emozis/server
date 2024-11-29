@@ -50,7 +50,7 @@ jobs:
           - name: Checkout code
             uses: actions/checkout@v4
 
-          - name: Deploy to server
+          - name: Deploy to server and update containers
             uses: appleboy/ssh-action@master
             with:
                 host: ${{ secrets.SSH_HOST }}
@@ -59,35 +59,21 @@ jobs:
                 password: ${{ secrets.SSH_PASSWORD }}
                 script: |
                     # Create project directory if it doesn't exist
-                    mkdir -p /home/isakin/project/emogi
+                    mkdir -p ${{ env.PROJECT_PATH }}
 
-          - name: Copy docker-compose file  # docker-compose 파일 복사
-            uses: appleboy/scp-action@master
-            with:
-                host: ${{ secrets.SSH_HOST }}
-                port: ${{ secrets.SSH_PORT }}
-                username: ${{ secrets.SSH_USERNAME }}
-                password: ${{ secrets.SSH_PASSWORD }}
-                source: "docker-compose.yml"
-                target: "/home/isakin/project/emogi"
+                    # Copy docker-compose file using scp
+                    scp $GITHUB_WORKSPACE/docker-compose.yml ${{ env.PROJECT_PATH }}/docker-compose.yml
 
-          - name: Update and restart containers
-            uses: appleboy/ssh-action@master
-            with:
-                host: ${{ secrets.SSH_HOST }}
-                port: ${{ secrets.SSH_PORT }}
-                username: ${{ secrets.SSH_USERNAME }}
-                password: ${{ secrets.SSH_PASSWORD }}
-                script: |
+                    # Move to project directory and update containers
                     cd ${{ env.PROJECT_PATH }}
 
                     # Update image tag in docker-compose.yml
                     sed -i "s|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:.*|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.version }}|" docker-compose.yml
-                    
+
                     # Pull and restart containers
                     docker compose pull
                     docker compose up -d
-                    
+
                     # Clean up unused Docker images
                     docker image prune -af
 
