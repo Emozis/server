@@ -27,7 +27,9 @@ jobs:
                 echo "${{ secrets.ENV_FILE }}" > .env
                 
           - name: Run tests
-            run: poetry run pytest
+            run: |
+                cat .env
+                poetry run pytest
 
     build-and-push:
         needs: test
