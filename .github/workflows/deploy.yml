@@ -76,46 +76,23 @@ jobs:
         runs-on: ubuntu-latest
         if: always()
         steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+          
+          - name: Generate Discord message
+            id: discord_message
+            run: |
+                message=$(bash ./scripts/discord_message.sh \
+                    "${{ github.repository }}" \
+                    "${{ github.ref_name }}" \
+                    "${{ needs.build-and-push.outputs.version }}" \
+                    "${{ github.event.head_commit.message }}" \
+                    "${{ needs.build-and-push.result }}" \
+                    "${{ needs.deploy-to-server.result }}" \
+                    "${{ github.event.head_commit.timestamp }}")
+                echo "DISCORD_EMBEDS=${message}" >> $GITHUB_ENV
+
           - name: Discord notification
+            uses: Ilshidur/action-discord@master
             env:
                 DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-                DISCORD_EMBEDS: |
-                    [{
-                        "title": "🚀 ${{ github.repository }} 배포 결과",
-                        "description": "GitHub Actions 워크플로우 실행 결과",
-                        "color": "${{ needs.build-and-push.result == 'success' && needs.deploy-to-server.result == 'success' && '5763719' || '15548997' }}",
-                        "fields": [
-                            {
-                                "name": "저장소",
-                                "value": "${{ github.repository }}",
-                                "inline": true
-                            },
-                            {
-                                "name": "브랜치",
-                                "value": "`${{ github.ref_name }}`",
-                                "inline": true
-                            },
-                            {
-                                "name": "버전",
-                                "value": "`${{ needs.build-and-push.outputs.version }}`",
-                                "inline": true
-                            },
-                            {
-                                "name": "커밋 메시지",
-                                "value": "${{ github.event.head_commit.message }}"
-                            },
-                            {
-                                "name": "빌드 상태",
-                                "value": "${{ needs.build-and-push.result == 'success' && '✅ 성공' || '❌ 실패' }}"
-                            },
-                            {
-                                "name": "배포 상태",
-                                "value": "${{ needs.deploy-to-server.result == 'success' && '✅ 성공' || '❌ 실패' }}"
-                            }
-                        ],
-                        "footer": {
-                            "text": "GitHub Actions"
-                        },
-                        "timestamp": "${{ github.event.head_commit.timestamp }}"
-                    }]
-            uses: Ilshidur/action-discord@master
