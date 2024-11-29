@@ -46,47 +46,6 @@ jobs:
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
-          - name: Discord notification
-            if: always()
-            env:
-                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
-                DISCORD_EMBEDS: |
-                    [{
-                        "title": "🚀 ${{ github.repository }} 배포 결과",
-                        "description": "GitHub Actions 워크플로우 실행 결과",
-                        "color": "${{ job.status == 'success' && '5763719' || '15548997' }}",
-                        "fields": [
-                            {
-                                "name": "저장소",
-                                "value": "${{ github.repository }}",
-                                "inline": true
-                            },
-                            {
-                                "name": "브랜치",
-                                "value": "`${{ github.ref_name }}`",
-                                "inline": true
-                            },
-                            {
-                                "name": "버전",
-                                "value": "`${{ steps.version.outputs.version }}`",
-                                "inline": true
-                            },
-                            {
-                                "name": "커밋 메시지",
-                                "value": "${{ github.event.head_commit.message }}"
-                            },
-                            {
-                                "name": "상태",
-                                "value": "${{ job.status == 'success' && '✅ 성공' || '❌ 실패' }}"
-                            }
-                        ],
-                        "footer": {
-                            "text": "GitHub Actions"
-                        },
-                        "timestamp": "${{ github.event.head_commit.timestamp }}"
-                    }]
-            uses: Ilshidur/action-discord@master
-    
     deploy-to-server:
         needs: build-and-push
         runs-on: ubuntu-latest
@@ -101,3 +60,53 @@ jobs:
                 script: |
                     # Pull the latest image
                     docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.version }}
+
+
+    notify:
+        needs: [build-and-push, deploy-to-server]
+        runs-on: ubuntu-latest
+        if: always()
+        steps:
+          - name: Discord notification
+            env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                DISCORD_EMBEDS: |
+                    [{
+                        "title": "🚀 ${{ github.repository }} 배포 결과",
+                        "description": "GitHub Actions 워크플로우 실행 결과",
+                        "color": "${{ needs.build-and-push.result == 'success' && needs.deploy-to-server.result == 'success' && '5763719' || '15548997' }}",
+                        "fields": [
+                            {
+                                "name": "저장소",
+                                "value": "${{ github.repository }}",
+                                "inline": true
+                            },
+                            {
+                                "name": "브랜치",
+                                "value": "`${{ github.ref_name }}`",
+                                "inline": true
+                            },
+                            {
+                                "name": "버전",
+                                "value": "`${{ needs.build-and-push.outputs.version }}`",
+                                "inline": true
+                            },
+                            {
+                                "name": "커밋 메시지",
+                                "value": "${{ github.event.head_commit.message }}"
+                            },
+                            {
+                                "name": "빌드 상태",
+                                "value": "${{ needs.build-and-push.result == 'success' && '✅ 성공' || '❌ 실패' }}"
+                            },
+                            {
+                                "name": "배포 상태",
+                                "value": "${{ needs.deploy-to-server.result == 'success' && '✅ 성공' || '❌ 실패' }}"
+                            }
+                        ],
+                        "footer": {
+                            "text": "GitHub Actions"
+                        },
+                        "timestamp": "${{ github.event.head_commit.timestamp }}"
+                    }]
+            uses: Ilshidur/action-discord@master
