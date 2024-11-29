@@ -45,7 +45,7 @@ jobs:
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
           - name: Discord notification
-            if: always() && secrets.DISCORD_WEBHOOK_URL != ''
+            if: always()
             env:
                 DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
             uses: Ilshidur/action-discord@master
