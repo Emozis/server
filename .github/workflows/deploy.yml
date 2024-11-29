@@ -93,8 +93,7 @@ jobs:
     deploy:
         needs: build
         if: |
-            success() &&
-            (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+            success() && github.ref == 'refs/heads/develop'
         runs-on: ubuntu-latest
         steps:
           - name: Checkout code
