@@ -20,7 +20,7 @@ if [[ "$1" == "refs/heads/main" ]]; then
     git config --global user.email 'actions@github.com'
     
     git add pyproject.toml
-    git commit -m "chore: bump version to ${NEW_VERSION} [skip ci]"
+    git commit -m "[Chore]: bump version to ${NEW_VERSION} [skip ci]"
     git push
 else
     echo "version=${BASE_VERSION}-dev.${2}" >> $GITHUB_OUTPUT
