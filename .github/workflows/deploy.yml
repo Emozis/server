@@ -15,6 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+     - name: Get version from pyproject.toml
+       id: version
+       run: |
+         echo "version=$(cat pyproject.toml | grep version | head -n 1 | cut -d'"' -f2)" >> $GITHUB_OUTPUT
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -30,4 +35,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+         tags: |
+           ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+           ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
