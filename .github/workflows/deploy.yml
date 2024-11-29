@@ -3,6 +3,7 @@ name: CI/CD Pipeline
 env:
     IMAGE_NAME: emogi-app
     CONTAINER_NAME: emogi-app
+    PROJECT_PATH: /home/isakin/project/emogi
 
 on:
     push:
@@ -82,10 +83,10 @@ jobs:
                 username: ${{ secrets.SSH_USERNAME }}
                 password: ${{ secrets.SSH_PASSWORD }}
                 script: |
-                    cd /home/isakin/project/emogi
+                    cd ${{ env.PROJECT_PATH }}
 
                     # Update image tag in docker-compose.yml
-                    sed -i "s|image: isakin/emogi-app:.*|image: isakin/emogi-app:${{ needs.build-and-push.outputs.version }}|" docker-compose.yml
+                    sed -i "s|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:.*|image: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.version }}|" docker-compose.yml
                     
                     # Pull and restart containers
                     docker compose pull
