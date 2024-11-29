@@ -114,7 +114,7 @@ jobs:
                     bash ./scripts/deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build-and-push.outputs.version }}"
 
     notify:
-        needs: [build-and-push, deploy-to-server]
+        needs: [test, build-and-push, deploy]
         runs-on: ubuntu-latest
         if: always()
         steps:
@@ -129,8 +129,9 @@ jobs:
                     "${{ github.ref_name }}" \
                     "${{ needs.build-and-push.outputs.version }}" \
                     "${{ github.event.head_commit.message }}" \
+                    "${{ needs.test.result }}" \
                     "${{ needs.build-and-push.result }}" \
-                    "${{ needs.deploy-to-server.result }}" \
+                    "${{ needs.deploy.result }}" \
                     "${{ github.event.head_commit.timestamp }}")
                 echo "DISCORD_EMBEDS=${message}" >> $GITHUB_ENV
 
