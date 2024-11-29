@@ -205,6 +205,9 @@
 
             const message = messageInput.value.trim();
             if (message) {
+                // 내 메시지를 화면에 표시
+                appendMessage('나', message);
+
                 // JSON 형태로 메시지 구성
                 const messageData = {
                     type: 'user',

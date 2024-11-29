@@ -58,9 +58,17 @@ jobs:
                 username: ${{ secrets.SSH_USERNAME }}
                 password: ${{ secrets.SSH_PASSWORD }}
                 script: |
-                    # Pull the latest image
-                    docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ needs.build-and-push.outputs.version }}
+                    cd /home/isakin/project/emogi
 
+                    # Update image tag in docker-compose.yml
+                    sed -i "s|image: isakin/emogi-app:.*|image: isakin/emogi-app:${{ needs.build-and-push.outputs.version }}|" docker-compose.yml
+                    
+                    # Pull and restart containers
+                    docker compose pull
+                    docker compose up -d
+                    
+                    # Clean up unused Docker images
+                    docker image prune -af
 
     notify:
         needs: [build-and-push, deploy-to-server]
