@@ -18,13 +18,19 @@ jobs:
           - name: Install poetry
             run: |
                 curl -sSL https://install.python-poetry.org | python3 -
+
           - name: Install dependencies
             run: poetry install --with dev
+
+          - name: Create env file
+            run: |
+                echo "${{ secrets.ENV_FILE }}" > .env
                 
           - name: Run tests
             run: poetry run pytest
 
     build-and-push:
+        needs: test
         runs-on: ubuntu-latest
         outputs:
             version: ${{ steps.version.outputs.version }}
