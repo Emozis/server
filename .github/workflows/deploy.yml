@@ -42,4 +42,21 @@ jobs:
          push: true
          tags: |
            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
-           ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+           ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Discord notification
+        if: always()  # 성공/실패 상관없이 항상 실행
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: |
+            🚀 **${{ github.repository }}** 배포 결과
+            
+            브랜치: `${{ github.ref_name }}`
+            버전: `${{ steps.version.outputs.version }}`
+            커밋: ${{ github.event.head_commit.message }}
+            
+            상태: ${{ job.status }}
+            
+            자세히 보기: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
