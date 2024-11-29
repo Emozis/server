@@ -52,7 +52,7 @@ jobs:
                 POSTGRES_DB: postgres
             run: poetry run pytest
 
-    build-and-push:
+    build:
         needs: [test]
         if: |
             always() &&
@@ -91,7 +91,8 @@ jobs:
                     ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
     deploy:
-        needs: build-and-push
+        if: needs.build.result == 'success'
+        needs: build
         runs-on: ubuntu-latest
         steps:
           - name: Checkout code
@@ -116,10 +117,10 @@ jobs:
                 password: ${{ secrets.SSH_PASSWORD }}
                 script: |
                     cd ${{ env.PROJECT_PATH }}
-                    bash ./scripts/deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build-and-push.outputs.version }}"
+                    bash ./scripts/deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
 
     notify:
-        needs: [test, build-and-push, deploy]
+        needs: [test, build, deploy]
         runs-on: ubuntu-latest
         if: always()
         steps:
@@ -132,10 +133,10 @@ jobs:
                 message=$(bash ./scripts/discord_message.sh \
                     "${{ github.repository }}" \
                     "${{ github.ref_name }}" \
-                    "${{ needs.build-and-push.outputs.version }}" \
+                    "${{ needs.build.outputs.version }}" \
                     "${{ github.event.head_commit.message }}" \
                     "${{ needs.test.result }}" \
-                    "${{ needs.build-and-push.result }}" \
+                    "${{ needs.build.result }}" \
                     "${{ needs.deploy.result }}" \
                     "${{ github.event.head_commit.timestamp }}")
                 echo "DISCORD_EMBEDS=${message}" >> $GITHUB_ENV
