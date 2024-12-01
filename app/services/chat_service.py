@@ -44,14 +44,7 @@ class ChatService:
         Returns:
             list[ChatResponse]: 마지막 메시지 시간순으로 정렬된 채팅방 목록
         """
-        chats = self.chat_crud.get_chats_by_user_id_order_by_last_message_at(user_id)
-        print("============================")
-        print(chats[0].to_dict())
-        print(chats[0].chat_logs)
-        for chat_log in chats[0].chat_logs:
-            print(chat_log.to_dict())
-        print("============================")
-        
+        chats = self.chat_crud.get_chats_by_user_id_order_by_last_message_at(user_id)        
         logger.info(f"🏠 Found {len(chats)} chat rooms for user {user_id}")
         return ChatMapper.to_dto_list(chats)
 

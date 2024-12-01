@@ -21,7 +21,7 @@ class ChatResponse(CamelModel):
 
     user: UserResponse
     character: CharacterResponse
-    last_log: LogResponse
+    last_log: LogResponse | None
 
     chat_create_at: datetime
     last_message_at: datetime

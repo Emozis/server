@@ -28,7 +28,7 @@ class ChatMapper:
         last_log = LogResponse(
             log_id=last_message.log_id,
             contents=last_message.contents
-        )
+        ) if last_message else None
 
         return ChatResponse(
             chat_id=model.chat_id,
