@@ -73,7 +73,7 @@ class TestUser:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "사용자 정보가 성공적으로 업데이트 되었습니다."
-        assert response_data["data"]["user_id"] == 2
+        assert response_data["data"]["userId"] == 2
 
     @pytest.mark.asyncio
     async def test_deactivate_user_success(self, auth_client: TestClient):
@@ -92,4 +92,4 @@ class TestUser:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "사용자가 성공적으로 탈퇴 되었습니다."
-        assert response_data["data"]["user_id"] == 2
+        assert response_data["data"]["userId"] == 2

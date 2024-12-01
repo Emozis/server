@@ -25,12 +25,12 @@ class TestChat:
         response = auth_client.post("/api/v1/chat", json=data)
         response_data: dict = response.json()
 
-        TestChat.chat_id = response_data["data"]["chat_id"]
+        TestChat.chat_id = response_data["data"]["chatId"]
         
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "채팅방이 성공적으로 생성되었습니다."
-        assert response_data["data"]["chat_id"]
+        assert response_data["data"]["chatId"]
 
     @pytest.mark.asyncio
     async def test_create_chat_not_found(self, auth_client: TestClient):
@@ -93,7 +93,7 @@ class TestChat:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "채팅방이 성공적으로 삭제되었습니다."
-        assert response_data["data"]["chat_id"] == self.chat_id
+        assert response_data["data"]["chatId"] == self.chat_id
 
     @pytest.mark.asyncio
     async def test_delete_chat_access_denied(self, auth_client: TestClient):

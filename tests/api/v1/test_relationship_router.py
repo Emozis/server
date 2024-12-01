@@ -25,12 +25,12 @@ class TestRelationship:
         response = auth_client.post("/api/v1/relationship", json=data)
         response_data: dict = response.json()
 
-        TestRelationship.relationship_id = response_data["data"]["relationship_id"]
+        TestRelationship.relationship_id = response_data["data"]["relationshipId"]
         
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "관계가 성공적으로 생성되었습니다."
-        assert response_data["data"]["relationship_id"]
+        assert response_data["data"]["relationshipId"]
 
     @pytest.mark.asyncio
     async def test_get_relationships_success(self, auth_client: TestClient):
@@ -118,7 +118,7 @@ class TestRelationship:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "관계가 성공적으로 수정되었습니다."
-        assert response_data["data"]["relationship_id"] == relationship_id
+        assert response_data["data"]["relationshipId"] == relationship_id
 
     @pytest.mark.asyncio
     async def test_update_relationship_not_found(self, auth_client: TestClient):
@@ -165,7 +165,7 @@ class TestRelationship:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "관계가 성공적으로 삭제되었습니다."
-        assert response_data["data"]["relationship_id"] == relationship_id
+        assert response_data["data"]["relationshipId"] == relationship_id
 
     @pytest.mark.asyncio
     async def test_delete_relationship_not_found(self, auth_client: TestClient):

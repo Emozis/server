@@ -33,12 +33,12 @@ class TestCharacter:
         response = auth_client.post("/api/v1/character", json=data)
         response_data: dict = response.json()
 
-        TestCharacter.character_id = response_data["data"]["character_id"]
+        TestCharacter.character_id = response_data["data"]["characterId"]
         
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "캐릭터가 성공적으로 생성되었습니다."
-        assert response_data["data"]["character_id"]
+        assert response_data["data"]["characterId"]
 
     @pytest.mark.asyncio
     async def test_get_public_characters_success(self, auth_client: TestClient):
@@ -76,7 +76,7 @@ class TestCharacter:
 
         response = auth_client.post("/api/v1/character", json=data)
         response_data: dict = response.json()
-        not_public_character_id = response_data["data"]["character_id"]
+        not_public_character_id = response_data["data"]["characterId"]
 
         # When
         response = auth_client.get("/api/v1/character")
@@ -186,7 +186,7 @@ class TestCharacter:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "캐릭터가 성공적으로 수정되었습니다."
-        assert response_data["data"]["character_id"] == self.character_id
+        assert response_data["data"]["characterId"] == self.character_id
 
     @pytest.mark.asyncio
     async def test_update_character_access_denied(self, auth_client: TestClient):
@@ -262,7 +262,7 @@ class TestCharacter:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "성공적으로 캐릭터를 비활성화 하였습니다."
-        assert response_data["data"]["character_id"] == character_id
+        assert response_data["data"]["characterId"] == character_id
 
     @pytest.mark.asyncio
     async def test_deactivate_character_access_denied(self, auth_client: TestClient):
@@ -330,7 +330,7 @@ class TestCharacter:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "캐릭터가 성공적으로 삭제되었습니다."
-        assert response_data["data"]["character_id"] == character_id
+        assert response_data["data"]["characterId"] == character_id
 
     @pytest.mark.asyncio
     async def test_delete_character_access_denied(self, auth_client: TestClient):

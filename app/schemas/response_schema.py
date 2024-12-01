@@ -19,7 +19,7 @@ class ChatIdResponse(CamelModel):
     chat_id: int
 
 class ChatLogIdResponse(CamelModel):
-    chat_log_id: int
+    log_id: int
 
 class DefaultImageIdResponse(CamelModel):
     image_id: int
