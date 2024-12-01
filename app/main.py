@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.core import lifespan, SwaggerConfig
 from app.core.router_scanner import RouterScanner
@@ -12,7 +13,6 @@ def create_app() -> FastAPI:
         title=config["title"],
         description=config["description"],
         version=config["version"],
-        license_info=config["license_info"],
         openapi_tags=config["tags_metadata"],
         lifespan=lifespan
     )
@@ -24,6 +24,8 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    app.mount("/docs", StaticFiles(directory="app/resources/docs"), name="project_docs")
 
     router_scanner = RouterScanner(app)
     router_scanner.scan_and_register_routers()

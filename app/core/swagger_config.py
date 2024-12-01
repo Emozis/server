@@ -7,7 +7,7 @@ class SwaggerConfig:
         self.title = "EMOG!"
         self.version = self._set_version_from_poetry()
         self.description = textwrap.dedent("""\
-            기능 목록:
+            #### 기능 목록:
 
             * **Auth** (_completely implemented_).
             * **User** (_completely implemented_).
@@ -16,11 +16,11 @@ class SwaggerConfig:
             * **Relationship** (_completely implemented_).
             * **Chat** (_completely implemented_).
             * **Chat log** (_completely implemented_).
+            
+            #### 문서:
+                                           
+            [API 변경 사항 (v0.1.0)](/docs/change_log_(0.1.0).html)
         """)
-        self.license_info = {
-            "name": "Apache 2.0",
-            "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
-        }
         self.tags_metadata = [
             {
                 "name": "Auth",
@@ -66,7 +66,6 @@ class SwaggerConfig:
             "title": self.title,
             "version": self.version,
             "description": self.description,
-            "license_info": self.license_info,
             "tags_metadata": self.tags_metadata,
         }
     
