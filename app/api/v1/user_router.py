@@ -7,7 +7,6 @@ from app.schemas import (
     UserResponse, 
     ErrorResponse, 
     ResponseSchema, 
-    ResponseSchema, 
     UserIdResponse
 )
 

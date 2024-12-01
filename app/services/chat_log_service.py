@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from ..core import logger
 from ..crud import ChatLogCRUD
 from ..mappers import ChatLogMapper
-from ..schemas import ResponseSchema, ChatLogCreate, ChatLogResponse
+from ..schemas import ResponseSchema, ChatLogCreate, ChatLogResponse, ChatLogIdResponse
 from ..exceptions import NotFoundException, ForbiddenException
 
 
@@ -25,7 +25,7 @@ class ChatLogService:
         logger.info(f"✨ Successfully created chat log: id {chat_log.log_id} by user {user_id} \'{chat_log.contents}\'")
         return ResponseSchema(
             message="채팅 로그가 성공적으로 생성되었습니다.",
-            data={"chat_id" : chat_log.log_id}
+            data=ChatLogIdResponse(chat_log_id=chat_log.log_id)
         )
 
     def create_chat_log_for_socket(self, chat_id: int, character_id: int, user_id: int, role: str, content: str) -> ResponseSchema:
@@ -39,7 +39,7 @@ class ChatLogService:
         logger.info(f"✨ Successfully created chat log: id {chat_log.log_id} by {role}(id: {user_id if user_id else character_id}) \'{chat_log.contents[:30]}{'...' if len(chat_log.contents) > 30 else ''}\'")
         return ResponseSchema(
             message="채팅 로그가 성공적으로 생성되었습니다.",
-            data={"chat_id" : chat_log.log_id}
+            data=ChatLogIdResponse(chat_log_id=chat_log.log_id)
         )
 
     def get_chat_logs_by_chat_id(self, chat_id: int, user_id: int) -> list[ChatLogResponse]:
@@ -80,5 +80,5 @@ class ChatLogService:
             logger.info(f"🗑️  Successfully deleted chat log: log{log_id} (ID: {log_id})")
             return ResponseSchema(
                 message="채팅 로그가 성공적으로 삭제되었습니다.",
-                data={"log_id" : log_id}
+                data=ChatLogIdResponse(chat_log_id=log_id)
             )

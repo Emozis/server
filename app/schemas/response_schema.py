@@ -10,6 +10,7 @@ class ResponseSchema(CamelModel, Generic[T]):
 
 class UserIdResponse(CamelModel):
     user_id: int
+    user_name: str
 
 class CharacterIdResponse(CamelModel):
     character_id: int

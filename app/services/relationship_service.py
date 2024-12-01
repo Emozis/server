@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from ..core import logger
 from ..crud import RelationshipCRUD
 from ..mappers import RelationshipMapper
-from ..schemas import MessageResponse, ResponseSchema, RelationshipCreate, RelationshipResponse, RelationshipUpdate
+from ..schemas import ResponseSchema, RelationshipCreate, RelationshipResponse, RelationshipUpdate, RelationshipIdResponse
 from ..exceptions import NotFoundException
 
 
@@ -24,7 +24,7 @@ class RelationshipService:
         logger.info(f"✨ Successfully created relationship: {created.relationship_name} (ID: {created.relationship_id})")
         return ResponseSchema(
             message="관계가 성공적으로 생성되었습니다.",
-            data={"relationship_id": created.relationship_id}
+            data=RelationshipIdResponse(relationship_id=created.relationship_id)
         )
 
     def get_relationships(self) -> list[RelationshipResponse]:
@@ -72,7 +72,7 @@ class RelationshipService:
         logger.info(f"✅ Successfully updated relationship: {updated.relationship_name} (ID: {relationship_id})")
         return ResponseSchema(
             message="관계가 성공적으로 수정되었습니다.",
-            data={"relationship_id": relationship_id}
+            data=RelationshipIdResponse(relationship_id=relationship_id)
         )
 
     def delete_relationship(self, relationship_id: int) -> ResponseSchema:
@@ -90,5 +90,5 @@ class RelationshipService:
             logger.info(f"✅ Successfully deleted relationship: {relationship.relationship_name} (ID: {relationship_id})")
             return ResponseSchema(
                 message="관계가 성공적으로 삭제되었습니다.",
-                data={"relationship_id": relationship_id}
+                data=RelationshipIdResponse(relationship_id=relationship_id)
             )

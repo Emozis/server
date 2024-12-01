@@ -8,7 +8,6 @@ from app.schemas import (
     RelationshipResponse, 
     ErrorResponse, 
     ResponseSchema, 
-    ResponseSchema, 
     RelationshipIdResponse
 )
 

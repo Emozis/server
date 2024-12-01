@@ -4,7 +4,7 @@ from fastapi import UploadFile
 from ..core import logger
 from ..crud import DefaultImageCRUD
 from ..mappers import DefaultImageMapper
-from ..schemas import ResponseSchema, DefaultImageCreate, DefaultImageResponse
+from ..schemas import ResponseSchema, DefaultImageCreate, DefaultImageResponse, DefaultImageIdResponse
 from ..exceptions import NotFoundException
 from ..utils import upload_to_s3
 
@@ -36,7 +36,7 @@ class DefaultImageService:
         logger.info(f"✅ Successfully created default image: {created_image.image_name} (ID: {created_image.image_id})")
         return ResponseSchema(
             message="기본 이미지가 성공적으로 저장되었습니다.",
-            data={"image_id": created_image.image_id}
+            data=DefaultImageIdResponse(image_id=created_image.image_id)
         )
     
     def get_default_images(self) -> list[DefaultImageResponse]:
@@ -94,7 +94,7 @@ class DefaultImageService:
         logger.info(f"✅ Successfully updated default image: {default_image.image_name} (ID: {image_id})")
         return ResponseSchema(
             message="기본 이미지가 성공적으로 수정되었습니다.",
-            data={"image_id": image_id}
+            data=DefaultImageIdResponse(image_id=image_id)
         )
     
     def delete_default_image(self,  image_id: int) -> ResponseSchema:
@@ -112,5 +112,5 @@ class DefaultImageService:
             logger.info(f"✅ Successfully deleted default image: {image.image_name} (ID: {image_id})")
             return ResponseSchema(
                 message="기본 이미지가 성공적으로 삭제되었습니다.",
-                data={"image_id": image_id}
+                data=DefaultImageIdResponse(image_id=image_id)
             )
