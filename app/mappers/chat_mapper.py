@@ -1,6 +1,6 @@
 from ..models import Chat
 from ..schemas import ChatCreate, ChatResponse
-from ..schemas.chat.chat_response import UserResponse, CharacterResponse
+from ..schemas.chat.chat_response import UserResponse, CharacterResponse, LogResponse
 
 
 class ChatMapper:
@@ -23,10 +23,18 @@ class ChatMapper:
             character_name=model.character.character_name,
             character_profile=model.character.character_profile
         )
+
+        last_message = max(model.chat_logs, key=lambda x: x.log_create_at) if model.chat_logs else None
+        last_log = LogResponse(
+            log_id=last_message.log_id,
+            contents=last_message.contents
+        )
+
         return ChatResponse(
             chat_id=model.chat_id,
             user=user_dto,
             character=character_dto,
+            last_log=last_log,
             chat_create_at=model.chat_create_at,
             last_message_at=model.last_message_at
         )
