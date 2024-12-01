@@ -2,7 +2,14 @@ from fastapi import APIRouter
 
 from app.core import handle_exceptions
 from app.core.dependencies import CurrentUser, UserServiceDep
-from app.schemas import UserUpdate, UserResponse, ErrorResponse, ResponseSchema
+from app.schemas import (
+    UserUpdate, 
+    UserResponse, 
+    ErrorResponse, 
+    ResponseSchema, 
+    ResponseSchema, 
+    UserIdResponse
+)
 
 
 router = APIRouter(
@@ -27,7 +34,7 @@ async def read_user_by_id(user_id: CurrentUser, user_service: UserServiceDep) ->
     path="/me",
     description="현재 로그인된 유저 정보를 업데이트합니다.",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[UserIdResponse], "description": "Successful Response"},
         404: {"model": ErrorResponse, "description": "User not found"},
         500: {"model": ErrorResponse, "description": "Internal server error"}
     }
@@ -40,7 +47,7 @@ async def update_user(user_id: CurrentUser, user: UserUpdate, user_service: User
     path="/me/deactivate",
     description="현재 로그인된 유저를 비활성화합니다.(탈퇴)",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[UserIdResponse], "description": "Successful Response"},
         404: {"model": ErrorResponse, "description": "User not found"},
         500: {"model": ErrorResponse, "description": "Internal server error"}
     }

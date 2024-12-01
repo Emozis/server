@@ -2,7 +2,14 @@ from fastapi import APIRouter
 
 from app.core import handle_exceptions
 from app.core.dependencies import CharacterServiceDep, CurrentUser
-from app.schemas import CharacterCreate, CharacterUpdate, CharacterResponse, ResponseSchema, ErrorResponse
+from app.schemas import (
+    CharacterCreate, 
+    CharacterUpdate, 
+    CharacterResponse, 
+    ErrorResponse, 
+    ResponseSchema, 
+    CharacterIdResponse
+)
 
 
 router = APIRouter(
@@ -14,7 +21,7 @@ router = APIRouter(
     path="",
     description="새 캐릭터를 생성하는 API입니다.",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[CharacterIdResponse], "description": "Successful Response"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
     }
 )
@@ -75,7 +82,7 @@ async def get_character_by_id(character_id: int, character_service: CharacterSer
     path="/{character_id}",
     description="특정 캐릭터 정보를 업데이트하는 API입니다.",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[CharacterIdResponse], "description": "Successful Response"},
         403: {"model": ErrorResponse, "description": "Forbidden - Access Denied"},
         404: {"model": ErrorResponse, "description": "Not Found"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
@@ -89,7 +96,7 @@ async def update_character(character_id: int, character: CharacterUpdate, user_i
     path="/{character_id}/deactive",    
     description="특정 캐릭터를 비활성화하는 API입니다.",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[CharacterIdResponse], "description": "Successful Response"},
         403: {"model": ErrorResponse, "description": "Forbidden - Access Denied"},
         404: {"model": ErrorResponse, "description": "Not Found"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
@@ -102,7 +109,7 @@ async def deactive_character(character_id: int, user_id: CurrentUser, chararter_
     path="/{character_id}",
     description="특정 캐릭터를 삭제하는 API입니다.",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[CharacterIdResponse], "description": "Successful Response"},
         403: {"model": ErrorResponse, "description": "Forbidden - Access Denied"},
         404: {"model": ErrorResponse, "description": "Not Found"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}

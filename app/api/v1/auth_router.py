@@ -2,7 +2,12 @@ from fastapi import APIRouter
 
 from app.core import handle_exceptions
 from app.core.dependencies import AuthServiceDep
-from app.schemas import LoginRequest, LoginGoogleRequest, ErrorResponse, LoginResponse
+from app.schemas import (
+    LoginRequest, 
+    LoginGoogleRequest, 
+    ErrorResponse, 
+    LoginResponse
+)
 
 
 router = APIRouter(

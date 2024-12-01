@@ -2,7 +2,13 @@ from fastapi import APIRouter
 
 from app.core import handle_exceptions
 from app.core.dependencies import ChatServiceDep, CurrentUser
-from app.schemas import ResponseSchema, ErrorResponse, ChatCreate, ChatResponse
+from app.schemas import (
+    ErrorResponse, 
+    ChatCreate, 
+    ChatResponse, 
+    ResponseSchema, 
+    ChatIdResponse
+)
 
 
 router = APIRouter(
@@ -14,7 +20,7 @@ router = APIRouter(
     path="",
     description="새 채팅방을 생성하는 API입니다.",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[ChatIdResponse], "description": "Successful Response"},
         404: {"model": ErrorResponse, "description": "Not Found"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
     }
@@ -39,7 +45,7 @@ async def get_chat_by_user_id(user_id: CurrentUser, chat_service: ChatServiceDep
     path="/{chat_id}",
     description="특정 채팅방을 삭제하는 API입니다.",
     responses={
-        200: {"model": ResponseSchema, "description": "Successful Response"},
+        200: {"model": ResponseSchema[ChatIdResponse], "description": "Successful Response"},
         403: {"model": ErrorResponse, "description": "Forbidden - Access Denied"},
         404: {"model": ErrorResponse, "description": "Not Found"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
