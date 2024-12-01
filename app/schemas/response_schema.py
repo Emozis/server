@@ -6,4 +6,4 @@ T = TypeVar('T')
 
 class ResponseSchema(BaseModel, Generic[T]):
     message: str
-    data: Optional[T] = None
+    data: Optional[T] = {}
