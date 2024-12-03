@@ -36,12 +36,12 @@ class TestDefaultImage:
         )
         response_data: dict = response.json()
 
-        TestDefaultImage.image_id = response_data["data"]["image_id"]
+        TestDefaultImage.image_id = response_data["data"]["imageId"]
         
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "기본 이미지가 성공적으로 저장되었습니다."
-        assert response_data["data"]["image_id"]
+        assert response_data["data"]["imageId"]
 
     @pytest.mark.asyncio
     async def test_create_default_image_invalid_format(self, auth_client: TestClient):
@@ -188,7 +188,7 @@ class TestDefaultImage:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "기본 이미지가 성공적으로 수정되었습니다."
-        assert response_data["data"]["image_id"] == image_id
+        assert response_data["data"]["imageId"] == image_id
 
     @pytest.mark.asyncio
     async def test_update_default_image_not_found(self, auth_client: TestClient):
@@ -300,7 +300,7 @@ class TestDefaultImage:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "기본 이미지가 성공적으로 삭제되었습니다."
-        assert response_data["data"]["image_id"] == image_id
+        assert response_data["data"]["imageId"] == image_id
 
     @pytest.mark.asyncio
     async def test_delete_default_image_not_found(self, auth_client: TestClient):

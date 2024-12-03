@@ -43,7 +43,7 @@ class TestChatLog:
         # Then
         assert response.status_code == 200
         assert response_data["message"] == "채팅 로그가 성공적으로 삭제되었습니다."
-        assert response_data["data"]["log_id"] == log_id
+        assert response_data["data"]["logId"] == log_id
 
     @pytest.mark.asyncio
     async def test_delete_chat_log_access_denied(self, auth_client: TestClient):

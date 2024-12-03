@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from ..core import logger
 from ..crud import ChatCRUD, CharacterCRUD
 from ..mappers import ChatMapper
-from ..schemas import ResponseSchema, ChatCreate, ChatResponse
+from ..schemas import ResponseSchema, ChatCreate, ChatResponse, ChatIdResponse
 from ..exceptions import NotFoundException, ForbiddenException
 
 
@@ -33,7 +33,7 @@ class ChatService:
 
         return ResponseSchema(
             message="채팅방이 성공적으로 생성되었습니다.",
-            data={"chat_id" : created_chat.chat_id}
+            data=ChatIdResponse(chat_id=created_chat.chat_id)
             )
 
     def get_chats_by_user_id(self, user_id: int) -> list[ChatResponse]:
@@ -44,7 +44,7 @@ class ChatService:
         Returns:
             list[ChatResponse]: 마지막 메시지 시간순으로 정렬된 채팅방 목록
         """
-        chats = self.chat_crud.get_chats_by_user_id_order_by_last_message_at(user_id)
+        chats = self.chat_crud.get_chats_by_user_id_order_by_last_message_at(user_id)        
         logger.info(f"🏠 Found {len(chats)} chat rooms for user {user_id}")
         return ChatMapper.to_dto_list(chats)
 
@@ -92,5 +92,5 @@ class ChatService:
             logger.info(f"🗑️  Successfully deleted chat: room{chat_id} (ID: {chat_id})")
             return ResponseSchema(
                 message="채팅방이 성공적으로 삭제되었습니다.",
-                data={"chat_id" : chat_id}
+                data=ChatIdResponse(chat_id=chat_id)
                 )

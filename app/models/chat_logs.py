@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Enum, Text, ForeignKey, BigInteger, Sequence, TIMESTAMP
+from sqlalchemy import Column, Enum, Text, ForeignKey, BigInteger, TIMESTAMP
+from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -21,3 +22,14 @@ class ChatLog(Base):
     chat = relationship("Chat", back_populates="chat_logs")
     user = relationship("User", back_populates="chat_logs")
     character = relationship("Character", back_populates="chat_logs")
+
+    def to_dict(self):
+        """Convert model instance to dictionary with more control."""
+        result = {}
+        for c in inspect(self).mapper.column_attrs:
+            value = getattr(self, c.key)
+            # datetime 등 특수 타입 처리
+            if hasattr(value, 'isoformat'):
+                value = value.isoformat()
+            result[c.key] = value
+        return result

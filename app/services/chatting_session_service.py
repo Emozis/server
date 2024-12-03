@@ -43,10 +43,9 @@ class ChattingSessionService:
 
         output = ""
         async for content in self.gemini.astream_yield(inputs):
-        # for content in inputs:
-            if content != "\n":
-                output += content
-                await self.send_socket_response(content, response_id)
+            # if content != "\n":
+            output += content
+            await self.send_socket_response(content, response_id)
                 # await asyncio.sleep(0.2)
 
         await self.send_socket_response("[EOS]", response_id)

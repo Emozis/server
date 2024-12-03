@@ -4,7 +4,7 @@ from ..core import logger
 from ..models import CharacterRelationship
 from ..crud import CharacterCRUD, CharacterRelationshipCRUD, RelationshipCRUD
 from ..mappers import CharacterMapper
-from ..schemas import CharacterCreate, CharacterUpdate, CharacterResponse, ResponseSchema
+from ..schemas import CharacterCreate, CharacterUpdate, CharacterResponse, ResponseSchema, CharacterIdResponse
 from ..exceptions import NotFoundException, ForbiddenException
 
 
@@ -33,7 +33,7 @@ class CharacterService:
         logger.info(f"✨ Successfully created character: {db_charater.character_name} (ID: {db_charater.character_id})")
         return ResponseSchema(
             message="캐릭터가 성공적으로 생성되었습니다.",
-            data={"character_id": db_charater.character_id}
+            data=CharacterIdResponse(character_id=db_charater.character_id)
         )
     
     def get_public_characters(self) -> list[CharacterResponse]:
@@ -124,7 +124,7 @@ class CharacterService:
         logger.info(f"🔄 Successfully updated character: {db_charater.character_name} (ID: {character_id})")
         return ResponseSchema(
             message="캐릭터가 성공적으로 수정되었습니다.",
-            data={"character_id": character_id}
+            data=CharacterIdResponse(character_id=character_id)
         )
     
     def deactive_charactor(self, character_id: int, user_id: int) -> ResponseSchema:
@@ -152,7 +152,7 @@ class CharacterService:
             logger.info(f"🚫 Successfully deactivated character: {character.character_name} (ID: {character_id})")
             return ResponseSchema(
                 message="성공적으로 캐릭터를 비활성화 하였습니다.",
-                data={"character_id": character_id}
+                data=CharacterIdResponse(character_id=character_id)
             )
     
     def delete_charactor(self, character_id: int, user_id: int) -> ResponseSchema:
@@ -180,5 +180,5 @@ class CharacterService:
             logger.info(f"🗑️  Successfully deleted character: {character.character_name} (ID: {character_id})")
             return ResponseSchema(
                 message="캐릭터가 성공적으로 삭제되었습니다.",
-                data={"character_id": character_id}
+                data=CharacterIdResponse(character_id=character_id)
             )

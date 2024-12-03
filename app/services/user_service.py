@@ -4,7 +4,7 @@ from ..core import logger
 from ..models import User
 from ..crud import UserCRUD
 from ..mappers import UserMapper
-from ..schemas import UserCreate, UserUpdate, UserResponse, ResponseSchema
+from ..schemas import UserCreate, UserUpdate, UserResponse, ResponseSchema, UserIdResponse
 from ..utils import password_hasher
 from ..exceptions import NotFoundException, UserConflictException
 
@@ -88,7 +88,7 @@ class UserService:
         logger.info(f"🔄 Successfully updated user: {updated_user.user_name} (ID: {user_id})")
         return ResponseSchema(
             message="사용자 정보가 성공적으로 업데이트 되었습니다.", 
-            data={"user_id": updated_user.user_id, "user_name": updated_user.user_name}
+            data=UserIdResponse(user_id=updated_user.user_id, user_name=updated_user.user_name)
         )
 
     def delete_user_by_id(self, user_id: int) -> ResponseSchema:
@@ -106,7 +106,7 @@ class UserService:
             logger.info(f"🗑️  Successfully deleted user: {user.user_name} (ID: {user_id})")
             return ResponseSchema(
                 message="사용자가 성공적으로 삭제 되었습니다.", 
-                data={"user_id": user.user_id, "user_name": user.user_name}
+                data=UserIdResponse(user_id=user.user_id, user_name=user.user_name)
             )
 
     def deactivate_user_by_id(self, user_id: int) -> ResponseSchema:
@@ -124,5 +124,5 @@ class UserService:
             logger.info(f"🚫 Successfully deactivated user: {user.user_name} (ID: {user_id})")
             return ResponseSchema(
                 message="사용자가 성공적으로 탈퇴 되었습니다.", 
-                data={"user_id": user.user_id, "user_name": user.user_name}
+                data=UserIdResponse(user_id=user.user_id, user_name=user.user_name)
             )

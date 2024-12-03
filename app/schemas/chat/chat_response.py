@@ -12,13 +12,16 @@ class CharacterResponse(CamelModel):
     character_name: str
     character_profile: str
 
+class LogResponse(CamelModel):
+    log_id: int
+    contents: str
+
 class ChatResponse(CamelModel):
     chat_id: int
 
     user: UserResponse
     character: CharacterResponse
+    last_log: LogResponse | None
 
     chat_create_at: datetime
     last_message_at: datetime
-
-    # chat_logs: list[ChatLogs]

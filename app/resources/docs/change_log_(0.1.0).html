@@ -1,0 +1,1345 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>API 변경 사항 (v0.1.0)</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="14fb3417-16d9-80a8-b6d6-c90d6f0c0f11" class="page sans"><header><h1 class="page-title">API 변경 사항 (v0.1.0)</h1><p class="page-description"></p></header><div class="page-body"><h2 id="14fb3417-16d9-80cf-b38b-c46f9ff9bcf4" class="">Auth</h2><hr id="14fb3417-16d9-80b8-bbf3-ff41aca1df95"/><h3 id="14fb3417-16d9-80f5-b588-c20682cef68e" class="">사용자 로그인 API (<code>POST /api/v1/auth/login</code>)</h3><blockquote id="14fb3417-16d9-801c-a39e-d473f50b1234" class="">신규 API</blockquote><h3 id="14fb3417-16d9-807d-8f39-dcf4697f6907" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8007-a513-e7363640fcec" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8062-a151-ca7d39a6e6ff" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><h3 id="14fb3417-16d9-802a-83d7-dac0498257b8" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-808f-9dad-cff7ad417561" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/auth/login</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8087-a412-d9440ff51bca" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;userEmail&quot;: &quot;user@example.com&quot;,
+  &quot;userPassword&quot;: &quot;string&quot;
+}
+
+// Response
+{
+  &quot;status&quot;: &quot;string&quot;,
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;user&quot;: {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;
+  },
+  &quot;accessToken&quot;: &quot;string&quot;
+}</code></pre><hr id="14fb3417-16d9-809b-aade-c1f38cb2a664"/><h3 id="14fb3417-16d9-809e-967f-f3c318af6bf6" class="">구글 로그인 API (<code>POST /api/v1/auth/login/google</code>)</h3><blockquote id="14fb3417-16d9-802a-8757-eff919c657be" class="">API 주소 변경</blockquote><h3 id="14fb3417-16d9-80f6-b6c7-cc1f26182062" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80e5-aeca-c0f5f44c645b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/auth/login/google/id-token</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8038-9796-fac072e9d51d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;idToken&quot;: &quot;string&quot;
+}
+
+// Response
+{
+  &quot;status&quot;: &quot;string&quot;,
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;user&quot;: {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;
+  },
+  &quot;accessToken&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-80b2-9296-f91ccd999139" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ac-8a7a-d70029fa8a36" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/auth/login/google</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ba-8af8-c91f26d9fb04" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;idToken&quot;: &quot;string&quot;
+}
+
+// Response
+{
+  &quot;status&quot;: &quot;string&quot;,
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;user&quot;: {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;
+  },
+  &quot;accessToken&quot;: &quot;string&quot;
+}</code></pre><hr id="14fb3417-16d9-8023-b3c5-f2dc51d917cf"/><h3 id="14fb3417-16d9-8095-8a51-e048be5635b3" class="">로그인 테스트 API (<code>POST /api/v1/auth/login/test</code>)</h3><blockquote id="14fb3417-16d9-8012-a46d-d0c1f10878d8" class="">API 주소 변경</blockquote><h3 id="14fb3417-16d9-804c-8f5d-cce228279fb7" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8088-9343-ef4856874656" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/auth/token/test</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80e2-93f0-e2b2a51e369b" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+
+// Response
+{
+  &quot;status&quot;: &quot;string&quot;,
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;user&quot;: {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;
+  },
+  &quot;accessToken&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-8002-bc84-cd49e650778f" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-808c-ac98-fb8deb83f54f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/auth/login/test</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-809e-bf03-fb6e322597be" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+
+// Response
+{
+  &quot;status&quot;: &quot;string&quot;,
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;user&quot;: {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;
+  },
+  &quot;accessToken&quot;: &quot;string&quot;
+}</code></pre><hr id="14fb3417-16d9-80ba-b712-d45139cc7b32"/><h3 id="14fb3417-16d9-80f5-a33c-d85aeb0dc15d" class="">토큰 데이터 확인 API (<code>GET /api/v1/auth/token</code>)</h3><blockquote id="14fb3417-16d9-80be-abb2-fcbf1151c5c7" class="">API 삭제</blockquote><h3 id="14fb3417-16d9-80c4-b9a7-f002c958a215" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-809a-84f8-f140ba57a910" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/auth/token</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80cf-a5d1-f4adeb596828" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;userId&quot;: 0,
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-80d6-a611-d49c74cd925d" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8060-ab16-c3e7a6d27deb" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80c5-b25c-cec4980957ea" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><hr id="14fb3417-16d9-8081-a6f8-de4a64f53a21"/><p id="14fb3417-16d9-8089-a1f5-d0d4eab6e743" class="">
+</p><h2 id="14fb3417-16d9-80ed-b0c8-caa90b9e0981" class="">User</h2><hr id="14fb3417-16d9-8016-817f-c75e5f0c0c99"/><h3 id="14fb3417-16d9-807c-9425-d3b2bd98e400" class="">모든 유저 조회 API (<code>GET /api/v1/user/</code>)</h3><blockquote id="14fb3417-16d9-8029-9a00-c7429292177f" class="">사용하지 않을 api 삭제</blockquote><h3 id="14fb3417-16d9-80c8-854a-e6231c6455a2" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a3-885d-fc0fe41fbc1a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/user/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80db-b77b-d11957f7e369" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;,
+    &quot;userGender&quot;: &quot;male&quot;,
+    &quot;userBirthdate&quot;: &quot;2024-12-01T05:07:54.049Z&quot;
+  }
+]</code></pre><h3 id="14fb3417-16d9-80a9-9e0c-ee63fba7d542" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8081-b525-f3d0e429bd0e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-807d-a0cf-eaaa437698b7" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><hr id="14fb3417-16d9-80ca-9284-ce164169bf26"/><h3 id="14fb3417-16d9-80b3-8b1e-d6785745dc2a" class="">현재 유저 조회 API (<code>GET /api/v1/user/me</code>)</h3><blockquote id="14fb3417-16d9-8006-8504-c93956ea846d" class="">변경사항 없음</blockquote><hr id="14fb3417-16d9-80c5-9c48-eeea31518d20"/><h3 id="14fb3417-16d9-8009-b21f-c4c3637a3003" class="">현재 유저 수정 API (<code>PUT /api/v1/user/me</code>)</h3><blockquote id="14fb3417-16d9-8012-a546-d4cfd31179e8" class="">Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80fd-8ecb-fe77f42aa312" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-809f-9336-ed6a942d2165" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/user/me</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80b2-8c25-cff1ece062f9" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;userName&quot;: &quot;string&quot;,
+  &quot;userProfile&quot;: &quot;string&quot;,
+  &quot;userGender&quot;: &quot;male&quot;,
+  &quot;userBirthdate&quot;: &quot;2024-12-01T05:11:28.212Z&quot;
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-80e2-b62a-cd05c709f8a5" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8066-931b-c9335dc4cc60" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/user/me</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8095-9151-e3f17a732412" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;userName&quot;: &quot;string&quot;,
+  &quot;userProfile&quot;: &quot;string&quot;,
+  &quot;userGender&quot;: &quot;male&quot;,
+  &quot;userBirthdate&quot;: &quot;2024-12-01T05:11:28.212Z&quot;
+}
+
+// Response
+
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;userId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-8049-95b0-f141eac4817b"/><h3 id="14fb3417-16d9-80d7-80ab-e859700bbbae" class="">현재 유저 삭제 API (<code>DELETE /api/v1/user/me</code>)</h3><blockquote id="14fb3417-16d9-803b-ab59-e95096c57699" class="">API 삭제</blockquote><h3 id="14fb3417-16d9-8009-bf00-eebb4d394dd9" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8029-87aa-dcf459c19fa6" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/user/me</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-808c-9da1-e904339571ac" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-8017-ab52-c6dd5544bcf3" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a7-91d9-f63e7c3ac256" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8039-8bfe-f9d456a138a3" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><hr id="14fb3417-16d9-809c-83f5-c8d0634c122f"/><h3 id="14fb3417-16d9-80b0-ab13-eb3385350ec6" class="">현재 유저 탈퇴 API (<code>PATCH /api/v1/user/me/deactivate</code> )</h3><blockquote id="14fb3417-16d9-807d-9a29-e7b3a916afda" class="">Response 형태 및 Methods 변경</blockquote><h3 id="14fb3417-16d9-8053-9f88-dd8089842eab" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8082-81b3-cdc303998765" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/user/me/deactivate</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80b1-92d2-d2f406a801f4" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-801b-89af-d07bc3d269e8" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80e1-ac82-d19853b144aa" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PATCH /api/v1/user/me/deactivate</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8039-8505-dab878d333f8" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+
+// Response
+
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;userId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-80b5-89bb-c851564188b1"/><p id="14fb3417-16d9-808f-befc-e135885cc2f1" class="">
+</p><h2 id="14fb3417-16d9-8061-ae29-f3c58dcfe27d" class="">Characters</h2><hr id="14fb3417-16d9-80ed-8d3a-c85f4124b37f"/><h3 id="14fb3417-16d9-8039-8745-e0783b59e37d" class="">모든 캐릭터 조회 API (<code>GET /api/v1/character</code> )</h3><blockquote id="14fb3417-16d9-80d6-831a-cacefd402dbb" class="">API 주소 변경</blockquote><h3 id="14fb3417-16d9-80ca-ae3c-fb15cc1f7024" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a8-b8e0-d990072b47ca" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/characters</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-802c-b313-e6e951f0cb6a" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;characterId&quot;: 0,
+    &quot;characterName&quot;: &quot;string&quot;,
+    &quot;characterProfile&quot;: &quot;string&quot;,
+    &quot;characterGender&quot;: &quot;male&quot;,
+    &quot;characterPersonality&quot;: &quot;string&quot;,
+    &quot;characterDetails&quot;: &quot;string&quot;,
+    &quot;characterRelationships&quot;: [
+      {
+        &quot;relationship&quot;: {
+          &quot;relationshipId&quot;: 0,
+          &quot;relationshipName&quot;: &quot;string&quot;
+        }
+      }
+    ],
+    &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:28:36.141Z&quot;,
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userEmail&quot;: &quot;string&quot;,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    }
+  }
+]</code></pre><h3 id="14fb3417-16d9-8073-851e-c56f568be290" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80bc-bf2c-e00d284987a9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/character</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-808a-842d-f0cd4d12cff8" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;characterId&quot;: 0,
+    &quot;characterName&quot;: &quot;string&quot;,
+    &quot;characterProfile&quot;: &quot;string&quot;,
+    &quot;characterGender&quot;: &quot;male&quot;,
+    &quot;characterPersonality&quot;: &quot;string&quot;,
+    &quot;characterDetails&quot;: &quot;string&quot;,
+    &quot;characterRelationships&quot;: [
+      {
+        &quot;relationshipId&quot;: 0,
+        &quot;relationshipName&quot;: &quot;string&quot;
+      }
+    ],
+    &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:29:34.029Z&quot;,
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userEmail&quot;: &quot;string&quot;,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    }
+  }
+]</code></pre><hr id="14fb3417-16d9-80e3-bde0-eacbe3f862e1"/><h3 id="14fb3417-16d9-80eb-ad5b-f7d0e719329b" class="">캐릭터 생성 API (<code>POST /api/v1/character</code> )</h3><blockquote id="14fb3417-16d9-8091-90a2-cb009ef22be1" class="">API 주소 변경 및 Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80cc-8355-feb89a2ec9b0" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ce-b92c-f39a13ca9c55" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/characters/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8069-be10-fe834e0ff274" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;characterName&quot;: &quot;string&quot;,
+  &quot;characterProfile&quot;: &quot;string&quot;,
+  &quot;characterGender&quot;: &quot;male&quot;,
+  &quot;characterPersonality&quot;: &quot;string&quot;,
+  &quot;characterDetails&quot;: &quot;string&quot;,
+  &quot;characterDescription&quot;: &quot;string&quot;,
+  &quot;characterGreeting&quot;: &quot;string&quot;,
+  &quot;characterIsPublic&quot;: true,
+  &quot;relationships&quot;: []
+}
+
+// Response
+{
+  &quot;characterId&quot;: 0,
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-808b-bd42-d8ade6625414" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8035-ae44-c41f851293b9" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/character</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80e7-86bf-d06912cb64a4" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;characterName&quot;: &quot;string&quot;,
+  &quot;characterProfile&quot;: &quot;string&quot;,
+  &quot;characterGender&quot;: &quot;male&quot;,
+  &quot;characterPersonality&quot;: &quot;string&quot;,
+  &quot;characterDetails&quot;: &quot;string&quot;,
+  &quot;characterDescription&quot;: &quot;string&quot;,
+  &quot;characterGreeting&quot;: &quot;string&quot;,
+  &quot;characterIsPublic&quot;: true,
+  &quot;relationships&quot;: []
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;characterId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-8006-a479-e6a2fe18be85"/><h3 id="14fb3417-16d9-8025-8d62-f421b048c22e" class="">캐릭터 랭킹 조회 API (<code>GET /api/v1/character/rank</code>)</h3><blockquote id="14fb3417-16d9-80a8-b4b3-f7f97bee708e" class="">API 주소 변경</blockquote><h3 id="14fb3417-16d9-80c6-b1e4-e8cd142fe6d4" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80cb-83a1-f103a7dbb059" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/characters/rank/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-804d-b30d-c564376d201f" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;characterId&quot;: 0,
+    &quot;characterName&quot;: &quot;string&quot;,
+    &quot;characterProfile&quot;: &quot;string&quot;,
+    &quot;characterGender&quot;: &quot;male&quot;,
+    &quot;characterPersonality&quot;: &quot;string&quot;,
+    &quot;characterDetails&quot;: &quot;string&quot;,
+    &quot;characterRelationships&quot;: [
+      {
+        &quot;relationship&quot;: {
+          &quot;relationshipId&quot;: 0,
+          &quot;relationshipName&quot;: &quot;string&quot;
+        }
+      }
+    ],
+    &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:50:27.970Z&quot;,
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userEmail&quot;: &quot;string&quot;,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    }
+  }
+]</code></pre><h3 id="14fb3417-16d9-8086-8710-f32166e9ac01" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8064-bd7a-f190fe0aa0a5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/character/rank</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8005-8007-c6cbae3b2f38" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;characterId&quot;: 0,
+    &quot;characterName&quot;: &quot;string&quot;,
+    &quot;characterProfile&quot;: &quot;string&quot;,
+    &quot;characterGender&quot;: &quot;male&quot;,
+    &quot;characterPersonality&quot;: &quot;string&quot;,
+    &quot;characterDetails&quot;: &quot;string&quot;,
+    &quot;characterRelationships&quot;: [
+      {
+        &quot;relationship&quot;: {
+          &quot;relationshipId&quot;: 0,
+          &quot;relationshipName&quot;: &quot;string&quot;
+        }
+      }
+    ],
+    &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:50:27.970Z&quot;,
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userEmail&quot;: &quot;string&quot;,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    }
+  }
+]</code></pre><hr id="14fb3417-16d9-80c8-9a64-ddf2795a7610"/><h3 id="14fb3417-16d9-8065-8f12-de181dad46fc" class="">사용자의 캐릭터 조회 API (<code>GET /api/v1/character/me</code> )</h3><blockquote id="14fb3417-16d9-8088-bfaa-e21833e0b4be" class="">API 주소 변경</blockquote><h3 id="14fb3417-16d9-8031-9206-db6a070d012c" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-809d-82a7-ea65b58b8426" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/characters/me/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-805a-9b0e-d73fba0e29cb" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;characterId&quot;: 0,
+    &quot;characterName&quot;: &quot;string&quot;,
+    &quot;characterProfile&quot;: &quot;string&quot;,
+    &quot;characterGender&quot;: &quot;male&quot;,
+    &quot;characterPersonality&quot;: &quot;string&quot;,
+    &quot;characterDetails&quot;: &quot;string&quot;,
+    &quot;characterRelationships&quot;: [
+      {
+        &quot;relationship&quot;: {
+          &quot;relationshipId&quot;: 0,
+          &quot;relationshipName&quot;: &quot;string&quot;
+        }
+      }
+    ],
+    &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:50:27.970Z&quot;,
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userEmail&quot;: &quot;string&quot;,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    }
+  }
+]</code></pre><h3 id="14fb3417-16d9-8050-81ef-f093a67acd08" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8042-8235-fa61fc560508" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/character/me</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8085-b421-d1553b7656e4" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;characterId&quot;: 0,
+    &quot;characterName&quot;: &quot;string&quot;,
+    &quot;characterProfile&quot;: &quot;string&quot;,
+    &quot;characterGender&quot;: &quot;male&quot;,
+    &quot;characterPersonality&quot;: &quot;string&quot;,
+    &quot;characterDetails&quot;: &quot;string&quot;,
+    &quot;characterRelationships&quot;: [
+      {
+        &quot;relationship&quot;: {
+          &quot;relationshipId&quot;: 0,
+          &quot;relationshipName&quot;: &quot;string&quot;
+        }
+      }
+    ],
+    &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:50:27.970Z&quot;,
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userEmail&quot;: &quot;string&quot;,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    }
+  }
+]</code></pre><hr id="14fb3417-16d9-806b-a180-e14fa5fb98ee"/><h3 id="14fb3417-16d9-80ac-b226-cee5815e9f10" class="">특정 캐릭터 조회 API (<code>GET /api/v1/character/{character_id}</code> )</h3><blockquote id="14fb3417-16d9-803a-b2db-cb55e7724fb6" class="">API 주소 변경</blockquote><h3 id="14fb3417-16d9-8072-868d-c0335d1f5705" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-808c-90f1-cbf9ae75983f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/characters/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8097-94f5-e0fc8d105188" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;characterId&quot;: 0,
+  &quot;characterName&quot;: &quot;string&quot;,
+  &quot;characterProfile&quot;: &quot;string&quot;,
+  &quot;characterGender&quot;: &quot;male&quot;,
+  &quot;characterPersonality&quot;: &quot;string&quot;,
+  &quot;characterDetails&quot;: &quot;string&quot;,
+  &quot;characterRelationships&quot;: [
+    {
+      &quot;relationship&quot;: {
+        &quot;relationshipId&quot;: 0,
+        &quot;relationshipName&quot;: &quot;string&quot;
+      }
+    }
+  ],
+  &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:54:19.787Z&quot;,
+  &quot;user&quot;: {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;
+  }
+}</code></pre><h3 id="14fb3417-16d9-80e6-8af2-dd800afb429f" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80b7-8c2a-f68168961510" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/character/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ca-a938-ea20509cde88" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;characterId&quot;: 0,
+  &quot;characterName&quot;: &quot;string&quot;,
+  &quot;characterProfile&quot;: &quot;string&quot;,
+  &quot;characterGender&quot;: &quot;male&quot;,
+  &quot;characterPersonality&quot;: &quot;string&quot;,
+  &quot;characterDetails&quot;: &quot;string&quot;,
+  &quot;characterRelationships&quot;: [
+    {
+      &quot;relationship&quot;: {
+        &quot;relationshipId&quot;: 0,
+        &quot;relationshipName&quot;: &quot;string&quot;
+      }
+    }
+  ],
+  &quot;characterCreatedAt&quot;: &quot;2024-12-01T05:54:19.787Z&quot;,
+  &quot;user&quot;: {
+    &quot;userId&quot;: 0,
+    &quot;userEmail&quot;: &quot;string&quot;,
+    &quot;userName&quot;: &quot;string&quot;,
+    &quot;userProfile&quot;: &quot;string&quot;
+  }
+}</code></pre><hr id="14fb3417-16d9-8038-9acb-e505f7a46e9c"/><h3 id="14fb3417-16d9-80c8-b21f-c617c69da1f8" class="">캐릭터 수정 API (<code>PUT /api/v1/character/{character_id}</code> )</h3><blockquote id="14fb3417-16d9-805b-9a3b-f0e1bcc818f4" class="">API 주소 변경 및 Request 형태 변경</blockquote><h3 id="14fb3417-16d9-8025-a815-ed9a9183cdc9" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80be-94e5-d3852b69c239" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/characters/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8073-8356-ec955c56e1be" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;characterName&quot;: &quot;string&quot;,
+  &quot;characterProfile&quot;: &quot;string&quot;,
+  &quot;characterGender&quot;: &quot;male&quot;,
+  &quot;characterPersonality&quot;: &quot;string&quot;,
+  &quot;characterDetails&quot;: &quot;string&quot;,
+  &quot;characterDescription&quot;: &quot;string&quot;,
+  &quot;characterGreeting&quot;: &quot;string&quot;,
+  &quot;characterIsPublic&quot;: true
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-8009-bd24-c2bb5cd7f132" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80b2-bcfe-f88c3ac9a724" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/character/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ca-8453-d350eb2575ea" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;characterName&quot;: &quot;string&quot;,
+  &quot;characterProfile&quot;: &quot;string&quot;,
+  &quot;characterGender&quot;: &quot;male&quot;,
+  &quot;characterPersonality&quot;: &quot;string&quot;,
+  &quot;characterDetails&quot;: &quot;string&quot;,
+  &quot;characterDescription&quot;: &quot;string&quot;,
+  &quot;characterGreeting&quot;: &quot;string&quot;,
+  &quot;characterIsPublic&quot;: true,
+  &quot;relationships&quot;: []
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;characterId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-8087-a2a4-eca879001f8f"/><h3 id="14fb3417-16d9-800c-ad8f-f8e0b0788274" class="">캐릭터 삭제 API (<code>DELETE /api/v1/character/{character_id}</code> )</h3><blockquote id="14fb3417-16d9-807a-b4df-d6ca31fe4915" class="">API 주소 변경 및 Response 형태 변경</blockquote><h3 id="14fb3417-16d9-8066-9f5b-c65809fe2e90" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80f1-a3b5-ce13a6b6c810" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/characters/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80db-a197-f8a5246c7e7d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-8082-a585-c5a176d96e42" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ba-b670-fbb47bd16c21" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/character/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8027-82bf-d8ffd0996cda" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;characterId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-8070-bae0-c2af534701a2"/><h3 id="14fb3417-16d9-8062-be0a-e37abaf56dd0" class="">캐릭터 비활성화 API (<code>PATCH /api/v1/character/{character_id}/deactive</code> )</h3><blockquote id="14fb3417-16d9-808b-99f7-f0f0c14b9ece" class="">Response 형태 변경</blockquote><h3 id="14fb3417-16d9-802c-9883-df4e7fb54f2b" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-806c-8cb2-c2d257eae940" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/characters/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8034-b1ea-f4ff002aa3f0" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-8085-8f44-da6c76a59dca" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ab-9ace-cc6d2818b98a" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PATCH /api/v1/character/{character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8050-9334-f1c0b70175b7" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;characterId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-80ea-affc-f10e41e4f18f"/><p id="14fb3417-16d9-8072-a34d-ff44da1caa7c" class="">
+</p><h2 id="14fb3417-16d9-80e5-8e65-c37c776562a1" class=""><strong>Default image</strong></h2><hr id="14fb3417-16d9-80c0-a72d-e95c9754c4a3"/><h3 id="14fb3417-16d9-80cb-bb6a-f8d0b20d011b" class="">이미지 전체 조회 API (<code>GET /api/v1/default-image</code> )</h3><blockquote id="14fb3417-16d9-80dd-b324-d41cea1f1a5f" class="">API 주소 변경 및 Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80c0-9cc3-f6ffe87dfa64" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8074-94dd-dcbff75af9b8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/default-images/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80c8-a13e-ce51de86a3c5" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;imageId&quot;: 0,
+    &quot;imageName&quot;: &quot;string&quot;,
+    &quot;imageUrl&quot;: &quot;string&quot;,
+    &quot;imageGender&quot;: &quot;string&quot;,
+    &quot;imageAgeGroup&quot;: &quot;string&quot;
+  }
+]</code></pre><h3 id="14fb3417-16d9-805d-9db1-eef3554f42e7" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ce-ba40-c56a8e0a3b30" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/default-image</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a0-a63e-cf7c03e7e91a" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;imageId&quot;: 0,
+    &quot;imageName&quot;: &quot;string&quot;,
+    &quot;imageUrl&quot;: &quot;string&quot;,
+    &quot;imageGender&quot;: &quot;string&quot;,
+    &quot;imageAgeGroup&quot;: &quot;string&quot;,
+    &quot;imageEmotion&quot;: &quot;string&quot;,
+    &quot;imageCreatedAt&quot;: &quot;2024-12-01T06:08:28.478Z&quot;,
+    &quot;imageUpdatedAt&quot;: &quot;2024-12-01T06:08:28.478Z&quot;
+  }
+]</code></pre><hr id="14fb3417-16d9-8099-838f-f4cf748288e0"/><h3 id="14fb3417-16d9-809d-9aaf-c9f7fe3e32d3" class="">이미지 생성 API (<code>POST /api/v1/default-image</code> )</h3><blockquote id="14fb3417-16d9-80c9-bd5a-d7799406b541" class="">API 주소 변경 및 변수명 camel case 변경</blockquote><h3 id="14fb3417-16d9-80d6-950a-e1cdf4ccdfdf" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8019-97bd-cc286aa9ada0" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/default-images/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-802f-b50b-fc622ece512c" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+name: &quot;string&quot;
+gneder: &quot;string&quot;
+age_group: &quot;string&quot;
+image: &quot;string($binary)&quot;
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-80df-8452-c17a0f049255" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8075-b256-f60bf4846a20" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/default-image</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-807b-a739-d1e6e3043521" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+gneder: &quot;string&quot;
+ageGroup: &quot;string&quot;
+emotion: &quot;string&quot;
+image: &quot;string($binary)&quot;
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;imageId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-8089-a55f-eaa44006a472"/><h3 id="14fb3417-16d9-8078-8b04-eaf6e42b142f" class="">특정 이미지 조회 API (<code>GET /api/v1/default-image/{image_id}</code> )</h3><blockquote id="14fb3417-16d9-8063-83ca-c35e18d6da84" class="">신규 API 추가</blockquote><h3 id="14fb3417-16d9-803f-b756-d7a15637e2f3" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80d9-b188-fcd9d5e8e11e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80f7-86ed-fb1959804697" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><h3 id="14fb3417-16d9-80c9-9ecf-fdfffae63b04" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a0-844e-e5055b194b7e" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/default-image/{image_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-805d-bf54-e6550aaca124" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;imageId&quot;: 0,
+  &quot;imageName&quot;: &quot;string&quot;,
+  &quot;imageUrl&quot;: &quot;string&quot;,
+  &quot;imageGender&quot;: &quot;string&quot;,
+  &quot;imageAgeGroup&quot;: &quot;string&quot;,
+  &quot;imageEmotion&quot;: &quot;string&quot;,
+  &quot;imageCreatedAt&quot;: &quot;2024-12-01T06:14:23.404Z&quot;,
+  &quot;imageUpdatedAt&quot;: &quot;2024-12-01T06:14:23.404Z&quot;
+}</code></pre><hr id="14fb3417-16d9-8082-848d-d58b123e51c3"/><h3 id="14fb3417-16d9-8010-8535-ea76d1616642" class="">이미지 수정 API (<code>PUT /api/v1/default-image/{image_id}</code> )</h3><blockquote id="14fb3417-16d9-80ed-8a70-fc64e39750b7" class="">신규 API 추가</blockquote><h3 id="14fb3417-16d9-8053-825f-fa029b46aa46" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8079-baf3-f570636fa9e1" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8099-b5e5-d0aee4c26c0e" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><h3 id="14fb3417-16d9-808d-9d52-f0d61a3645e7" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-803e-b42b-df248784b133" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/default-image/{image_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a3-bf68-c9c1574ab12f" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+gneder: &quot;string&quot;
+ageGroup: &quot;string&quot;
+emotion: &quot;string&quot;
+image: &quot;string($binary)&quot;
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;imageId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-80dc-bb30-e20d80360f09"/><h3 id="14fb3417-16d9-8017-97d9-e4ae07d3c2ee" class="">이미지 삭제 API (<code>DELETE /api/v1/default-image/{image_id}</code> )</h3><blockquote id="14fb3417-16d9-80dc-9ca0-cc32daa37997" class="">신규 API 추가</blockquote><h3 id="14fb3417-16d9-809d-a7be-dbcecb2f3bd3" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-800e-9a6b-ea6cc98b3768" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80cd-b247-e17c8a8f392e" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><h3 id="14fb3417-16d9-808c-bf67-d38d35c2a746" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80fd-aa1e-e4da888907c4" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/default-image/{image_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80f6-8cdc-dff97efa7454" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;imageId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-8022-8d34-ec12d1fe0aa6"/><p id="14fb3417-16d9-807c-96dc-c05a09f74498" class="">
+</p><h2 id="14fb3417-16d9-8031-805c-cf7a2102ef88" class="">Relationship</h2><hr id="14fb3417-16d9-8063-aee8-e442b84002f8"/><h3 id="14fb3417-16d9-8044-9a27-e1d2f12d5a15" class="">관계 전체 조회 API (<code>GET /api/v1/relationship</code> )</h3><blockquote id="14fb3417-16d9-8008-8eb9-da504ed88459" class="">API 주소 변경</blockquote><h3 id="14fb3417-16d9-800b-aab0-d506559e24a8" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80f8-ba94-feaf84c64691" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/relationship/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8050-b205-e9cd520af860" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;relationshipId&quot;: 0,
+    &quot;relationshipName&quot;: &quot;string&quot;
+  }
+]</code></pre><h3 id="14fb3417-16d9-807f-984f-d970df9a916f" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80cf-86e8-cb89e9400337" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/relationship </code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8096-a4dd-c16f4e2f793d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;relationshipId&quot;: 0,
+    &quot;relationshipName&quot;: &quot;string&quot;
+  }
+]</code></pre><hr id="14fb3417-16d9-8059-a248-d4898bf00231"/><h3 id="14fb3417-16d9-8093-91f7-d361d9d0646e" class="">관계 생성 API (<code>POST /api/v1/relationship</code> )</h3><blockquote id="14fb3417-16d9-80a0-929b-d4d74230472f" class="">API 주소 변경 및 Response 형태 변경</blockquote><h3 id="14fb3417-16d9-8013-9d31-e042e1e8001b" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ac-b58f-d737b3c1aab8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/relationship/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80d4-87c0-ce4633123e19" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;relationshipName&quot;: &quot;string&quot;
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-80aa-89bc-ee5218abe2ee" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-804b-a47c-e9b517c37a64" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/relationship </code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a8-9204-d8f208341121" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;relationshipName&quot;: &quot;string&quot;
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;relationshipId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-80ca-aa41-c2e91344de6c"/><h3 id="14fb3417-16d9-8080-b591-e473f46878fb" class="">특정 관계 조회 API (<code>GET /api/v1/relationship/{relationship_id}</code> )</h3><blockquote id="14fb3417-16d9-80c0-bb62-eaf223c04a73" class="">신규 API 추가</blockquote><h3 id="14fb3417-16d9-80ff-bf2d-ee8cf8f88daa" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80fb-9fbf-d261a3b78d1b" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all"></code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8008-aec0-cc81f99007ab" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all"></code></pre><h3 id="14fb3417-16d9-80e6-be02-c311c34a474d" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a8-b697-f14d7cef8588" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/relationship/{relationship_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80cf-893e-f4e92fda08e5" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;relationshipId&quot;: 0,
+  &quot;relationshipName&quot;: &quot;string&quot;
+}</code></pre><hr id="14fb3417-16d9-80dd-9940-cb21a681b46d"/><h3 id="14fb3417-16d9-8077-aab2-e4774a598be5" class="">관계 수정 API (<code>PUT /api/v1/relationship/{relationship_id}</code> )</h3><blockquote id="14fb3417-16d9-80c4-8798-ea5bda640bf4" class="">Response 형태 변경</blockquote><h3 id="14fb3417-16d9-8070-9dab-d886df29a224" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-804e-913c-df67238fc5f3" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/relationship/{relationship_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ae-8755-ede4063e0dfc" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;relationshipName&quot;: &quot;string&quot;
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-800f-8cad-eea777cb0857" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-805c-9980-cf29f025a5b5" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">PUT /api/v1/relationship/{relationship_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8009-baeb-c33b646dd738" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;relationshipName&quot;: &quot;string&quot;
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;relationshipId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-80e5-ac76-f79fd9e873c8"/><h3 id="14fb3417-16d9-8097-b4d9-e0778dc16243" class="">관계 삭제 API (<code>DELETE /api/v1/relationship/{relationship_id}</code> )</h3><blockquote id="14fb3417-16d9-8022-9749-ff2eb68ef2c6" class="">Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80ab-af2a-cc89f8097a8b" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-805b-b517-d1a640e448a7" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/relationship/{relationship_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80b8-bb42-efb596b83b5c" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-806d-947e-e9927cbf3d15" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80b4-81c2-fa1452991d2d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/relationship/{relationship_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8094-a0a2-d2024082d2db" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;relationshipId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-808c-bc6c-db20299f31a4"/><p id="14fb3417-16d9-806b-bdac-ecdfc1877ea1" class="">
+</p><h2 id="14fb3417-16d9-806a-9e49-ed641f207cd8" class="">Chat</h2><hr id="14fb3417-16d9-80e0-8058-fbdf0291bbb6"/><h3 id="14fb3417-16d9-80f5-a8f1-f3e37781a815" class="">채팅방 생성 API (<code>POST /api/v1/chat</code> )</h3><blockquote id="14fb3417-16d9-80af-93a2-f81a23f0ce34" class="">Response 형태 및 Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80c1-8c81-f746186c1ec0" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80c0-966d-ce0569729a5d" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/chat/?character_id={character_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80b8-9cf2-cf88122bbe4d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;chatId&quot;: 0
+}</code></pre><h3 id="14fb3417-16d9-8028-933b-e3a43eb70f51" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80dd-ad50-c14831109049" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">POST /api/v1/chat</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8015-8091-e1902834226d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;characterId&quot;: 0
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;chatId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-8072-9c1e-d07eed21df27"/><h3 id="14fb3417-16d9-8092-adaf-fc24c1f77c2d" class="">사용자의 채팅방 조회 API (<code>GET /api/v1/chat/me</code> )</h3><blockquote id="14fb3417-16d9-80ae-a1d2-f91d000ed2ab" class="">Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80aa-b368-e47d22d9b7b2" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80a3-8ed4-e6de70978e9f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/chat/me/</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-806c-b6b1-fc95e7971017" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;chatId&quot;: 0,
+    &quot;userId&quot;: 0,
+    &quot;characterId&quot;: 0,
+    &quot;chatCreateAt&quot;: &quot;2024-12-01T06:29:12.143Z&quot;,
+    &quot;lastMessageAt&quot;: &quot;2024-12-01T06:29:12.143Z&quot;,
+    &quot;chatLogs&quot;: [
+      {
+        &quot;logId&quot;: 0,
+        &quot;contents&quot;: &quot;string&quot;
+      }
+    ],
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    },
+    &quot;character&quot;: {
+      &quot;characterId&quot;: 0,
+      &quot;characterName&quot;: &quot;string&quot;,
+      &quot;characterProfile&quot;: &quot;string&quot;
+    }
+  }
+]</code></pre><h3 id="14fb3417-16d9-80dd-8413-fe1b5c2a6d6b" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8069-a221-c98cba317247" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/chat/me</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8081-b63a-f7446278afe0" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;chatId&quot;: 0,
+    &quot;user&quot;: {
+      &quot;userId&quot;: 0,
+      &quot;userName&quot;: &quot;string&quot;,
+      &quot;userProfile&quot;: &quot;string&quot;
+    },
+    &quot;character&quot;: {
+      &quot;characterId&quot;: 0,
+      &quot;characterName&quot;: &quot;string&quot;,
+      &quot;characterProfile&quot;: &quot;string&quot;
+    },
+    &quot;lastLog&quot;: {
+      &quot;logId&quot;: 0,
+      &quot;contents&quot;: &quot;string&quot;
+    },
+    &quot;chatCreateAt&quot;: &quot;2024-12-01T12:03:55.959Z&quot;,
+    &quot;lastMessageAt&quot;: &quot;2024-12-01T12:03:55.959Z&quot;
+  }
+]</code></pre><hr id="14fb3417-16d9-80a9-a2ad-c603b0ffe74b"/><h3 id="14fb3417-16d9-8063-b5ff-e65ae0573d82" class="">채팅방 삭제 API (<code>DELETE /api/v1/chat/{chat_id}</code> )</h3><blockquote id="14fb3417-16d9-80d1-97b1-d1d779fc0497" class="">Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80fa-afa9-f4f2eae9990c" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80d5-bfe8-d30b44ba9e34" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/chat/{chat_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80c7-a936-d1fd9c5d4dc0" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-8072-9057-c73f0d754b10" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8077-99ca-d5687c3e4445" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/chat/{chat_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-806e-9122-dd6a0e82533d" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;characterId&quot;: 0
+}
+
+// Response
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;chatId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-80a9-99af-d892317e63c8"/><p id="14fb3417-16d9-805a-80b4-e5e84ae02ef5" class="">
+</p><h2 id="14fb3417-16d9-808d-9efc-c8ce3dbea6ce" class="">Chat log</h2><hr id="14fb3417-16d9-8040-801e-cb429d83f29d"/><h3 id="14fb3417-16d9-8004-8d94-ccf3d3bf000c" class="">채팅방의 채팅 로그 전체 조회 API (<code>GET /api/v1/chat-log/chats/{chat_id}</code> )</h3><blockquote id="14fb3417-16d9-801c-8c80-dd13a0f4d752" class="">API 주소 및 Response 형태 변경</blockquote><h3 id="14fb3417-16d9-805a-8a9c-cb88b31cc0a4" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-809b-b8c3-fe2f6e28510c" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/chat-log/me/{chat_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80e3-86f1-e467b512158a" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+[
+  {
+    &quot;logId&quot;: 0,
+    &quot;chatId&quot;: 0,
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;contents&quot;: &quot;string&quot;,
+    &quot;logCreateAt&quot;: &quot;2024-12-01T06:36:55.100Z&quot;
+  }
+]</code></pre><h3 id="14fb3417-16d9-8000-b059-c8b96310d890" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8098-bc22-cec4f2b27b52" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">GET /api/v1/chat-log/chats/{chat_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8023-a009-feb628b68c05" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+[
+  {
+    &quot;logId&quot;: 0,
+    &quot;character&quot;: {
+      &quot;characterId&quot;: 0,
+      &quot;characterName&quot;: &quot;string&quot;,
+      &quot;characterProfile&quot;: &quot;string&quot;
+    },
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;contents&quot;: &quot;string&quot;,
+    &quot;logCreateAt&quot;: &quot;2024-12-01T06:37:22.373Z&quot;
+  }
+]</code></pre><hr id="14fb3417-16d9-8004-a3b8-cc956c84af98"/><h3 id="14fb3417-16d9-80a8-bcf6-c5b6f3662513" class="">채팅 로그 삭제 API (<code>DELETE /api/v1/chat-log/{log_id}</code> )</h3><blockquote id="14fb3417-16d9-8040-bb0d-e9d5f9810107" class="">Response 형태 변경</blockquote><h3 id="14fb3417-16d9-80a7-a678-da9daa7df2f2" class="">변경 전</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8088-ba75-e79fa504eaa8" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/chat-log/{log_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-8041-b9b7-dbe008f2e324" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Response
+{
+  &quot;message&quot;: &quot;string&quot;
+}</code></pre><h3 id="14fb3417-16d9-8031-b9bb-fcf29560ea41" class="">변경 후</h3><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80af-bf40-f957a874687f" class="code"><code class="language-Plain Text" style="white-space:pre-wrap;word-break:break-all">DELETE /api/v1/chat-log/{log_id}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="14fb3417-16d9-80ff-8ae6-d964b5517fb0" class="code"><code class="language-JSON" style="white-space:pre-wrap;word-break:break-all">// Request
+{
+  &quot;message&quot;: &quot;string&quot;,
+  &quot;data&quot;: {
+    &quot;chatLogId&quot;: 0
+  }
+}</code></pre><hr id="14fb3417-16d9-80da-bbe5-fc4532f99e35"/></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
