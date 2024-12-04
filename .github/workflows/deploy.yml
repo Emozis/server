@@ -114,7 +114,8 @@ jobs:
                     bash ./scripts/deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
 
     notify:
-        needs: [test, build, deploy]
+        # needs: [test, build, deploy]
+        needs: [build, deploy]
         runs-on: ubuntu-latest
         if: always()
         steps:
