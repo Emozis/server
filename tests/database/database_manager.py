@@ -6,18 +6,19 @@ import os
 from dotenv import load_dotenv
 
 from app.database.base import Base
-from app.core import logger
+from app.core import logger, settings
+
 
 # .env.test 파일 로드
 load_dotenv('.env.test')
 
 class DatabaseManagerForTest:
     def __init__(self):
-        self.host = os.getenv('POSTGRES_HOST')
-        self.port = os.getenv('POSTGRES_PORT')
-        self.db_name = f"{os.getenv('POSTGRES_DB')}_test"  # 테스트 DB 이름에 _test 접미사 추가
-        self.user = os.getenv('POSTGRES_USER')
-        self.password = os.getenv('POSTGRES_PASSWORD')
+        self.host = settings.POSTGRES_HOST
+        self.port = settings.POSTGRES_PORT
+        self.db_name = f"{settings.POSTGRES_DB}_test"  # 테스트 DB 이름에 _test 접미사 추가
+        self.user = settings.POSTGRES_USER
+        self.password = settings.POSTGRES_PASSWORD
 
         self.Base = Base
         self.engine = None
