@@ -25,6 +25,11 @@ eMoGi는 감정을 다양하게 표현하는 공간으로, "emotion"과 "emoji"�
 - **Amazon S3**: 이미지 저장소로 활용
 - **CloudFront**: CDN을 통한 이미지 전송 최적화 및 보안 강화
 
+### Infrastructure Overview
+
+
+<img src="https://github.com/user-attachments/assets/092b6e8d-99ed-4ee6-a387-5eb0828dd9fa" width="70%">
+
 ## 📒 Features
 
 #### Authentication & Authorization
