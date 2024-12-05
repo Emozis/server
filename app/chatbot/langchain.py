@@ -7,7 +7,7 @@ import asyncio
 import os 
 
 from ..core import settings, logger
-from ..utils import const
+from ..utils.constants import constants
 
 
 os.environ["GRPC_VERBOSITY"] = "NONE"
@@ -25,9 +25,9 @@ class Gemini:
         self.inputs = self._get_inputs(user_info, character_info, chat_history)
         
         # 체인에 대한 변수
-        self.template_path = const.TEMPLATE_PATH
-        self.model_name = const.GEMINI_MODEL
-        self.temperature = const.TEMPERATURE
+        self.template_path = constants.TEMPLATE_PATH
+        self.model_name = constants.GEMINI_MODEL
+        self.temperature = constants.TEMPERATURE
         self.chain = self._make_chain()
 
     def _get_inputs(self, user_info, character_info, chat_history):

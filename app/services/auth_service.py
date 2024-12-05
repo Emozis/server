@@ -1,9 +1,13 @@
 from sqlalchemy.orm import Session
+from jose.exceptions import JWTError
+from jwt import PyJWKClient
+import jwt
 
-from ..core import logger
+from ..core import logger, settings
 from ..crud import UserCRUD
 from ..schemas import UserCreate, UserResponse, LoginRequest, LoginResponse
-from ..utils import decode_id_token, JwtUtil, password_hasher
+from ..utils.jwt_util import JwtUtil
+from ..utils.password_hasher import password_hasher
 from ..models import User
 from ..mappers import UserMapper
 from ..exceptions import NotFoundException
@@ -123,7 +127,7 @@ class AuthService:
         Raises:
             InvalidGoogleTokenException: 유효하지 않은 구글 토큰인 경우
         """
-        google_user = decode_id_token(id_token)
+        google_user = self._decode_id_token(id_token)
         if not google_user:
             raise InvalidGoogleTokenException(id_token)
         
@@ -137,3 +141,28 @@ class AuthService:
         """
         test_user = UserCreate(user_email="test@example.com", user_password="test", user_name="Test User", user_profile="test.jpg")
         return self._login(test_user)
+
+    def _decode_id_token(self, id_token: str) -> UserCreate:
+        jwks_url = "https://www.googleapis.com/oauth2/v3/certs"
+        jwks_client = PyJWKClient(jwks_url)
+
+        signing_key = jwks_client.get_signing_key_from_jwt(id_token)
+
+        options = {
+            'verify_iat': True
+        }
+
+        try:
+            user_info: dict = jwt.decode(id_token, signing_key.key, algorithms=["RS256"], audience=settings.GOOGLE_CLIENT_ID, options=options, leeway=30)
+        except JWTError as e:
+            logger.error(f"❌ JWT decoding error: {e}")
+            return None
+        
+        user_data = {
+            "user_id": int(user_info.get("sub")),
+            "user_email": user_info.get("email"),
+            "user_name": user_info.get("name"),
+            "user_profile": user_info.get("picture"),
+        }
+        user = UserCreate(**user_data)
+        return user

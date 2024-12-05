@@ -1,5 +1,5 @@
 from typing import Optional
-from ..utils import RoomManager
+from ..utils.socket_room_manager import RoomManager
 
 class ApplicationContext:
     _instance: Optional["ApplicationContext"] = None

@@ -10,7 +10,8 @@ from ..services.chatting_session_service import ChattingSessionService
 from ..crud import ChatCRUD
 from ..models import Chat
 from ..schemas import AuthMessage
-from ..utils import JwtUtil, RoomManager
+from ..utils.jwt_util import JwtUtil
+from ..utils.socket_room_manager import RoomManager
 
 
 class ChattingService:

@@ -6,7 +6,7 @@ from ..crud import DefaultImageCRUD
 from ..mappers import DefaultImageMapper
 from ..schemas import ResponseSchema, DefaultImageCreate, DefaultImageResponse, DefaultImageIdResponse
 from ..exceptions import NotFoundException
-from ..utils import upload_to_s3
+from ..utils.s3_util import upload_to_s3
 
 
 class DefaultImageService:

@@ -1,7 +1,7 @@
 from fastapi import Depends
 from fastapi.security import APIKeyHeader
 from ..exceptions import InvalidTokenException
-from ..utils import JwtUtil
+from ..utils.jwt_util import JwtUtil
 
 
 api_key_scheme = APIKeyHeader(
