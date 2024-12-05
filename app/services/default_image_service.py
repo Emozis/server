@@ -6,7 +6,7 @@ from ..crud import DefaultImageCRUD
 from ..mappers import DefaultImageMapper
 from ..schemas import ResponseSchema, DefaultImageCreate, DefaultImageResponse, DefaultImageIdResponse
 from ..exceptions import NotFoundException
-from ..utils.s3_util import upload_to_s3
+from ..utils.aws_manager import aws_managers
 
 
 class DefaultImageService:
@@ -24,8 +24,8 @@ class DefaultImageService:
             MessageResponse: 생성 성공 메세지
         """
         # S3에 이미지 업로드
-        default_image.image_url = await upload_to_s3(file=image, folder_path="default_images")
-        
+        default_image.image_url = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
+
         # 파일 이름 제작
         cnt = self.default_image_crud.get_total_count()
         default_image.image_name = f"{str(default_image.image_gender.value)[0].upper()}{str(default_image.image_age_group.value)[0].upper()}{str(default_image.image_emotion.value)[0].upper()}-{str(cnt).zfill(3)}"
@@ -82,7 +82,7 @@ class DefaultImageService:
         self.get_default_image(image_id)
 
         # S3에 이미지 업로드
-        default_image.image_url = await upload_to_s3(file=image, folder_path="default_images")
+        default_image.image_url = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
 
         # 파일 이름 제작
         cnt = self.default_image_crud.get_total_count()
