@@ -14,12 +14,10 @@ from ..utils import JwtUtil, RoomManager
 
 
 class ChattingService:
-    def __init__(self, db: Session, room_manager: RoomManager):
+    def __init__(self, db: Session):
         self.db = db
-        self.room_manager = room_manager
         self.user_service = UserService(db)
         self.chat_service = ChatService(db)
-        # self.chatting_session_service = ChattingSessionService(db, room_manager)
         self.chat_crud = ChatCRUD(db)
         self.AUTH_TIMEOUT = 5
 
@@ -45,8 +43,8 @@ class ChattingService:
             )
         return chat
 
-    async def chatting(self, websocket: WebSocket, chat_id: int):
-        room = self.room_manager.get_room(chat_id)
+    async def chatting(self, websocket: WebSocket, chat_id: int, room_manager: RoomManager):
+        room = room_manager.get_room(chat_id)
         await room.connect(websocket)
 
         try:

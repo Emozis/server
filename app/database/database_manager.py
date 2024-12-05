@@ -2,12 +2,14 @@ import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.exc import OperationalError
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
+from typing import Generator
 import os
 
 from ..core.logger_config import logger
-from ..core.env_config import settings
+from ..core import settings
 from ..database.base import Base
+
 
 class DatabaseManager:
     def __init__(self):
@@ -187,3 +189,15 @@ class DatabaseManager:
         except Exception as e:
             logger.error(f"❌ Failed to execute SQL files: {str(e)}")
             return False
+        
+
+db_manager = DatabaseManager()
+engine, SessionLocal, Base = db_manager.init_database()
+
+def get_db() -> Generator[Session, None, None]:
+    """데이터베이스 세션 제공"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

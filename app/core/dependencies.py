@@ -1,76 +1,25 @@
-from typing import Generator, Annotated
+from typing import Annotated
 from fastapi import Depends
-from fastapi.security import APIKeyHeader
-from sqlalchemy.orm import Session
 
-from ..database import DatabaseManager
 from .. import services
-from ..exceptions import InvalidTokenException
-from ..utils import JwtUtil, RoomManager
-
-db_manager = DatabaseManager()
-engine, SessionLocal, Base = db_manager.init_database()
-
-api_key_scheme = APIKeyHeader(
-    name="Authorization",
-    description="Bearer {test-token}. 테스트 토큰을 받으려면 /api/v1/auth/token/test를 먼저 호출하세요.",
-    auto_error=False
-)
+from ..utils import RoomManager
+from .auth_config import get_current_user
+from .context import ApplicationContext
 
 room_manager = RoomManager()
 
-def get_db() -> Generator[Session, None, None]:
-    """데이터베이스 세션 제공"""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+def get_room_manager() -> RoomManager:
+    return ApplicationContext.get_instance().room_manager
 
-async def get_current_user(auth_header: str = Depends(api_key_scheme)) -> int:
-    """현재 인증된 사용자의 ID를 반환하는 의존성 함수"""
-    token = auth_header.replace("Bearer ", "") if auth_header and auth_header.startswith("Bearer ") else auth_header
-    if not token:
-        raise InvalidTokenException(None, "인증 정보가 제공되지 않았습니다.")
-    try:
-        user_id, name, role = await JwtUtil.verify_token(token)
-        if not user_id:
-            raise InvalidTokenException(token)
-        return int(user_id)
-    except Exception as e:
-        raise InvalidTokenException(token)
-    
-def get_auth_service(db: Session = Depends(get_db)) -> services.AuthService:
-    return services.AuthService(db)
-
-def get_user_service(db: Session = Depends(get_db)) -> services.UserService:
-    return services.UserService(db)
-
-def get_relationship_service(db: Session = Depends(get_db)) -> services.RelationshipService:
-    return services.RelationshipService(db)
-
-def get_default_image_service(db: Session = Depends(get_db)) -> services.DefaultImageService:
-    return services.DefaultImageService(db)
-
-def get_character_service(db: Session = Depends(get_db)) -> services.CharacterService:
-    return services.CharacterService(db)
-
-def get_chat_service(db: Session = Depends(get_db)) -> services.ChatService:
-    return services.ChatService(db)
-
-def get_chat_log_service(db: Session = Depends(get_db)) -> services.ChatLogService:
-    return services.ChatLogService(db)
-
-def get_chatting_service(db: Session = Depends(get_db)) -> services.ChattingService:
-    return services.ChattingService(db, room_manager)
+RoomManagerDep = Annotated[RoomManager, Depends(get_room_manager)]
 
 CurrentUser = Annotated[int, Depends(get_current_user)]
 
-AuthServiceDep = Annotated[services.AuthService, Depends(get_auth_service)]
-UserServiceDep = Annotated[services.UserService, Depends(get_user_service)]
-RelationshipServiceDep = Annotated[services.RelationshipService, Depends(get_relationship_service)]
-DefaultImageServiceDep = Annotated[services.DefaultImageService, Depends(get_default_image_service)]
-CharacterServiceDep = Annotated[services.CharacterService, Depends(get_character_service)]
-ChatServiceDep = Annotated[services.ChatService, Depends(get_chat_service)]
-ChatLogServiceDep = Annotated[services.ChatLogService, Depends(get_chat_log_service)]
-ChattingServiceDep = Annotated[services.ChattingService, Depends(get_chatting_service)]
+AuthServiceDep = Annotated[services.AuthService, Depends(services.get_auth_service)]
+UserServiceDep = Annotated[services.UserService, Depends(services.get_user_service)]
+RelationshipServiceDep = Annotated[services.RelationshipService, Depends(services.get_relationship_service)]
+DefaultImageServiceDep = Annotated[services.DefaultImageService, Depends(services.get_default_image_service)]
+CharacterServiceDep = Annotated[services.CharacterService, Depends(services.get_character_service)]
+ChatServiceDep = Annotated[services.ChatService, Depends(services.get_chat_service)]
+ChatLogServiceDep = Annotated[services.ChatLogService, Depends(services.get_chat_log_service)]
+ChattingServiceDep = Annotated[services.ChattingService, Depends(services.get_chatting_service)]
