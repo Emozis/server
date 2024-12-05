@@ -27,8 +27,7 @@ eMoGi는 감정을 다양하게 표현하는 공간으로, "emotion"과 "emoji"�
 
 ### Infrastructure Overview
 
-
-<img src="https://github.com/user-attachments/assets/092b6e8d-99ed-4ee6-a387-5eb0828dd9fa" width="70%">
+<img src="https://github.com/user-attachments/assets/c782a070-f051-459d-850a-ef80a9874dc1" width="70%">
 
 ## 📒 Features
 
@@ -68,3 +67,9 @@ eMoGi는 감정을 다양하게 표현하는 공간으로, "emotion"과 "emoji"�
   - 리소스 사용량 및 성능 지표 실시간 모니터링
   - CloudWatch Logs를 통한 중앙화된 로그 관리
   - CloudWatch Alarms를 통한 임계값 기반 모니터링
+
+## 📫 Contact
+
+프로젝트와 관련된 문의 사항이나 제안이 있으시면 아래 이메일로 연락해 주세요:
+
+- **Backend 개발**: ⭐️정민교(minkyo.dev@gmail.com)
