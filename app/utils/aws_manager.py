@@ -9,13 +9,26 @@ from ..core import logger
 
 class AWSManager:
     def __init__(self):
-        self.region_name = "ap-northeast-2"
-        self.secret_name = "/prod/emogi/env"
-        self.bucket_name = "emogi-bucket-2024"
-        self.cloudfront_domain = "d18qrti6vmh2m5.cloudfront.net"
+        self.region_name = os.getenv("AWS_REGION", "ap-northeast-2")
+        
+        self.ssm_client = boto3.client('ssm', region_name=self.region_name)
+        self.bucket_name = self.get_parameter("/emogi/s3_bucket_name")
+        self.cloudfront_domain = self.get_parameter("/emogi/cloudfront_domain")
+        self.secret_name = self.get_parameter("/emogi/secret_name")
 
         self.secrets_client = boto3.client('secretsmanager', region_name=self.region_name)
         self.s3_client = boto3.client('s3', region_name=self.region_name)
+
+    def get_parameter(self, parameter_name: str) -> Optional[str]:
+        """
+        Parameter Store에서 값을 가져옵니다.
+        """
+        try:
+            response = self.ssm_client.get_parameter(Name=parameter_name)
+            return response['Parameter']['Value']
+        except ClientError as e:
+            logger.error(f"Failed to get parameter '{parameter_name}': {str(e)}")
+            return None
 
     def get_secret(self) -> Dict[str, Any]:
         """
