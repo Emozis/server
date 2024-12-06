@@ -1,12 +1,13 @@
 from ..models import DefaultImages
 from ..schemas import DefaultImageCreate, DefaultImageUpdate, DefaultImageResponse
+from ..utils.aws_manager import aws_managers
 
 class DefaultImageMapper:
     @staticmethod
     def create_to_model(dto: DefaultImageCreate) -> DefaultImages:
         return DefaultImages(
             image_name=dto.image_name,
-            image_url=dto.image_url,
+            image_key=dto.image_key,
             image_gender=dto.image_gender,
             image_age_group=dto.image_age_group,
             image_emotion=dto.image_emotion
@@ -16,7 +17,7 @@ class DefaultImageMapper:
     def update_to_model(dto: DefaultImageUpdate) -> DefaultImages:
         return DefaultImages(
             image_name=dto.image_name,
-            image_url=dto.image_url,
+            image_key=dto.image_key,
             image_gender=dto.image_gender,
             image_age_group=dto.image_age_group,
             image_emotion=dto.image_emotion
@@ -27,7 +28,7 @@ class DefaultImageMapper:
         return DefaultImageResponse(
             image_id=model.image_id,
             image_name=model.image_name,
-            image_url=model.image_url,
+            image_url=aws_managers.get_cloudfront_url(model.image_key),
             image_gender=model.image_gender,
             image_age_group=model.image_age_group,
             image_emotion=model.image_emotion,

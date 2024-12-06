@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from ..core import constants
 from ..database import db_manager
 from .dependencies import room_manager
+from ..utils.constants import constants
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

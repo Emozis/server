@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.core import constants
+from app.utils.constants import constants
 from app.core.dependencies import get_db
 from tests.database.database_manager import DatabaseManagerForTest
 

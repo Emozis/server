@@ -7,7 +7,7 @@ from ..core import logger
 from ..services import ChatLogService
 from ..models import Chat
 from ..schemas import UserMessage, CharacterMessage
-from ..utils import ConnectionManager
+from ..utils.socket_connection_manager import ConnectionManager
 from ..chatbot import data_converter, Gemini
 
 

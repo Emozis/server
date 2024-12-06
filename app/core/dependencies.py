@@ -2,9 +2,10 @@ from typing import Annotated
 from fastapi import Depends
 
 from .. import services
-from ..utils import RoomManager
+from ..utils.socket_room_manager import RoomManager
 from .auth_config import get_current_user
 from .context import ApplicationContext
+
 
 room_manager = RoomManager()
 

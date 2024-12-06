@@ -3,10 +3,10 @@ from pydantic import ConfigDict, ValidationError
 from typing import Optional, Dict
 from botocore.exceptions import ClientError
 from pathlib import Path
-import boto3
 import json
 
 from . import logger
+from ..utils.aws_manager import aws_managers
 
 class Settings(BaseSettings):
     # DATABASE
@@ -54,17 +54,10 @@ class Settings(BaseSettings):
         return result
 
     @classmethod
-    def get_aws_secrets(cls, secret_name: str, region_name: str) -> Optional[Dict]:
+    def get_aws_secrets(cls) -> Optional[Dict]:
         """AWS Secrets Manager에서 설정값을 가져옵니다."""
         try:
-            session = boto3.session.Session()
-            client = session.client(
-                service_name='secretsmanager',
-                region_name=region_name
-            )
-            
-            response = client.get_secret_value(SecretId=secret_name)
-            secret_string = response['SecretString']
+            secret_string = aws_managers.get_secret()
 
             return cls.parse_env_string(json.loads(secret_string))
             
@@ -73,9 +66,7 @@ class Settings(BaseSettings):
             return None
 
     @classmethod
-    def load_and_validate(cls, 
-                         aws_secret_name: str = "/prod/emogi/env",
-                         aws_region: str = "ap-northeast-2"):
+    def load_and_validate(cls):
         """설정을 로드하고 검증합니다. .env 파일이 없으면 AWS Secrets Manager를 사용합니다."""
         try:
             # 먼저 .env 파일에서 로드 시도
@@ -85,11 +76,11 @@ class Settings(BaseSettings):
                 return settings
             
             # .env 파일이 없으면 AWS Secrets에서 로드
-            logger.info("'.env' file not found, attempting to load from AWS Secrets Manager...")
-            secrets = cls.get_aws_secrets(aws_secret_name, aws_region)
+            logger.info("🔃 '.env' file not found, attempting to load from AWS Secrets Manager...")
+            secrets = cls.get_aws_secrets()
             
             if secrets is None:
-                raise ValueError("Failed to load settings from both .env and AWS Secrets Manager")
+                raise ValueError("❌ Failed to load settings from both .env and AWS Secrets Manager")
 
             # AWS Secrets의 값들을 환경변수처럼 처리하기 위해 바로 Settings 인스턴스 생성
             settings = cls(**secrets)
