@@ -24,7 +24,7 @@ class DefaultImageService:
             MessageResponse: 생성 성공 메세지
         """
         # S3에 이미지 업로드
-        default_image.image_url = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
+        default_image.image_key = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
 
         # 파일 이름 제작
         cnt = self.default_image_crud.get_total_count()
@@ -33,7 +33,7 @@ class DefaultImageService:
         # DB에 이미지 저장
         created_image = self.default_image_crud.create(DefaultImageMapper.create_to_model(default_image))
 
-        logger.info(f"✅ Successfully created default image: {created_image.image_name} (ID: {created_image.image_id})")
+        logger.info(f"✨ Successfully created default image: {created_image.image_name} (ID: {created_image.image_id})")
         return ResponseSchema(
             message="기본 이미지가 성공적으로 저장되었습니다.",
             data=DefaultImageIdResponse(image_id=created_image.image_id)
@@ -79,10 +79,15 @@ class DefaultImageService:
         Raises:
             NotFoundException: 이미지를 찾을 수 없는 경우
         """
-        self.get_default_image(image_id)
+        db_default_image = self.default_image_crud.get_by_id(image_id)
+        if not db_default_image:
+            logger.warning(f"❌ Failed to find default image with id {image_id}")
+            raise NotFoundException("이미지를 찾을 수 없습니다.", "image_id", image_id)
+        
+        old_image_key = db_default_image.image_key
 
         # S3에 이미지 업로드
-        default_image.image_url = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
+        default_image.image_key = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
 
         # 파일 이름 제작
         cnt = self.default_image_crud.get_total_count()
@@ -91,7 +96,10 @@ class DefaultImageService:
         # DB에 이미지 저장
         self.default_image_crud.update(image_id, DefaultImageMapper.update_to_model(default_image))
 
-        logger.info(f"✅ Successfully updated default image: {default_image.image_name} (ID: {image_id})")
+        # S3 기존 이미지 삭제
+        aws_managers.delete_files([old_image_key])
+
+        logger.info(f"🔄 Successfully updated default image: {default_image.image_name} (ID: {image_id})")
         return ResponseSchema(
             message="기본 이미지가 성공적으로 수정되었습니다.",
             data=DefaultImageIdResponse(image_id=image_id)
@@ -107,9 +115,14 @@ class DefaultImageService:
         Raises:
             NotFoundException: 이미지를 찾을 수 없는 경우
         """
-        image = self.get_default_image(image_id)
+        default_image = self.default_image_crud.get_by_id(image_id)
+        if not default_image:
+            logger.warning(f"❌ Failed to find default image with id {image_id}")
+            raise NotFoundException("이미지를 찾을 수 없습니다.", "image_id", image_id)
+        
         if self.default_image_crud.delete(image_id):
-            logger.info(f"✅ Successfully deleted default image: {image.image_name} (ID: {image_id})")
+            aws_managers.delete_files([default_image.image_key])
+            logger.info(f"🗑️  Successfully deleted default image: {default_image.image_name} (ID: {image_id})")
             return ResponseSchema(
                 message="기본 이미지가 성공적으로 삭제되었습니다.",
                 data=DefaultImageIdResponse(image_id=image_id)

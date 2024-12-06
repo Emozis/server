@@ -9,7 +9,7 @@ class DefaultImages(Base):
 
     image_id = Column(BigInteger, primary_key=True, autoincrement=True)
     image_name = Column(String(255), nullable=True)
-    image_url = Column(String(255), nullable=False)
+    image_key = Column(String(255), nullable=False)
     image_gender = Column(Enum(ImageGenderEnum), nullable=True)
     image_age_group = Column(Enum(ImageAgeGroupEnum), nullable=True)
     image_emotion = Column(String(255), nullable=True)
