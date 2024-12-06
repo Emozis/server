@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 from app.utils.constants import constants
-from app.core.dependencies import get_db
+from app.database.database_manager import get_db
 from tests.database.database_manager import DatabaseManagerForTest
 
 @pytest.fixture(scope="session")
