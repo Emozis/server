@@ -9,16 +9,16 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${SERVER_PORT}/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     volumes:
       - ${PROJECT_PATH}/.env.app:/app/.env
       - ~/.aws:/root/.aws
     ports:
-      - "${SERVER_PORT}:8000"
+      - "8200:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -34,10 +34,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 5
-      start_period: 10s
+      retries: 7
+      start_period: 5s
     expose:
       - "5432"
     volumes:

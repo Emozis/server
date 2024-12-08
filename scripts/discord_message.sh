@@ -8,10 +8,11 @@ COMMIT_MESSAGE=$4
 TEST_STATUS=$5
 BUILD_STATUS=$6
 DEPLOY_STATUS=$7
-TIMESTAMP=$8
+HEALTH_STATUS=$8
+TIMESTAMP=$9
 
 # Set color based on all statuses
-if [[ "$BUILD_STATUS" == "success" ]] && [[ "$DEPLOY_STATUS" == "success" ]]; then
+if [[ "$BUILD_STATUS" == "success" ]] && [[ "$DEPLOY_STATUS" == "success" ]] && [[ "$HEALTH_STATUS" == "success" ]]; then
     if [[ -z "$TEST_STATUS" ]] || [[ "$TEST_STATUS" == "success" ]]; then
         COLOR="5763719"  # Green
     else
@@ -30,6 +31,7 @@ fi
 
 BUILD_EMOJI=$([ "$BUILD_STATUS" == "success" ] && echo "✅ 성공" || echo "❌ 실패")
 DEPLOY_EMOJI=$([ "$DEPLOY_STATUS" == "success" ] && echo "✅ 성공" || echo "❌ 실패")
+HEALTH_EMOJI=$([ "$HEALTH_STATUS" == "success" ] && echo "✅ 성공" || echo "❌ 실패")
 
 # Create JSON output in a single line
 echo "[{
@@ -67,6 +69,10 @@ echo "[{
         {
             \"name\":\"배포 상태\",
             \"value\":\"${DEPLOY_EMOJI}\"
+        },
+        {
+            \"name\":\"헬스 체크\",
+            \"value\":\"${HEALTH_EMOJI}\"
         }
     ],
     \"footer\":{\"text\":\"GitHub Actions\"},

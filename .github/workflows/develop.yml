@@ -71,8 +71,36 @@ jobs:
                     cd ${{ env.PROJECT_PATH }}
                     bash ./scripts/deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
 
+    health-check:
+        needs: deploy
+        runs-on: ubuntu-22.04
+        steps:
+          - name: Wait for application to be ready
+            uses: appleboy/ssh-action@master
+            with:
+                host: ${{ secrets.SSH_HOST }}
+                port: ${{ secrets.SSH_PORT }}
+                username: ${{ secrets.SSH_USERNAME }}
+                password: ${{ secrets.SSH_PASSWORD }}
+                script: |
+                    attempts=0
+                    max_attempts=10
+                    until curl -sf http://localhost:8200/health || [ $attempts -eq $max_attempts ]
+                    do
+                        attempts=$((attempts+1))
+                        echo "Health check attempt $attempts of $max_attempts..."
+                        sleep 15
+                    done
+                    
+                    if [ $attempts -eq $max_attempts ]; then
+                        echo "Health check failed after $max_attempts attempts"
+                        exit 1
+                    fi
+                    
+                    echo "Application is healthy!"
+
     notify:
-        needs: [build, deploy]
+        needs: [build, deploy, health-check]
         runs-on: ubuntu-22.04
         if: always()
         steps:
@@ -90,6 +118,7 @@ jobs:
                     "${{ needs.test.result }}" \
                     "${{ needs.build.result }}" \
                     "${{ needs.deploy.result }}" \
+                    "${{ needs.health-check.result }}" \
                     "${{ github.event.head_commit.timestamp }}")
                 echo "DISCORD_EMBEDS=${message}" >> $GITHUB_ENV
 
