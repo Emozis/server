@@ -10,6 +10,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ${PROJECT_PATH}/.env.app:/app/.env
+      - ~/.aws:/root/.aws
     ports:
       - "8200:8000"
     depends_on:
