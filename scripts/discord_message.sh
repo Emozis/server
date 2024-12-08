@@ -11,14 +11,23 @@ DEPLOY_STATUS=$7
 TIMESTAMP=$8
 
 # Set color based on all statuses
-if [[ "$TEST_STATUS" == "success" ]] && [[ "$BUILD_STATUS" == "success" ]] && [[ "$DEPLOY_STATUS" == "success" ]]; then
-    COLOR="5763719"  # Green
+if [[ "$BUILD_STATUS" == "success" ]] && [[ "$DEPLOY_STATUS" == "success" ]]; then
+    if [[ -z "$TEST_STATUS" ]] || [[ "$TEST_STATUS" == "success" ]]; then
+        COLOR="5763719"  # Green
+    else
+        COLOR="15548997"  # Red
+    fi
 else
     COLOR="15548997"  # Red
 fi
 
 # Convert statuses to emojis with Korean text
-TEST_EMOJI=$([ "$TEST_STATUS" == "success" ] && echo "✅ 성공" || echo "❌ 실패")
+if [[ -z "$TEST_STATUS" ]]; then
+    TEST_EMOJI="➖ 미실행"
+else
+    TEST_EMOJI=$([ "$TEST_STATUS" == "success" ] && echo "✅ 성공" || echo "❌ 실패")
+fi
+
 BUILD_EMOJI=$([ "$BUILD_STATUS" == "success" ] && echo "✅ 성공" || echo "❌ 실패")
 DEPLOY_EMOJI=$([ "$DEPLOY_STATUS" == "success" ] && echo "✅ 성공" || echo "❌ 실패")
 
