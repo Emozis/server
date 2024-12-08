@@ -11,7 +11,7 @@ on:
 
 jobs:
     test:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         services:
             postgres:
                 image: postgres:16.4-bullseye
@@ -55,7 +55,7 @@ jobs:
 
     build:
         needs: test
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         outputs:
             version: ${{ steps.version.outputs.version }}
         steps:
@@ -89,7 +89,7 @@ jobs:
 
     deploy:
         needs: build
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         steps:
           - name: Checkout code
             uses: actions/checkout@v4
@@ -117,7 +117,7 @@ jobs:
 
     notify:
         needs: [test, build, deploy]
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-22.04
         if: always()
         steps:
           - name: Checkout code

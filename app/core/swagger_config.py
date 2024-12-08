@@ -16,6 +16,7 @@ class SwaggerConfig:
             * **Relationship** (_completely implemented_).
             * **Chat** (_completely implemented_).
             * **Chat log** (_completely implemented_).
+            * **Health** (_completely implemented_).
             
             #### 문서:
                                            
@@ -50,6 +51,10 @@ class SwaggerConfig:
                 "name": "Chat log",
                 "description": "채팅 기록에 관한 API입니다."
             },
+            {
+                "name": "Health",
+                "description": "서버 상태 확인을 위한 health check API입니다."
+            },
         ]
 
     def _set_version_from_poetry(self):
@@ -59,7 +64,7 @@ class SwaggerConfig:
                 pyproject = tomli.load(f)
             return pyproject["tool"]["poetry"]["version"]
         except Exception:
-            return "0.0.1"  # 기본값
+            return "0.0.1"
 
     def get_config(self):
         return {
