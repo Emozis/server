@@ -3,7 +3,9 @@ from jose.exceptions import JWTError
 from jwt import PyJWKClient
 import jwt
 
-from ..core import logger, settings
+from ..config import settings
+
+from ..core import logger
 from ..crud import UserCRUD
 from ..schemas import UserCreate, UserResponse, LoginRequest, LoginResponse
 from ..utils.jwt_util import JwtUtil

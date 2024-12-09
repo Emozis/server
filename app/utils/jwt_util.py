@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
 from typing import Tuple, Literal
 
-from ..core import settings
+from ..config import settings
 
 
 class JwtUtil:

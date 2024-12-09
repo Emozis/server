@@ -4,9 +4,11 @@ from langchain_core.messages import AIMessage,HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from pathlib import Path
 import asyncio
-import os 
+import os
 
-from ..core import settings, logger
+from ..config import settings 
+
+from ..core import logger
 from ..utils.constants import constants
 
 

@@ -6,7 +6,9 @@ from sqlalchemy.orm import sessionmaker, Session
 from typing import Generator
 import os
 
-from ..core import logger, settings
+from ..config import settings
+
+from ..core import logger
 from ..database.base import Base
 
 
@@ -69,7 +71,8 @@ class DatabaseManager:
             with self.engine.connect() as conn:
                 conn.execute(text("SELECT 1"))
 
-            logger.info("✅ Database connection successful")
+            masked_url = f"postgresql://{self.user}:****@{self.host}:{self.port}/{self.db_name}"
+            logger.info(f"✅ Database connection successful - Connected to {masked_url}")
             return True
         except OperationalError as e:
             self.engine = None

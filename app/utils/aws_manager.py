@@ -14,7 +14,7 @@ class AWSManager:
         self.ssm_client = boto3.client('ssm', region_name=self.region_name)
         self.bucket_name = self.get_parameter("/emogi/s3/bucket_name")
         self.cloudfront_domain = self.get_parameter("/emogi/cloudfront/domain_name")
-        self.secret_name = self.get_parameter("/emogi/secret_name")
+        self.secret_name = self.get_parameter("/emogi/secrets/env_secret_name")
 
         self.secrets_client = boto3.client('secretsmanager', region_name=self.region_name)
         self.s3_client = boto3.client('s3', region_name=self.region_name)
