@@ -113,7 +113,7 @@ jobs:
                 key: ${{ secrets.EC2_KEY }}
                 script: |
                     cd ${{ env.PROJECT_PATH }}
-                    bash ./scripts/deploy_prod.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
+                    bash ./scripts/deploy_prod.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}" "${{ env.CONTAINER_NAME }}"
 
     # notify:
     #     needs: [test, build, deploy]
