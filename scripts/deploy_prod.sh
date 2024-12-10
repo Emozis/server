@@ -18,6 +18,7 @@ sudo docker rm "${CONTAINER_NAME}" | true
 
 sudo docker run -d \
   --name "${CONTAINER_NAME}" \
+  -e ENV=prod \
   -v ${PROJECT_PATH}/.env.dev:/app/.env.dev \
   -v ~/.aws:/root/.aws \
   -p 8000:8000 \
