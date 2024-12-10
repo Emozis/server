@@ -10,51 +10,51 @@ on:
       branches: ["deploy"]
 
 jobs:
-    # test:
-    #     runs-on: ubuntu-22.04
-    #     services:
-    #         postgres:
-    #             image: postgres:16.4-bullseye
-    #             env:
-    #                 POSTGRES_USER: postgres
-    #                 POSTGRES_PASSWORD: postgres
-    #                 POSTGRES_DB: postgres
-    #             ports:
-    #               - 5432:5432
-    #             options: >-
-    #               --health-cmd pg_isready
-    #               --health-interval 10s
-    #               --health-timeout 5s
-    #               --health-retries 5
+    test:
+        runs-on: ubuntu-22.04
+        services:
+            postgres:
+                image: postgres:16.4-bullseye
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: postgres
+                ports:
+                  - 5432:5432
+                options: >-
+                  --health-cmd pg_isready
+                  --health-interval 10s
+                  --health-timeout 5s
+                  --health-retries 5
 
-    #     steps:
-    #       - uses: actions/checkout@v4
+        steps:
+          - uses: actions/checkout@v4
 
-    #       - name: Configure AWS Credentials
-    #         uses: aws-actions/configure-aws-credentials@v4
-    #         with:
-    #             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #             aws-region: ${{ secrets.AWS_REGION }}
+          - name: Configure AWS Credentials
+            uses: aws-actions/configure-aws-credentials@v4
+            with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: ${{ secrets.AWS_REGION }}
 
-    #       - name: Install poetry
-    #         run: |
-    #             curl -sSL https://install.python-poetry.org | python3 -
+          - name: Install poetry
+            run: |
+                curl -sSL https://install.python-poetry.org | python3 -
 
-    #       - name: Install dependencies
-    #         run: poetry install --with dev
+          - name: Install dependencies
+            run: poetry install --with dev
                 
-    #       - name: Run tests
-    #         env:
-    #             POSTGRES_HOST: localhost
-    #             POSTGRES_PORT: 5432
-    #             POSTGRES_USER: postgres
-    #             POSTGRES_PASSWORD: postgres
-    #             POSTGRES_DB: postgres
-    #         run: poetry run pytest
+          - name: Run tests
+            env:
+                POSTGRES_HOST: localhost
+                POSTGRES_PORT: 5432
+                POSTGRES_USER: postgres
+                POSTGRES_PASSWORD: postgres
+                POSTGRES_DB: postgres
+            run: poetry run pytest
 
     build:
-        # needs: test
+        needs: test
         runs-on: ubuntu-22.04
         outputs:
             version: ${{ steps.version.outputs.version }}
@@ -144,7 +144,7 @@ jobs:
                     bash ./scripts/health_check.sh "${{ env.PROJECT_PATH }}"
 
     notify:
-        needs: [build, deploy, health-check]
+        needs: [test, build, deploy, health-check]
         runs-on: ubuntu-22.04
         if: always()
         steps:
