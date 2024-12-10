@@ -7,7 +7,7 @@ env:
 
 on:
     push:
-      branches: ["main"]
+      branches: ["deploy"]
 
 jobs:
     # test:
@@ -100,7 +100,7 @@ jobs:
                 host: ${{ secrets.EC2_HOST }}
                 port: 22
                 username: ec2-user
-                password: ${{ secrets.EC2_KEY }}
+                key: ${{ secrets.EC2_KEY }}
                 source: "docker-compose.yml,scripts/deploy.sh"
                 target: ${{ env.PROJECT_PATH }}
 
