@@ -20,6 +20,8 @@ FROM python:3.10-slim-buster
 
 WORKDIR /app
 
+ENV ENV=dev
+
 # 필요한 패키지를 설치합니다.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
@@ -32,4 +34,4 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
 
 # FastAPI 애플리케이션을 시작합니다.
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD uvicorn app.main:app --host 0.0.0.0 --port 8000 --log-level critical
