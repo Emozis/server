@@ -6,6 +6,9 @@ PROJECT_PATH=$1
 # Load environment variables
 source "${PROJECT_PATH}/.env"
 
+# Set default port if SERVER_PORT is not set
+: "${SERVER_PORT:=8000}"    
+
 attempts=0
 max_attempts=10
 
