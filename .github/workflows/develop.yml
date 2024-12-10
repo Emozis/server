@@ -57,7 +57,7 @@ jobs:
                 port: ${{ secrets.SSH_PORT }}
                 username: ${{ secrets.SSH_USERNAME }}
                 password: ${{ secrets.SSH_PASSWORD }}
-                source: "docker-compose.yml,scripts/deploy.sh"
+                source: "docker-compose.yml,scripts/deploy_dev.sh"
                 target: ${{ env.PROJECT_PATH }}
 
           - name: Execute deploy script
@@ -69,7 +69,7 @@ jobs:
                 password: ${{ secrets.SSH_PASSWORD }}
                 script: |
                     cd ${{ env.PROJECT_PATH }}
-                    bash ./scripts/deploy.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
+                    bash ./scripts/deploy_dev.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
 
     health-check:
         needs: deploy
