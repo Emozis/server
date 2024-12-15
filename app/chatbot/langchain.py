@@ -6,9 +6,7 @@ from pathlib import Path
 import asyncio
 import os
 
-from ..config import settings 
-
-from ..core import logger
+from ..core import logger, settings
 from ..utils.constants import constants
 
 

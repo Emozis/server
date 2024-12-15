@@ -1,7 +1,8 @@
 from pydantic_settings import BaseSettings
 from pydantic import ConfigDict, ValidationError
+import os
 
-from ..core import logger
+from . import logger
 from ..utils.aws_manager import aws_managers
 
 
@@ -77,3 +78,16 @@ class DevConfig(BaseConfig):
 
 class ProdConfig(BaseConfig):
     model_config = ConfigDict(env_file=".env.prod")
+
+
+def get_settings():
+    env = os.getenv("ENV", "dev")
+    drop_tables = os.getenv("DROP_TABLES", "false").lower() == "true"
+
+    config_class = ProdConfig if env == "prod" else DevConfig
+    settings = config_class.load_and_validate()
+    settings.DROP_ALL_TABLES = drop_tables
+
+    return settings
+
+settings = get_settings()

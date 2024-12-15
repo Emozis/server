@@ -6,9 +6,7 @@ from sqlalchemy.orm import sessionmaker, Session
 from typing import Generator
 import os
 
-from ..config import settings
-
-from ..core import logger
+from ..core import logger, settings
 from ..database.base import Base
 
 

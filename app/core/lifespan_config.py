@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from ..config import settings
+from ..core import settings
 from ..database import db_manager
 from .dependencies import room_manager
 from ..utils.constants import constants
