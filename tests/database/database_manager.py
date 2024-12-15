@@ -5,9 +5,8 @@ from sqlalchemy.orm import sessionmaker
 import os
 from dotenv import load_dotenv
 
-from app.config import settings
+from app.core import logger, settings
 from app.database.base import Base
-from app.core import logger
 
 
 # .env.test 파일 로드
