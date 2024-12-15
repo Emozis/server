@@ -1,177 +1,177 @@
 name: CI/CD Pipeline
 
 env:
-    IMAGE_NAME: emogi-app
-    CONTAINER_NAME: emogi-app
-    PROJECT_PATH: /home/ec2-user/emogi
+  IMAGE_NAME: emogi-app
+  CONTAINER_NAME: emogi-app
+  PROJECT_PATH: /home/ec2-user/emogi
 
 on:
-    push:
-      branches: ["deploy"]
+  push:
+    branches: ["main"]
 
 jobs:
-    test:
-        runs-on: ubuntu-22.04
-        services:
-            postgres:
-                image: postgres:16.4-bullseye
-                env:
-                    POSTGRES_USER: postgres
-                    POSTGRES_PASSWORD: postgres
-                    POSTGRES_DB: emogi
-                ports:
-                  - 5432:5432
-                options: >-
-                  --health-cmd pg_isready
-                  --health-interval 10s
-                  --health-timeout 5s
-                  --health-retries 5
+  test:
+    runs-on: ubuntu-22.04
+    services:
+      postgres:
+        image: postgres:16.4-bullseye
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: emogi
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-        steps:
-          - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-          - name: Configure AWS Credentials
-            uses: aws-actions/configure-aws-credentials@v4
-            with:
-                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-          - name: Install poetry
-            run: |
-                curl -sSL https://install.python-poetry.org | python3 -
+      - name: Install poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
 
-          - name: Install dependencies
-            run: poetry install --with dev
+      - name: Install dependencies
+        run: poetry install --with dev
 
-          - name: Create env file
-            env:
-                ENV_CONTENT: ${{ secrets.ENV_FILE }}
-            run: echo "$ENV_CONTENT" > .env.dev
-                
-          - name: Run tests
-            env:
-                POSTGRES_HOST: localhost
-                POSTGRES_PORT: 5432
-                POSTGRES_USER: postgres
-                POSTGRES_PASSWORD: postgres
-                POSTGRES_DB: emogi
-            run: poetry run pytest
+      - name: Create env file
+        env:
+          ENV_CONTENT: ${{ secrets.ENV_FILE }}
+        run: echo "$ENV_CONTENT" > .env.dev
+            
+      - name: Run tests
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: emogi
+        run: poetry run pytest
 
-    build:
-        needs: test
-        runs-on: ubuntu-22.04
-        outputs:
-            version: ${{ steps.version.outputs.version }}
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
-            with:
-                token: ${{ secrets.ACCESS_TOKEN }}
+  build:
+    needs: test
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
 
-          - name: Get and update version
-            id: version
-            run: bash ./scripts/update_version.sh "${{ github.ref }}" "${{ github.run_number }}"
+      - name: Get and update version
+        id: version
+        run: bash ./scripts/update_version.sh "${{ github.ref }}" "${{ github.run_number }}"
 
-          - name: Set up Docker Buildx
-            uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-          - name: Login to DockerHub
-            uses: docker/login-action@v3.3.0
-            with:
-                username: ${{ secrets.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v3.3.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-          - name: Build and push Docker image
-            uses: docker/build-push-action@v6.7.0
-            with:
-                context: .
-                file: ./Dockerfile
-                push: true
-                tags: |
-                    ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
-                    ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.7.0
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
-    deploy:
-        needs: build
-        runs-on: ubuntu-22.04
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
+  deploy:
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-          - name: Copy deployment files
-            uses: appleboy/scp-action@master
-            with:
-                host: ${{ secrets.EC2_HOST }}
-                port: 22
-                username: ec2-user
-                key: ${{ secrets.EC2_KEY }}
-                source: "docker-compose.yml,scripts/deploy_prod.sh"
-                target: ${{ env.PROJECT_PATH }}
+      - name: Copy deployment files
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          port: 22
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          source: "docker-compose.yml,scripts/deploy_prod.sh"
+          target: ${{ env.PROJECT_PATH }}
 
-          - name: Execute deploy script
-            uses: appleboy/ssh-action@master
-            with:
-                host: ${{ secrets.EC2_HOST }}
-                port: 22
-                username: ec2-user
-                key: ${{ secrets.EC2_KEY }}
-                script: |
-                    cd ${{ env.PROJECT_PATH }}
-                    bash ./scripts/deploy_prod.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}" "${{ env.CONTAINER_NAME }}"
+      - name: Execute deploy script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          port: 22
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ${{ env.PROJECT_PATH }}
+            bash ./scripts/deploy_prod.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}" "${{ env.CONTAINER_NAME }}"
 
-    health-check:
-        needs: deploy
-        runs-on: ubuntu-22.04
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
+  health-check:
+    needs: deploy
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-          - name: Copy health check script
-            uses: appleboy/scp-action@master
-            with:
-                host: ${{ secrets.EC2_HOST }}
-                port: 22
-                username: ec2-user
-                key: ${{ secrets.EC2_KEY }}
-                source: "scripts/health_check.sh"
-                target: ${{ env.PROJECT_PATH }}
+      - name: Copy health check script
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          port: 22
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          source: "scripts/health_check.sh"
+          target: ${{ env.PROJECT_PATH }}
 
-          - name: Execute health check script
-            uses: appleboy/ssh-action@master
-            with:
-                host: ${{ secrets.EC2_HOST }}
-                port: 22
-                username: ec2-user
-                key: ${{ secrets.EC2_KEY }}
-                script: |
-                    cd ${{ env.PROJECT_PATH }}
-                    bash ./scripts/health_check.sh "${{ env.PROJECT_PATH }}"
+      - name: Execute health check script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          port: 22
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+              cd ${{ env.PROJECT_PATH }}
+              bash ./scripts/health_check.sh "${{ env.PROJECT_PATH }}"
 
-    notify:
-        needs: [test, build, deploy, health-check]
-        runs-on: ubuntu-22.04
-        if: always()
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
-          
-          - name: Generate Discord message
-            id: discord_message
-            run: |
-                message=$(bash ./scripts/discord_message.sh \
-                    "${{ github.repository }}" \
-                    "${{ github.ref_name }}" \
-                    "${{ needs.build.outputs.version }}" \
-                    "${{ github.event.head_commit.message }}" \
-                    "${{ needs.test.result }}" \
-                    "${{ needs.build.result }}" \
-                    "${{ needs.deploy.result }}" \
-                    "${{ needs.health-check.result }}" \
-                    "${{ github.event.head_commit.timestamp }}")
-                echo "DISCORD_EMBEDS=${message}" >> $GITHUB_ENV
+  notify:
+    needs: [test, build, deploy, health-check]
+    runs-on: ubuntu-22.04
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Generate Discord message
+        id: discord_message
+        run: |
+          message=$(bash ./scripts/discord_message.sh \
+              "${{ github.repository }}" \
+              "${{ github.ref_name }}" \
+              "${{ needs.build.outputs.version }}" \
+              "${{ github.event.head_commit.message }}" \
+              "${{ needs.test.result }}" \
+              "${{ needs.build.result }}" \
+              "${{ needs.deploy.result }}" \
+              "${{ needs.health-check.result }}" \
+              "${{ github.event.head_commit.timestamp }}")
+          echo "DISCORD_EMBEDS=${message}" >> $GITHUB_ENV
 
-          - name: Discord notification
-            uses: Ilshidur/action-discord@master
-            env:
-                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: Discord notification
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
