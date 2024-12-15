@@ -16,8 +16,8 @@ jobs:
             postgres:
                 image: postgres:16.4-bullseye
                 env:
-                    POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-                    POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
                     POSTGRES_DB: emogi
                 ports:
                   - 5432:5432
@@ -53,8 +53,8 @@ jobs:
             env:
                 POSTGRES_HOST: localhost
                 POSTGRES_PORT: 5432
-                POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-                POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+                POSTGRES_USER: postgres
+                POSTGRES_PASSWORD: postgres
                 POSTGRES_DB: emogi
             run: poetry run pytest
 
