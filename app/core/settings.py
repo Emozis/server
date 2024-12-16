@@ -25,8 +25,10 @@ class BaseConfig(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
 
-    # GEMINI
+    # AI API KEY
     GOOGLE_API_KEY: str
+    OPENAI_API_KEY: str
+    UPSTAGE_API_KEY: str
 
     @staticmethod
     def parse_env_string(env_string: str) -> dict[str, str]:
