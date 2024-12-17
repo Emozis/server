@@ -43,3 +43,12 @@ class UserAlreadyExistsException(BaseException):
                 "email": email
             }
         )
+
+class UnauthorizedException(BaseException):
+    def __init__(self, message: str = "접근 권한이 없습니다."):
+        super().__init__(
+            status_code=403,
+            message=message,
+            code="UNAUTHORIZED",
+            data={}
+        )

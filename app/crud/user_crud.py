@@ -15,6 +15,15 @@ class UserCRUD(BaseCRUD[User]):
     def __init__(self, db: Session):
         super().__init__(model=User, db=db, id_field='user_id')
 
+    def get_all_users(self) -> list[User]:
+        """
+        모든 사용자 목록을 조회합니다.
+        
+        Returns:
+            list[User]: 전체 사용자 객체 리스트
+        """
+        return self.db.query(self.model).all()
+
     def get_user_by_email(self, email: str) -> Optional[User]:
         """
         이메일로 사용자를 조회합니다.
@@ -42,6 +51,24 @@ class UserCRUD(BaseCRUD[User]):
         return self.db.query(self.model)\
             .filter(
                 self.model.user_email == user_email,
+                self.model.user_is_active == True
+            ).first()
+
+    def get_admin_user_by_email_and_role(self, user_email: str) -> Optional[User]:
+        """
+        이메일로 관리자 권한을 가진 활성화된 사용자를 조회합니다.
+        user_role이 'admin'이고 user_is_active가 True인 사용자만 조회합니다.
+        
+        Args:
+            user_email (str): 조회할 관리자의 이메일
+        
+        Returns:
+            Optional[User]: 조회된 관리자 사용자 객체. 존재하지 않을 경우 None 반환
+        """
+        return self.db.query(self.model)\
+            .filter(
+                self.model.user_email == user_email,
+                self.model.user_role == "admin",
                 self.model.user_is_active == True
             ).first()
     

@@ -7,6 +7,10 @@ class UserGenderEnum(Enum):
     female = "female"
     other = "other"
 
+class UserRoleEnum(Enum):
+    admin = "admin"
+    user = "user"
+
 # charaters.py
 class CharacterGenderEnum(Enum):
     male = 'male'

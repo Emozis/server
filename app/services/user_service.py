@@ -36,6 +36,17 @@ class UserService:
         logger.info(f"✨ Successfully created user: {created_user.user_name} (ID: {created_user.user_id})")
         return created_user
 
+    def get_all_users(self) -> list[UserResponse]:
+        """
+        전체 사용자 목록 조회
+        활성화 상태와 관계없이 데이터베이스의 모든 사용자 정보를 반환합니다.
+        
+        Returns:
+            UserResponse: 전체 사용자 정보 목록을 포함한 DTO 객체
+        """
+        users = self.user_crud.get_all_users()
+        return UserMapper.to_dto_list(users)
+
     def get_user_by_id(self, user_id: int) -> UserResponse:
         """
         ID로 사용자 조회

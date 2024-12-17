@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.core import handle_exceptions
-from app.core.dependencies import ChatLogServiceDep, CurrentUser
+from app.core.dependencies import ChatLogServiceDep, AuthenticatedUser
 from app.schemas import (
     ErrorResponse, 
     ChatLogResponse, 
@@ -24,7 +24,7 @@ router = APIRouter(
     }
 )
 @handle_exceptions
-async def get_chat_logs_by_chat_id(chat_id: int, user_id: CurrentUser, chat_log_service: ChatLogServiceDep) -> list[ChatLogResponse]:
+async def get_chat_logs_by_chat_id(chat_id: int, user_id: AuthenticatedUser, chat_log_service: ChatLogServiceDep) -> list[ChatLogResponse]:
     return chat_log_service.get_chat_logs_by_chat_id(chat_id, user_id)
 
 @router.delete(
@@ -38,5 +38,5 @@ async def get_chat_logs_by_chat_id(chat_id: int, user_id: CurrentUser, chat_log_
     }
 )
 @handle_exceptions
-async def delete_chat_log(log_id: int, user_id: CurrentUser, chat_log_service: ChatLogServiceDep) -> ResponseSchema:
+async def delete_chat_log(log_id: int, user_id: AuthenticatedUser, chat_log_service: ChatLogServiceDep) -> ResponseSchema:
     return chat_log_service.delete_chat_log(log_id, user_id)

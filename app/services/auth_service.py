@@ -53,12 +53,13 @@ class AuthService:
 
         return UserMapper.to_dto(db_user)
     
-    def _make_auth_respone(self, status: str, message: str, user: User) -> LoginResponse:
+    def _make_auth_respone(self, status: str, message: str, user: User, role: str = "user") -> LoginResponse:
         """
         인증 응답 생성
         Args:
             status (str): 인증 상태 ("success" 또는 "registration")
             message (str): 응답 메시지
+            role (str): 사용자 종류
             user (User): 사용자 정보
         Returns:
             LoginResponse: 인증 응답 (상태, 메시지, 사용자 정보, 액세스 토큰 포함)
@@ -72,7 +73,7 @@ class AuthService:
                 "user_name": user.user_name,
                 "user_profile": user.user_profile
             },
-            "access_token": JwtUtil.create_access_token(user.user_id, user.user_name)
+            "access_token": JwtUtil.create_access_token(user.user_id, user.user_name, role)
         }
         return LoginResponse(**response)
     
@@ -96,6 +97,44 @@ class AuthService:
 
         logger.info(f"✅ login complete! - id: {user.user_id}, name: {user.user_name}")
         return self._make_auth_respone(status, message, user)
+
+    def _decode_id_token(self, id_token: str) -> UserCreate:
+        """
+        Google ID 토큰을 디코딩하여 사용자 정보를 추출합니다.
+        Google의 공개 키를 사용하여 토큰을 검증하고, 토큰에 포함된 사용자 정보를 UserCreate 객체로 변환합니다.
+        
+        Args:
+            id_token (str): Google에서 발급받은 ID 토큰
+            
+        Returns:
+            UserCreate: 디코딩된 사용자 정보를 담은 객체. 토큰이 유효하지 않은 경우 None 반환
+            
+        Raises:
+            JWTError: 토큰 디코딩 또는 검증 과정에서 오류가 발생한 경우
+        """
+        jwks_url = "https://www.googleapis.com/oauth2/v3/certs"
+        jwks_client = PyJWKClient(jwks_url)
+
+        signing_key = jwks_client.get_signing_key_from_jwt(id_token)
+
+        options = {
+            'verify_iat': True
+        }
+
+        try:
+            user_info: dict = jwt.decode(id_token, signing_key.key, algorithms=["RS256"], audience=settings.GOOGLE_CLIENT_ID, options=options, leeway=30)
+        except JWTError as e:
+            logger.error(f"❌ JWT decoding error: {e}")
+            return None
+        
+        user_data = {
+            "user_id": int(user_info.get("sub")),
+            "user_email": user_info.get("email"),
+            "user_name": user_info.get("name"),
+            "user_profile": user_info.get("picture"),
+        }
+        user = UserCreate(**user_data)
+        return user
     
     def login_id_password(self, request: LoginRequest) -> LoginResponse:
         """
@@ -115,7 +154,27 @@ class AuthService:
         if not password_hasher.verify_password(request.user_password, existing_user.user_password):
             raise InvalidPasswordException()
 
-        return self._make_auth_respone(status="success", message="로그인에 성공하였습니다.", user=existing_user)
+        return self._make_auth_respone(status="success", message="로그인에 성공하였습니다.", role=existing_user.user_role.value, user=existing_user)
+    
+    def login_admin(self, request: LoginRequest) -> LoginResponse:
+        """
+        관리자 계정 로그인 처리
+        Args:
+            request (LoginRequest): 로그인 요청 정보 (이메일, 비밀번호)
+        Returns:
+            LoginResponse: 로그인 응답 정보
+        Raises:
+            NotFoundException: 관리자 권한을 가진 사용자를 찾을 수 없는 경우
+            InvalidPasswordException: 비밀번호가 일치하지 않는 경우
+        """
+        existing_user = self.user_crud.get_admin_user_by_email_and_role(request.user_email)
+        if not existing_user:
+            raise NotFoundException("사용자를 찾을 수 없습니다.", "user_email", request.user_email)
+        
+        if not password_hasher.verify_password(request.user_password, existing_user.user_password):
+            raise InvalidPasswordException()
+
+        return self._make_auth_respone(status="success", message="로그인에 성공하였습니다.", role=existing_user.user_role.value, user=existing_user)
     
     def login_google(self, id_token: str) -> LoginResponse:
         """
@@ -141,28 +200,3 @@ class AuthService:
         """
         test_user = UserCreate(user_email="test@example.com", user_password="test", user_name="Test User", user_profile="test.jpg")
         return self._login(test_user)
-
-    def _decode_id_token(self, id_token: str) -> UserCreate:
-        jwks_url = "https://www.googleapis.com/oauth2/v3/certs"
-        jwks_client = PyJWKClient(jwks_url)
-
-        signing_key = jwks_client.get_signing_key_from_jwt(id_token)
-
-        options = {
-            'verify_iat': True
-        }
-
-        try:
-            user_info: dict = jwt.decode(id_token, signing_key.key, algorithms=["RS256"], audience=settings.GOOGLE_CLIENT_ID, options=options, leeway=30)
-        except JWTError as e:
-            logger.error(f"❌ JWT decoding error: {e}")
-            return None
-        
-        user_data = {
-            "user_id": int(user_info.get("sub")),
-            "user_email": user_info.get("email"),
-            "user_name": user_info.get("name"),
-            "user_profile": user_info.get("picture"),
-        }
-        user = UserCreate(**user_data)
-        return user

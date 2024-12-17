@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.core import handle_exceptions
-from app.core.dependencies import CurrentUser, UserServiceDep
+from app.core.dependencies import AuthenticatedUser, AdminUser, UserServiceDep
 from app.schemas import (
     UserUpdate, 
     UserResponse, 
@@ -26,8 +26,20 @@ router = APIRouter(
     }
 )
 @handle_exceptions
-async def read_user_by_id(user_id: CurrentUser, user_service: UserServiceDep) -> UserResponse:
+async def read_user_by_id(user_id: AuthenticatedUser, user_service: UserServiceDep) -> UserResponse:
     return user_service.get_user_by_id(user_id)
+
+@router.get(
+    path="/all",
+    description="모든 유저 정보를 조회합니다. (관리자 전용)",
+    responses={
+        200: {"model": list[UserResponse], "description": "Successful Response"},
+        500: {"model": ErrorResponse, "description": "Internal server error"}
+    }
+)
+@handle_exceptions
+async def read_all_users(admin_id: AdminUser, user_service: UserServiceDep) -> list[UserResponse]:
+    return user_service.get_all_users()
 
 @router.put(
     path="/me",
@@ -39,7 +51,7 @@ async def read_user_by_id(user_id: CurrentUser, user_service: UserServiceDep) ->
     }
 )
 @handle_exceptions
-async def update_user(user_id: CurrentUser, user: UserUpdate, user_service: UserServiceDep) -> ResponseSchema:
+async def update_user(user_id: AuthenticatedUser, user: UserUpdate, user_service: UserServiceDep) -> ResponseSchema:
     return user_service.update_user(user_id, user)
 
 @router.patch(
@@ -52,6 +64,6 @@ async def update_user(user_id: CurrentUser, user: UserUpdate, user_service: User
     }
 )
 @handle_exceptions
-async def deactivate_user(user_id: CurrentUser, user_service: UserServiceDep) -> ResponseSchema:
+async def deactivate_user(user_id: AuthenticatedUser, user_service: UserServiceDep) -> ResponseSchema:
     """사용자 비활성화 엔드포인트"""
     return user_service.deactivate_user_by_id(user_id)

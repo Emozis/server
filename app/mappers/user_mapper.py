@@ -33,3 +33,7 @@ class UserMapper:
             user_gender=model.user_gender,
             user_birthdate=model.user_birthdate
         )
+        
+    @staticmethod
+    def to_dto_list(models: list[User]) -> list[UserResponse]:
+        return [UserMapper.to_dto(model) for model in models]
