@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.core import handle_exceptions
-from app.core.dependencies import AuthenticatedUser, AdminUser, UserServiceDep
+from app.core.dependencies import AuthenticatedUser, UserServiceDep
 from app.schemas import (
     UserUpdate, 
     UserResponse, 
@@ -28,18 +28,6 @@ router = APIRouter(
 @handle_exceptions
 async def read_user_by_id(user_id: AuthenticatedUser, user_service: UserServiceDep) -> UserResponse:
     return user_service.get_user_by_id(user_id)
-
-@router.get(
-    path="/all",
-    description="모든 유저 정보를 조회합니다. (관리자 전용)",
-    responses={
-        200: {"model": list[UserResponse], "description": "Successful Response"},
-        500: {"model": ErrorResponse, "description": "Internal server error"}
-    }
-)
-@handle_exceptions
-async def read_all_users(admin_id: AdminUser, user_service: UserServiceDep) -> list[UserResponse]:
-    return user_service.get_all_users()
 
 @router.put(
     path="/me",
