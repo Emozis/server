@@ -20,7 +20,7 @@ class RouterScanner:
                 self._register_routers_in_directory(version_dir, version_dir.name)
 
         if len(self.registered_routers) > 0:
-            logger.info(f"🚀 Successfully registered {len(self.registered_routers)} API routers")
+            logger.info(f"✅ Successfully registered {len(self.registered_routers)} API routers")
 
     def _register_routers_in_directory(self, directory: Path, version: str) -> None:
         """특정 디렉토리의 모든 라우터를 등록"""

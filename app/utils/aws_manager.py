@@ -15,6 +15,7 @@ class AWSManager:
         self.bucket_name = self.get_parameter("/emogi/s3/bucket_name")
         self.cloudfront_domain = self.get_parameter("/emogi/cloudfront/domain_name")
         self.secret_name = self.get_parameter("/emogi/secrets/env_secret_name")
+        self.env = self.get_parameter("/emogi/ec2/env-variables")
 
         self.secrets_client = boto3.client('secretsmanager', region_name=self.region_name)
         self.s3_client = boto3.client('s3', region_name=self.region_name)
@@ -24,19 +25,14 @@ class AWSManager:
         Parameter Store에서 값을 가져옵니다.
         """
         try:
-            response = self.ssm_client.get_parameter(Name=parameter_name)
+            response = self.ssm_client.get_parameter(
+                Name=parameter_name,
+                WithDecryption=True
+            )
             return response['Parameter']['Value']
         except ClientError as e:
             logger.error(f"Failed to get parameter '{parameter_name}': {str(e)}")
             return None
-
-    def get_secret(self) -> Dict[str, Any]:
-        """
-        Secrets Manager에서 시크릿 값을 가져옵니다.
-        """
-        response = self.secrets_client.get_secret_value(SecretId=self.secret_name)
-        if 'SecretString' in response:
-            return response['SecretString']
         
     async def upload_to_s3(self, file: UploadFile, folder_path: str = "") -> bool:
         """
