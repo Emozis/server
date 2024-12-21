@@ -7,4 +7,8 @@ class Constants:
 
     chatbot={"model": 'gpt-4o-mini', "temperature": 0.5}
 
+    # DB settings
+    POOL_SIZE=10
+    MAX_OVERFLOW=5
+
 constants = Constants()
