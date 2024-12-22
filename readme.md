@@ -21,6 +21,8 @@ eMoGi는 감정을 다양하게 표현하는 공간으로, "emotion"과 "emoji"�
 
 #### Cloud Infrastructure
 
+👉 [See Infrastructure Details](https://github.com/Emozis/infra)
+
 - **Terraform**: Infrastructure as Code를 통한 AWS 리소스 관리
 - **Amazon S3**: 이미지 저장소로 활용
 - **CloudFront**: CDN을 통한 이미지 전송 최적화 및 보안 강화
