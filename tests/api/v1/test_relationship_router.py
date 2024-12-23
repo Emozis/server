@@ -9,7 +9,7 @@ class TestRelationship:
     relationship_id = None
 
     @pytest.mark.asyncio
-    async def test_create_relationship_success(self, auth_client: TestClient):
+    async def test_create_relationship_success(self, admin_client: TestClient):
         """
         관계 생성 성공 테스트
         
@@ -22,7 +22,7 @@ class TestRelationship:
         data = self.test_relationship.copy()
 
         # When
-        response = auth_client.post("/api/v1/relationship", json=data)
+        response = admin_client.post("/api/v1/admin/relationship", json=data)
         response_data: dict = response.json()
 
         TestRelationship.relationship_id = response_data["data"]["relationshipId"]
@@ -97,7 +97,7 @@ class TestRelationship:
         assert response_data["detail"]["relationship_id"] == relationship_id
 
     @pytest.mark.asyncio
-    async def test_update_relationship_success(self, auth_client: TestClient):
+    async def test_update_relationship_success(self, admin_client: TestClient):
         """
         관계 수정 성공 테스트
         
@@ -112,7 +112,7 @@ class TestRelationship:
         relationship_id = self.relationship_id
 
         # When
-        response = auth_client.put(f"/api/v1/relationship/{relationship_id}", json=data)
+        response = admin_client.put(f"/api/v1/admin/relationship/{relationship_id}", json=data)
         response_data: dict = response.json()
         
         # Then
@@ -121,7 +121,7 @@ class TestRelationship:
         assert response_data["data"]["relationshipId"] == relationship_id
 
     @pytest.mark.asyncio
-    async def test_update_relationship_not_found(self, auth_client: TestClient):
+    async def test_update_relationship_not_found(self, admin_client: TestClient):
         """
         존재하지 않는 관계 수정 시도 테스트
         
@@ -136,7 +136,7 @@ class TestRelationship:
         relationship_id = 999
 
         # When
-        response = auth_client.put(f"/api/v1/relationship/{relationship_id}", json=data)
+        response = admin_client.put(f"/api/v1/admin/relationship/{relationship_id}", json=data)
         response_data: dict = response.json()
         
         # Then
@@ -146,7 +146,7 @@ class TestRelationship:
         assert response_data["detail"]["relationship_id"] == relationship_id
 
     @pytest.mark.asyncio
-    async def test_delete_relationship_success(self, auth_client: TestClient):
+    async def test_delete_relationship_success(self, admin_client: TestClient):
         """
         관계 삭제 성공 테스트
         
@@ -159,7 +159,7 @@ class TestRelationship:
         relationship_id = self.relationship_id
 
         # When
-        response = auth_client.delete(f"/api/v1/relationship/{relationship_id}")
+        response = admin_client.delete(f"/api/v1/admin/relationship/{relationship_id}")
         response_data: dict = response.json()
         
         # Then
@@ -168,7 +168,7 @@ class TestRelationship:
         assert response_data["data"]["relationshipId"] == relationship_id
 
     @pytest.mark.asyncio
-    async def test_delete_relationship_not_found(self, auth_client: TestClient):
+    async def test_delete_relationship_not_found(self, admin_client: TestClient):
         """
         존재하지 않는 관계 삭제 시도 테스트
         
@@ -181,7 +181,7 @@ class TestRelationship:
         relationship_id = 999
 
         # When
-        response = auth_client.delete(f"/api/v1/relationship/{relationship_id}")
+        response = admin_client.delete(f"/api/v1/admin/relationship/{relationship_id}")
         response_data: dict = response.json()
         
         # Then

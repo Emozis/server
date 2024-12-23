@@ -42,13 +42,26 @@ def client(db_session):
     with TestClient(app) as test_client:
         yield test_client
 
-
 @pytest.fixture
 def auth_client(client: TestClient):
     """인증된 테스트 클라이언트를 반환하는 fixture"""
     # Login and get token
     response = client.post("/api/v1/auth/login", json={
         "userEmail": "test@example.com",
+        "userPassword": "1234"
+    })
+    token = response.json()["accessToken"]
+    
+    # Add token to headers
+    client.headers["Authorization"] = f"Bearer {token}"
+    return client
+
+@pytest.fixture
+def admin_client(client: TestClient):
+    """관리자 클라이언트를 반환하는 fixture"""
+    # Login and get token
+    response = client.post("/api/v1/auth/login/admin", json={
+        "userEmail": "admin@example.com",
         "userPassword": "1234"
     })
     token = response.json()["accessToken"]

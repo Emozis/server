@@ -51,6 +51,7 @@ jobs:
             
       - name: Run tests
         env:
+          ENV: prod
           POSTGRES_HOST: localhost
           POSTGRES_PORT: 5432
           POSTGRES_USER: postgres

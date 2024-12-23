@@ -15,7 +15,7 @@ class TestDefaultImage:
     image_id = None
 
     @pytest.mark.asyncio
-    async def test_create_default_image_success(self, auth_client: TestClient):
+    async def test_create_default_image_success(self, admin_client: TestClient):
         """
         기본 이미지 생성 성공 테스트
         
@@ -29,8 +29,8 @@ class TestDefaultImage:
         data = self.test_default_image.copy()
 
         # When
-        response = auth_client.post(
-            "/api/v1/default-image",
+        response = admin_client.post(
+            "/api/v1/admin/default-image",
             files=file,
             data=data
         )
@@ -44,7 +44,7 @@ class TestDefaultImage:
         assert response_data["data"]["imageId"]
 
     @pytest.mark.asyncio
-    async def test_create_default_image_invalid_format(self, auth_client: TestClient):
+    async def test_create_default_image_invalid_format(self, admin_client: TestClient):
         """
         잘못된 파일 형식으로 이미지 생성 시도 테스트
         
@@ -59,8 +59,8 @@ class TestDefaultImage:
         data = self.test_default_image
 
         # When
-        response = auth_client.post(
-            "/api/v1/default-image",
+        response = admin_client.post(
+            "/api/v1/admin/default-image",
             files=file,
             data=data
         )
@@ -73,7 +73,7 @@ class TestDefaultImage:
         assert response_data["detail"]["content_type"] == "text/plain"
 
     @pytest.mark.asyncio
-    async def test_create_default_image_invalid_enum(self, auth_client: TestClient):
+    async def test_create_default_image_invalid_enum(self, admin_client: TestClient):
         """
         잘못된 열거형 값으로 이미지 생성 시도 테스트
         
@@ -88,8 +88,8 @@ class TestDefaultImage:
         data["gender"] = "invalid_gender"
 
         # When
-        response = auth_client.post(
-            "/api/v1/default-image",
+        response = admin_client.post(
+            "/api/v1/admin/default-image",
             files=file,
             data=data
         )
@@ -163,7 +163,7 @@ class TestDefaultImage:
         assert response_data["detail"]["image_id"] == image_id
 
     @pytest.mark.asyncio
-    async def test_update_default_image_success(self, auth_client: TestClient):
+    async def test_update_default_image_success(self, admin_client: TestClient):
         """
         기본 이미지 수정 성공 테스트
         
@@ -178,8 +178,8 @@ class TestDefaultImage:
         image_id = self.image_id
 
         # When
-        response = auth_client.put(
-            f"/api/v1/default-image/{image_id}",
+        response = admin_client.put(
+            f"/api/v1/admin/default-image/{image_id}",
             files=file,
             data=data
         )
@@ -191,7 +191,7 @@ class TestDefaultImage:
         assert response_data["data"]["imageId"] == image_id
 
     @pytest.mark.asyncio
-    async def test_update_default_image_not_found(self, auth_client: TestClient):
+    async def test_update_default_image_not_found(self, admin_client: TestClient):
         """
         존재하지 않는 이미지 수정 시도 테스트
         
@@ -206,8 +206,8 @@ class TestDefaultImage:
         image_id = 999
 
         # When
-        response = auth_client.put(
-            f"/api/v1/default-image/{image_id}",
+        response = admin_client.put(
+            f"/api/v1/admin/default-image/{image_id}",
             files=file,
             data=data
         )
@@ -220,7 +220,7 @@ class TestDefaultImage:
         assert response_data["detail"]["image_id"] == image_id
 
     @pytest.mark.asyncio
-    async def test_update_default_image_invalid_formatd(self, auth_client: TestClient):
+    async def test_update_default_image_invalid_formatd(self, admin_client: TestClient):
         """
         잘못된 파일 형식으로 이미지 수정 시도 테스트
         
@@ -236,8 +236,8 @@ class TestDefaultImage:
         image_id = self.image_id
 
         # When
-        response = auth_client.put(
-            f"/api/v1/default-image/{image_id}",
+        response = admin_client.put(
+            f"/api/v1/admin/default-image/{image_id}",
             files=file,
             data=data
         )
@@ -250,7 +250,7 @@ class TestDefaultImage:
         assert response_data["detail"]["content_type"] == "text/plain"
 
     @pytest.mark.asyncio
-    async def test_update_default_image_invalid_enum(self, auth_client: TestClient):
+    async def test_update_default_image_invalid_enum(self, admin_client: TestClient):
         """
         잘못된 열거형 값으로 이미지 수정 시도 테스트
         
@@ -266,8 +266,8 @@ class TestDefaultImage:
         image_id = self.image_id
 
         # When
-        response = auth_client.put(
-            f"/api/v1/default-image/{image_id}",
+        response = admin_client.put(
+            f"/api/v1/admin/default-image/{image_id}",
             files=file,
             data=data
         )
@@ -281,7 +281,7 @@ class TestDefaultImage:
         assert response_data["detail"]["provided_value"] == "invalid_gender"
 
     @pytest.mark.asyncio
-    async def test_delete_default_image_success(self, auth_client: TestClient):
+    async def test_delete_default_image_success(self, admin_client: TestClient):
         """
         기본 이미지 삭제 성공 테스트
         
@@ -294,7 +294,7 @@ class TestDefaultImage:
         image_id = self.image_id
 
         # When
-        response = auth_client.delete(f"/api/v1/default-image/{image_id}")
+        response = admin_client.delete(f"/api/v1/admin/default-image/{image_id}")
         response_data: dict = response.json()
         
         # Then
@@ -303,7 +303,7 @@ class TestDefaultImage:
         assert response_data["data"]["imageId"] == image_id
 
     @pytest.mark.asyncio
-    async def test_delete_default_image_not_found(self, auth_client: TestClient):
+    async def test_delete_default_image_not_found(self, admin_client: TestClient):
         """
         존재하지 않는 이미지 삭제 시도 테스트
         
@@ -316,7 +316,7 @@ class TestDefaultImage:
         image_id = 999
 
         # When
-        response = auth_client.delete(f"/api/v1/default-image/{image_id}")
+        response = admin_client.delete(f"/api/v1/admin/default-image/{image_id}")
         response_data: dict = response.json()
         
         # Then

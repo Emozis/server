@@ -3,12 +3,8 @@ from fastapi import APIRouter
 from app.core import handle_exceptions
 from app.core.dependencies import RelationshipServiceDep
 from app.schemas import (
-    RelationshipCreate, 
-    RelationshipUpdate, 
     RelationshipResponse, 
     ErrorResponse, 
-    ResponseSchema, 
-    RelationshipIdResponse
 )
 
 
