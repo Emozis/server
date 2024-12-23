@@ -1,7 +1,7 @@
 name: CI/CD Pipeline
 
 env:
-  IMAGE_NAME: emogi-app
+  IMAGE_NAME: emogi-prod
   CONTAINER_NAME: emogi-app
   PROJECT_PATH: /home/ec2-user/emogi
 
@@ -93,6 +93,41 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.version }}
             ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
 
+  deploy:
+      needs: build
+      runs-on: ubuntu-22.04
+      steps:
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ${{ secrets.AWS_REGION }}
+
+        - name: Deploy using SSM
+          run: |
+            # SSM Run Command를 사용하여 배포
+            aws ssm send-command \
+              --targets "Key=tag:Environment,Values=prod" \
+              --document-name "AWS-RunShellScript" \
+              --parameters commands=[\
+                "cd ${PROJECT_PATH}",\
+                "docker pull ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ needs.build.outputs.version }}",\
+                "docker stop ${CONTAINER_NAME} || true",\
+                "docker rm ${CONTAINER_NAME} || true",\
+                "docker run -d \
+                  --name ${CONTAINER_NAME} \
+                  -e ENV=prod \
+                  -v ~/.aws:/root/.aws \
+                  -p 8000:8000 \
+                  --health-cmd='python -c \"import urllib.request; urllib.request.urlopen(\\\"http://localhost:8000/health\\\")\"' \
+                  --health-interval=10s \
+                  --health-timeout=5s \
+                  --health-retries=5 \
+                  --health-start-period=20s \
+                  ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ needs.build.outputs.version }}"\
+              ]
+              
   # deploy:
   #   needs: build
   #   runs-on: ubuntu-22.04
