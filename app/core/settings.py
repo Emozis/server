@@ -7,6 +7,15 @@ from ..utils.aws_manager import aws_managers
 
 
 class BaseConfig(BaseSettings):
+    model_config = ConfigDict(
+        env_file_encoding='utf-8',
+        env_nested_delimiter='__',
+        extra='allow',
+        env_prefix='',
+        case_sensitive=False,
+        env_priority='higher'
+    )
+
     # DATABASE
     POSTGRES_HOST: str
     POSTGRES_PORT: str
@@ -47,23 +56,22 @@ class BaseConfig(BaseSettings):
     @classmethod
     def load_and_validate(cls):
         try:
+            settings_dict = {}
+            
             if cls.__name__ == "ProdConfig":
-                secret_string = aws_managers.env
-                secrets = cls.parse_env_string(secret_string)
-                return cls(**secrets) if secrets else cls()
-            settings = cls()
+                settings_dict = cls.parse_env_string(aws_managers.env)
+                # 환경 변수로 덮어쓰기
+                for key in cls.model_fields.keys():
+                    if env_value := os.getenv(key):
+                        settings_dict[key] = env_value
+            
+            return cls(**settings_dict) if settings_dict else cls()
 
-            return settings
         except ValidationError as e:
             logger.error("❌ Error validating settings:")
-            
-            component_list = []
             for error in e.errors():
                 loc = ".".join(str(loc) for loc in error['loc'])
-                msg = error['msg']
-                logger.error(f" - {loc}: {msg}")
-                component_list.append(f"- `{loc}`: {msg}")
-            
+                logger.error(f" - {loc}: {error['msg']}")
             raise e
         except Exception as e:
             logger.error(f"❌ Unexpected error loading settings: {str(e)}")
