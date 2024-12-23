@@ -18,7 +18,7 @@ class User(Base):
     user_is_active = Column(Boolean, default=True)
     user_deactived_at = Column(TIMESTAMP(timezone=True))
 
-    user_gender = Column(Enum(UserGenderEnum), nullable=False)
+    user_gender = Column(Enum(UserGenderEnum), nullable=True)
     user_role = Column(Enum(UserRoleEnum), nullable=False, default="user")
     user_birthdate = Column(Date, nullable=True)
 

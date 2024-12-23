@@ -1,7 +1,7 @@
 from fastapi import UploadFile
 import boto3
 from botocore.exceptions import ClientError
-from typing import Dict, Any, Optional
+from typing import Optional
 import os, uuid
 
 from ..core import logger
@@ -16,7 +16,6 @@ class AWSManager:
         self.cloudfront_domain = self.get_parameter("/emogi/cloudfront/domain_name")
         self.env = self.get_parameter("/emogi/ec2/env-variables")
 
-        self.secrets_client = boto3.client('secretsmanager', region_name=self.region_name)
         self.s3_client = boto3.client('s3', region_name=self.region_name)
 
     def get_parameter(self, parameter_name: str) -> Optional[str]:
