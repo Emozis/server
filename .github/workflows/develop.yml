@@ -1,7 +1,7 @@
 name: CI/CD Pipeline
 
 env:
-  IMAGE_NAME: emogi-app
+  IMAGE_NAME: emogi-dev
   CONTAINER_NAME: emogi-app
   PROJECT_PATH: /home/isakin/project/emogi
 
