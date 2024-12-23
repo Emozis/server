@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.core import handle_exceptions
-from app.core.dependencies import ChatServiceDep, CurrentUser
+from app.core.dependencies import ChatServiceDep, AuthenticatedUser
 from app.schemas import (
     ErrorResponse, 
     ChatCreate, 
@@ -26,7 +26,7 @@ router = APIRouter(
     }
 )
 @handle_exceptions
-async def create_chat(chat: ChatCreate, user_id: CurrentUser, chat_service: ChatServiceDep):
+async def create_chat(chat: ChatCreate, user_id: AuthenticatedUser, chat_service: ChatServiceDep):
     return chat_service.create_chat(chat, user_id)
 
 @router.get(
@@ -38,7 +38,7 @@ async def create_chat(chat: ChatCreate, user_id: CurrentUser, chat_service: Chat
     }
 )
 @handle_exceptions
-async def get_chat_by_user_id(user_id: CurrentUser, chat_service: ChatServiceDep):
+async def get_chat_by_user_id(user_id: AuthenticatedUser, chat_service: ChatServiceDep):
     return chat_service.get_chats_by_user_id(user_id)
 
 @router.delete(
@@ -52,5 +52,5 @@ async def get_chat_by_user_id(user_id: CurrentUser, chat_service: ChatServiceDep
     }
 )
 @handle_exceptions
-async def delete_character(chat_id: int, user_id: CurrentUser, chat_service: ChatServiceDep):
+async def delete_character(chat_id: int, user_id: AuthenticatedUser, chat_service: ChatServiceDep):
     return chat_service.delete_chat(chat_id, user_id)

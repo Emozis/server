@@ -36,6 +36,16 @@ class CharacterService:
             data=CharacterIdResponse(character_id=db_charater.character_id)
         )
     
+    def get_all_characters(self) -> list[CharacterResponse]:
+        """
+        모든 캐릭터 조회
+        Returns:
+            list[CharacterResponse]: 모든 캐릭터 목록
+        """
+        charaters = self.character_crud.get_charaters()
+        logger.info(f"😊 Total {len(charaters)} public characters found")
+        return CharacterMapper.to_dto_list(charaters)
+    
     def get_public_characters(self) -> list[CharacterResponse]:
         """
         공개된 모든 캐릭터 조회

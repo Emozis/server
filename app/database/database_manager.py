@@ -8,6 +8,7 @@ import os
 
 from ..core import logger, settings
 from ..database.base import Base
+from ..utils.constants import constants
 
 
 class DatabaseManager:
@@ -62,7 +63,13 @@ class DatabaseManager:
     def _setup_connection(self):
         """데이터베이스 연결 설정 및 테스트"""
         try:
-            self.engine = create_engine(self.DATABASE_URL)
+            self.engine = create_engine(
+                url=self.DATABASE_URL,
+                pool_size=constants.POOL_SIZE,
+                max_overflow=constants.MAX_OVERFLOW,
+                pool_timeout=30,
+                pool_pre_ping=True,
+            )
             self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
             
             # 데이터베이스 연결 테스트

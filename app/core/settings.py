@@ -25,8 +25,10 @@ class BaseConfig(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CLIENT_SECRET: str
 
-    # GEMINI
+    # AI API KEY
     GOOGLE_API_KEY: str
+    OPENAI_API_KEY: str
+    UPSTAGE_API_KEY: str
 
     @staticmethod
     def parse_env_string(env_string: str) -> dict[str, str]:
@@ -42,17 +44,12 @@ class BaseConfig(BaseSettings):
                 
         return result
 
-    @staticmethod
-    def get_aws_secrets(cls) -> dict:
-       logger.info("🔃 '.env' file not found, attempting to load from AWS Secrets Manager...")
-       secret_string = aws_managers.get_secret()
-       return cls.parse_env_string(secret_string)
-
     @classmethod
     def load_and_validate(cls):
         try:
             if cls.__name__ == "ProdConfig":
-                secrets = cls.get_aws_secrets(cls)
+                secret_string = aws_managers.env
+                secrets = cls.parse_env_string(secret_string)
                 return cls(**secrets) if secrets else cls()
             settings = cls()
 
@@ -79,12 +76,16 @@ class DevConfig(BaseConfig):
 class ProdConfig(BaseConfig):
     model_config = ConfigDict(env_file=".env.prod")
 
-
 def get_settings():
     env = os.getenv("ENV", "dev")
     drop_tables = os.getenv("DROP_TABLES", "false").lower() == "true"
 
+    env_emoji = "🎯" if env == "prod" else "🛠️ "
+    logger.info(f"{env_emoji} Loading settings for environment: {env.upper()}")
+
     config_class = ProdConfig if env == "prod" else DevConfig
+    logger.info(f"📝 Using configuration class: {config_class.__name__}")
+
     settings = config_class.load_and_validate()
     settings.DROP_ALL_TABLES = drop_tables
 

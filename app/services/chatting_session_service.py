@@ -8,7 +8,7 @@ from ..services import ChatLogService
 from ..models import Chat
 from ..schemas import UserMessage, CharacterMessage
 from ..utils.socket_connection_manager import ConnectionManager
-from ..chatbot import data_converter, Gemini
+from ..chatbot import data_converter, Gemini, ChatBot
 
 
 class ChattingSessionService:
@@ -37,15 +37,21 @@ class ChattingSessionService:
             character_info=character_info,
             chat_history=chat_history
         )
+
+        self.chatbot = ChatBot(
+            user_info=user_info,
+            character_info=character_info,
+            chat_history=chat_history
+    )
         
     async def generate_bot_response(self, inputs: str):
         response_id = self.room.get_next_response_id()
 
         output = ""
-        async for content in self.gemini.astream_yield(inputs):
-            # if content != "\n":
-            output += content
-            await self.send_socket_response(content, response_id)
+        # async for char in self.gemini.astream_yield(inputs):
+        async for char in self.chatbot.astream(inputs):
+            output += char
+            await self.send_socket_response(char, response_id)
                 # await asyncio.sleep(0.2)
 
         await self.send_socket_response("[EOS]", response_id)

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from ..database.base import Base
-from .enums import UserGenderEnum
+from .enums import UserGenderEnum, UserRoleEnum
 
 
 class User(Base):
@@ -19,6 +19,7 @@ class User(Base):
     user_deactived_at = Column(TIMESTAMP(timezone=True))
 
     user_gender = Column(Enum(UserGenderEnum), nullable=True)
+    user_role = Column(Enum(UserRoleEnum), nullable=False, default="user")
     user_birthdate = Column(Date, nullable=True)
 
     chats = relationship("Chat", back_populates="user")

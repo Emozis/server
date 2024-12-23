@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from app.core import handle_exceptions
-from app.core.dependencies import CharacterServiceDep, CurrentUser
+from app.core.dependencies import CharacterServiceDep, AuthenticatedUser
 from app.schemas import (
     CharacterCreate, 
     CharacterUpdate, 
@@ -26,7 +26,7 @@ router = APIRouter(
     }
 )
 @handle_exceptions
-async def create_character(charater: CharacterCreate, user_id: CurrentUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
+async def create_character(charater: CharacterCreate, user_id: AuthenticatedUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
     return chararter_service.create_character(charater, user_id)
 
 @router.get(
@@ -62,7 +62,7 @@ async def get_top_used_public_characters(chararter_service: CharacterServiceDep)
     }
 )
 @handle_exceptions
-async def get_characters_by_user_id(user_id: CurrentUser, chararter_service: CharacterServiceDep) -> list[CharacterResponse]:
+async def get_characters_by_user_id(user_id: AuthenticatedUser, chararter_service: CharacterServiceDep) -> list[CharacterResponse]:
     return chararter_service.get_characters_by_user_id(user_id)
 
 @router.get(
@@ -89,7 +89,7 @@ async def get_character_by_id(character_id: int, character_service: CharacterSer
     }
 )
 @handle_exceptions
-async def update_character(character_id: int, character: CharacterUpdate, user_id: CurrentUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
+async def update_character(character_id: int, character: CharacterUpdate, user_id: AuthenticatedUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
     return chararter_service.update_character(character_id, character, user_id)
 
 @router.patch(
@@ -102,7 +102,7 @@ async def update_character(character_id: int, character: CharacterUpdate, user_i
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
     }
 )
-async def deactive_character(character_id: int, user_id: CurrentUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
+async def deactive_character(character_id: int, user_id: AuthenticatedUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
     return chararter_service.deactive_charactor(character_id, user_id)
 
 @router.delete(
@@ -116,5 +116,5 @@ async def deactive_character(character_id: int, user_id: CurrentUser, chararter_
     }
 )
 @handle_exceptions
-async def delete_character(character_id: int, user_id: CurrentUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
+async def delete_character(character_id: int, user_id: AuthenticatedUser, chararter_service: CharacterServiceDep) -> ResponseSchema:
     return chararter_service.delete_charactor(character_id, user_id)
