@@ -34,4 +34,4 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY . .
 
 # FastAPI 애플리케이션을 시작합니다.
-CMD uvicorn app.main:app --host 0.0.0.0 --port 8000 --log-level critical
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-level", "critical"]
