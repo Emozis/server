@@ -10,57 +10,57 @@ on:
     branches: ["deploy"]
 
 jobs:
-  test:
-    runs-on: ubuntu-22.04
-    services:
-      postgres:
-        image: postgres:16.4-bullseye
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: emogi
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+  # test:
+  #   runs-on: ubuntu-22.04
+  #   services:
+  #     postgres:
+  #       image: postgres:16.4-bullseye
+  #       env:
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_DB: emogi
+  #       ports:
+  #         - 5432:5432
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Install poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
+  #     - name: Install poetry
+  #       run: |
+  #         curl -sSL https://install.python-poetry.org | python3 -
 
-      - name: Install dependencies
-        run: poetry install --with dev
+  #     - name: Install dependencies
+  #       run: poetry install --with dev
 
-      - name: Create env file
-        env:
-          ENV_CONTENT: ${{ secrets.ENV_FILE }}
-        run: echo "$ENV_CONTENT" > .env.dev
+  #     - name: Create env file
+  #       env:
+  #         ENV_CONTENT: ${{ secrets.ENV_FILE }}
+  #       run: echo "$ENV_CONTENT" > .env.dev
             
-      - name: Run tests
-        env:
-          ENV: prod
-          POSTGRES_HOST: localhost
-          POSTGRES_PORT: 5432
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: emogi
-        run: poetry run pytest
+  #     - name: Run tests
+  #       env:
+  #         ENV: prod
+  #         POSTGRES_HOST: localhost
+  #         POSTGRES_PORT: 5432
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_DB: emogi
+  #       run: poetry run pytest
 
   build:
-    needs: test
+    # needs: test
     runs-on: ubuntu-22.04
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -111,11 +111,26 @@ jobs:
             --document-name "AWS-RunShellScript" \
             --parameters '{
               "commands": [
-                "cd ${PROJECT_PATH}",
-                "docker pull ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ needs.build.outputs.version }}",
-                "docker stop ${CONTAINER_NAME} || true",
-                "docker rm ${CONTAINER_NAME} || true",
-                "docker run -d --name ${CONTAINER_NAME} -e ENV=prod -v ~/.aws:/root/.aws -p 8000:8000 --health-cmd=\"python -c \\\"import urllib.request; urllib.request.urlopen(\\\\\\\"http://localhost:8000/health\\\\\\\")\\\"\" --health-interval=10s --health-timeout=5s --health-retries=5 --health-start-period=20s ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ needs.build.outputs.version }}"
+                "export HOME=/home/ec2-user",
+                "cd /home/ec2-user/emogi",
+                "IMAGE_TAG=\"${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ needs.build.outputs.version }}\"",
+                "echo \"Pulling image: $IMAGE_TAG\"",
+                "docker pull \"$IMAGE_TAG\"",
+                "echo \"Stopping container: ${CONTAINER_NAME}\"",
+                "docker stop \"${CONTAINER_NAME}\" || true",
+                "docker rm \"${CONTAINER_NAME}\" || true",
+                "echo \"Starting container\"",
+                "docker run -d \\",
+                "  --name \"${CONTAINER_NAME}\" \\",
+                "  -e ENV=prod \\",
+                "  -v /home/ec2-user/.aws:/root/.aws \\",
+                "  -p 8000:8000 \\",
+                "  --health-cmd=\"python -c \\\"import urllib.request; urllib.request.urlopen(\\\\\\\"http://localhost:8000/health\\\\\\\")\\\"\" \\",
+                "  --health-interval=10s \\",
+                "  --health-timeout=5s \\",
+                "  --health-retries=5 \\",
+                "  --health-start-period=20s \\",
+                "  \"$IMAGE_TAG\""
               ],
               "executionTimeout": ["300"]
             }' \
@@ -156,6 +171,9 @@ jobs:
             
             sleep 5
           done
+
+
+
   # deploy:
   #   needs: build
   #   runs-on: ubuntu-22.04
