@@ -116,7 +116,7 @@ jobs:
             ],
             "executionTimeout": ["300"]
           }
-EOF
+          EOF
           )
 
           COMMAND_ID=$(aws ssm send-command \
