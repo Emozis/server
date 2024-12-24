@@ -107,35 +107,13 @@ jobs:
       - name: Deploy using SSM
         run: |
           DOCKER_IMAGE="${{ secrets.DOCKER_USERNAME }}/emogi-app:${{ needs.build.outputs.version }}"
-          HEALTH_CMD="python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/health\")'"
           
-          DEPLOY_COMMAND=$(cat << 'EOF'
-          {
+          DEPLOY_COMMAND='{
             "commands": [
-              "docker pull %DOCKER_IMAGE% && \
-               docker stop emogi-app || true && \
-               docker rm emogi-app || true && \
-               docker run -d \
-                 --name emogi-app \
-                 -e ENV=prod \
-                 -v /home/ec2-user/.aws:/root/.aws \
-                 -p 8000:8000 \
-                 --health-cmd=%HEALTH_CMD% \
-                 --health-interval=10s \
-                 --health-timeout=5s \
-                 --health-retries=5 \
-                 --health-start-period=20s \
-                 %DOCKER_IMAGE%"
+              "docker pull '"${DOCKER_IMAGE}"' && docker stop emogi-app || true && docker rm emogi-app || true && docker run -d --name emogi-app -e ENV=prod -v /home/ec2-user/.aws:/root/.aws -p 8000:8000 --health-cmd=\"python -c \\\"import urllib.request; urllib.request.urlopen(\\\\\\\"http://localhost:8000/health\\\\\\\")\\\"\" --health-interval=10s --health-timeout=5s --health-retries=5 --health-start-period=20s '"${DOCKER_IMAGE}"'"
             ],
             "executionTimeout": ["300"]
-          }
-          EOF
-          )
-
-          # Replace placeholders with actual values
-          DEPLOY_COMMAND=$(echo "$DEPLOY_COMMAND" | \
-            sed "s|%DOCKER_IMAGE%|${DOCKER_IMAGE}|g" | \
-            sed "s|%HEALTH_CMD%|${HEALTH_CMD}|g")
+          }'
 
           COMMAND_ID=$(aws ssm send-command \
             --targets "Key=tag:Environment,Values=prod" \
@@ -160,11 +138,6 @@ jobs:
               --output text)
             
             echo "Deployment status: $STATUS"
-
-            aws ssm get-command-invocation \
-              --command-id "$COMMAND_ID" \
-              --instance-id "$INSTANCE_ID" \
-              --output json
 
             if [ "$STATUS" = "Success" ]; then
               echo "Deployment completed successfully"
