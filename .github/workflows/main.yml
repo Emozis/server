@@ -106,34 +106,30 @@ jobs:
 
       - name: Deploy using SSM
         run: |
+          DEPLOY_COMMAND='
+            DOCKER_IMAGE="${{ secrets.DOCKER_USERNAME }}/emogi-app:${{ needs.build.outputs.version }}"
+            echo "Pulling image: $DOCKER_IMAGE"
+            docker pull $DOCKER_IMAGE
+            echo "Stopping container: emogi-app"
+            docker stop emogi-app || true
+            docker rm emogi-app || true
+            echo "Starting container"
+            docker run -d \
+              --name emogi-app \
+              -e ENV=prod \
+              -v /home/ec2-user/.aws:/root/.aws \
+              -p 8000:8000 \
+              --health-cmd="python -c \"import urllib.request; urllib.request.urlopen(\\\"http://localhost:8000/health\\\")\"" \
+              --health-interval=10s \
+              --health-timeout=5s \
+              --health-retries=5 \
+              --health-start-period=20s \
+              $DOCKER_IMAGE'
+
           COMMAND_ID=$(aws ssm send-command \
             --targets "Key=tag:Environment,Values=prod" \
             --document-name "AWS-RunShellScript" \
-            --parameters '{
-              "commands": [
-                "export HOME=/home/ec2-user",
-                "cd /home/ec2-user/emogi",
-                "IMAGE_TAG=\"${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ needs.build.outputs.version }}\"",
-                "echo \"Pulling image: $IMAGE_TAG\"",
-                "docker pull \"$IMAGE_TAG\"",
-                "echo \"Stopping container: ${CONTAINER_NAME}\"",
-                "docker stop \"${CONTAINER_NAME}\" || true",
-                "docker rm \"${CONTAINER_NAME}\" || true",
-                "echo \"Starting container\"",
-                "docker run -d \\",
-                "  --name \"${CONTAINER_NAME}\" \\",
-                "  -e ENV=prod \\",
-                "  -v /home/ec2-user/.aws:/root/.aws \\",
-                "  -p 8000:8000 \\",
-                "  --health-cmd=\"python -c \\\"import urllib.request; urllib.request.urlopen(\\\\\\\"http://localhost:8000/health\\\\\\\")\\\"\" \\",
-                "  --health-interval=10s \\",
-                "  --health-timeout=5s \\",
-                "  --health-retries=5 \\",
-                "  --health-start-period=20s \\",
-                "  \"$IMAGE_TAG\""
-              ],
-              "executionTimeout": ["300"]
-            }' \
+            --parameters "{\"commands\":[\"$DEPLOY_COMMAND\"],\"executionTimeout\":[\"300\"]}" \
             --query "Command.CommandId" --output text)
 
           echo "Command ID: $COMMAND_ID"
