@@ -106,25 +106,7 @@ jobs:
 
       - name: Deploy using SSM
         run: |
-          DEPLOY_COMMAND='
-            DOCKER_IMAGE="${{ secrets.DOCKER_USERNAME }}/emogi-app:${{ needs.build.outputs.version }}"
-            echo "Pulling image: $DOCKER_IMAGE"
-            docker pull $DOCKER_IMAGE
-            echo "Stopping container: emogi-app"
-            docker stop emogi-app || true
-            docker rm emogi-app || true
-            echo "Starting container"
-            docker run -d \
-              --name emogi-app \
-              -e ENV=prod \
-              -v /home/ec2-user/.aws:/root/.aws \
-              -p 8000:8000 \
-              --health-cmd="python -c \"import urllib.request; urllib.request.urlopen(\\\"http://localhost:8000/health\\\")\"" \
-              --health-interval=10s \
-              --health-timeout=5s \
-              --health-retries=5 \
-              --health-start-period=20s \
-              $DOCKER_IMAGE'
+          DEPLOY_COMMAND="docker pull ${{ secrets.DOCKER_USERNAME }}/emogi-app:${{ needs.build.outputs.version }} && docker stop emogi-app || true && docker rm emogi-app || true && docker run -d --name emogi-app -e ENV=prod -v /home/ec2-user/.aws:/root/.aws -p 8000:8000 --health-cmd='python -c \"import urllib.request; urllib.request.urlopen(\\\"http://localhost:8000/health\\\")\"' --health-interval=10s --health-timeout=5s --health-retries=5 --health-start-period=20s ${{ secrets.DOCKER_USERNAME }}/emogi-app:${{ needs.build.outputs.version }}"
 
           COMMAND_ID=$(aws ssm send-command \
             --targets "Key=tag:Environment,Values=prod" \
@@ -133,9 +115,8 @@ jobs:
             --query "Command.CommandId" --output text)
 
           echo "Command ID: $COMMAND_ID"
-          sleep 10  # 명령어 실행 시작을 위한 대기
+          sleep 10
 
-          # 인스턴스 ID 가져오기
           INSTANCE_ID=$(aws ssm list-command-invocations \
             --command-id "$COMMAND_ID" \
             --query "CommandInvocations[0].InstanceId" \
@@ -151,7 +132,6 @@ jobs:
             
             echo "Deployment status: $STATUS"
 
-            # 상세 내용 확인
             aws ssm get-command-invocation \
               --command-id "$COMMAND_ID" \
               --instance-id "$INSTANCE_ID" \
