@@ -97,61 +97,28 @@ jobs:
     needs: build
     runs-on: ubuntu-22.04
     steps:
-      - name: Configure AWS credentials
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      
-      - name: Deploy using SSM
+
+      - name: Deploy to EC2
         run: |
-          DOCKER_IMAGE="${{ secrets.DOCKER_USERNAME }}/emogi-app:${{ needs.build.outputs.version }}"
-          
-          DEPLOY_COMMAND='{
-            "commands": [
-              "docker pull '"${DOCKER_IMAGE}"' && docker stop emogi-app || true && docker rm emogi-app || true && docker run -d --name emogi-app -e ENV=prod -v /home/ec2-user/.aws:/root/.aws -p 8000:8000 --health-cmd=\"python -c \\\"import urllib.request; urllib.request.urlopen(\\\\\\\"http://localhost:8000/health\\\\\\\")\\\"\" --health-interval=10s --health-timeout=5s --health-retries=5 --health-start-period=20s '"${DOCKER_IMAGE}"'"
-            ],
-            "executionTimeout": ["300"]
-          }'
-
-          COMMAND_ID=$(aws ssm send-command \
-            --targets "Key=tag:Environment,Values=prod" \
-            --document-name "AWS-RunShellScript" \
-            --parameters "$DEPLOY_COMMAND" \
-            --query "Command.CommandId" --output text)
-
-          echo "Command ID: $COMMAND_ID"
-          sleep 10
-
-          INSTANCE_ID=$(aws ssm list-command-invocations \
-            --command-id "$COMMAND_ID" \
-            --query "CommandInvocations[0].InstanceId" \
-            --output text)
-          
-          echo "Instance ID: $INSTANCE_ID"
-
-          while true; do
-            STATUS=$(aws ssm list-command-invocations \
-              --command-id "$COMMAND_ID" \
-              --query "CommandInvocations[0].Status" \
-              --output text)
+          chmod +x scripts/deploy_prod.sh
+          ./scripts/deploy_prod.sh \
+            -i ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }} \
+            -t ${{ needs.build.outputs.version }} \
+            -n ${{ env.CONTAINER_NAME }} \
+            -p 8000 \
+            -e prod \
+            --env-value prod \
+            --name-value emogi-ec2-app
             
-            echo "Deployment status: $STATUS"
-
-            if [ "$STATUS" = "Success" ]; then
-              echo "Deployment completed successfully"
-              break
-            elif [ "$STATUS" = "Failed" ] || [ "$STATUS" = "Cancelled" ] || [ "$STATUS" = "TimedOut" ]; then
-              echo "Deployment failed with status: $STATUS"
-              exit 1
-            fi
-            
-            sleep 5
-          done
-
-
-
   # deploy:
   #   needs: build
   #   runs-on: ubuntu-22.04
