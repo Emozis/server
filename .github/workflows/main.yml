@@ -120,7 +120,7 @@ jobs:
             --name-value emogi-ec2-app
 
   health-check:
-    needs: build
+    needs: deploy
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -136,7 +136,7 @@ jobs:
       - name: Execute health check
         run: |
           chmod +x scripts/health-check.sh
-          ./health-check.sh \
+          ./scripts/health-check.sh \
             -p 8000 \
             --env-tag Environment \
             --env-value prod \
