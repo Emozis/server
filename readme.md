@@ -75,3 +75,4 @@ eMoGi는 감정을 다양하게 표현하는 공간으로, "emotion"과 "emoji"�
 프로젝트와 관련된 문의 사항이나 제안이 있으시면 아래 이메일로 연락해 주세요:
 
 - **Backend 개발**: ⭐️정민교(minkyo.dev@gmail.com)
+
