@@ -72,7 +72,7 @@ jobs:
 
       - name: Get and update version
         id: version
-        run: bash ./scripts/update_version.sh "${{ github.ref }}" "${{ github.run_number }}"
+        run: bash ./scripts/update-version.sh "${{ github.ref }}" "${{ github.run_number }}"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -156,9 +156,8 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Generate Discord message
-        id: discord_message
         run: |
-          message=$(bash ./scripts/discord_message.sh \
+          message=$(bash ./scripts/discord-message.sh \
               "${{ github.repository }}" \
               "${{ github.ref_name }}" \
               "${{ needs.build.outputs.version }}" \

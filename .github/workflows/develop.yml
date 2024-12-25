@@ -22,7 +22,7 @@ jobs:
 
       - name: Get and update version
         id: version
-        run: bash ./scripts/update_version.sh "${{ github.ref }}" "${{ github.run_number }}"
+        run: bash ./scripts/update-version.sh "${{ github.ref }}" "${{ github.run_number }}"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -57,7 +57,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "docker-compose.yml,scripts/deploy_dev.sh"
+          source: "docker-compose.yml,scripts/deploy-dev.sh"
           target: ${{ env.PROJECT_PATH }}
 
       - name: Execute deploy script
@@ -69,7 +69,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             cd ${{ env.PROJECT_PATH }}
-            bash ./scripts/deploy_dev.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
+            bash ./scripts/deploy-dev.sh "${{ env.PROJECT_PATH }}" "${{ secrets.DOCKER_USERNAME }}" "${{ env.IMAGE_NAME }}" "${{ needs.build.outputs.version }}"
 
   health-check:
       needs: deploy
@@ -110,7 +110,7 @@ jobs:
       - name: Generate Discord message
         id: discord_message
         run: |
-          message=$(bash ./scripts/discord_message.sh \
+          message=$(bash ./scripts/discord-message.sh \
               "${{ github.repository }}" \
               "${{ github.ref_name }}" \
               "${{ needs.build.outputs.version }}" \
