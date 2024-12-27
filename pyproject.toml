@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "test"
-version = "0.1.9"
+version = "1.0.0"
 description = ""
 authors = ["MinkyoDev <minkyo.dev@gmail.com>"]
 readme = "README.md"
