@@ -55,6 +55,10 @@ class SwaggerConfig:
                 "name": "Health",
                 "description": "서버 상태 확인을 위한 health check API입니다."
             },
+            {
+                "name": "Pages",
+                "description": "관리자 페이지를 위한 API입니다."
+            },
         ]
 
     def _set_version_from_poetry(self):

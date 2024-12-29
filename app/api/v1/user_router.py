@@ -7,7 +7,8 @@ from app.schemas import (
     UserResponse, 
     ErrorResponse, 
     ResponseSchema, 
-    UserIdResponse
+    UserIdResponse,
+    UserCreate
 )
 
 
@@ -27,6 +28,13 @@ router = APIRouter(
 )
 @handle_exceptions
 async def read_user_by_id(user_id: AuthenticatedUser, user_service: UserServiceDep) -> UserResponse:
+    new = UserCreate(
+        user_email="emozis0012@gmail.com",
+        user_name="emogi-admin",
+        user_password="emogi001!"
+    )
+    print(new)
+    user_service.create_user(new)
     return user_service.get_user_by_id(user_id)
 
 @router.put(

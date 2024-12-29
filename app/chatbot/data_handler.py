@@ -5,12 +5,12 @@ async def data_converter(user: User, character: Character, chat_logs: list[ChatL
     user_info = {
         "user_name": user.user_name,
         "user_birthdate": user.user_birthdate,
-        "user_gender": user.user_gender.value
+        "user_gender": user.user_gender.value if user.user_gender else None
     }
 
     character_info = {
         "character_name": character.character_name,
-        "character_gender": character.character_gender.value,
+        "character_gender": character.character_gender.value if character.character_gender else None,
         "character_personality": character.character_personality,
         "character_details": character.character_details,
         "relation_type": ", ".join([c.relationship.relationship_name for c in character.character_relationships])

@@ -3,16 +3,19 @@ from fastapi.responses import FileResponse
 
 
 router = APIRouter(
-    prefix=""
+    prefix="",
+    tags=["Pages"]
 )
 
 @router.get("/admin/login")
 async def login_page():
     return FileResponse("app/static/html/login.html")
 
+
 @router.get("/admin/dashboard")
 async def login_page():
     return FileResponse("app/static/html/dashboard.html")
+
 
 @router.get("/admin/character")
 async def login_page():
@@ -26,6 +29,7 @@ async def login_page():
 async def login_page():
     return FileResponse("app/static/html/characterModify.html")
 
+
 @router.get("/admin/image")
 async def login_page():
     return FileResponse("app/static/html/imageCheck.html")
@@ -37,3 +41,8 @@ async def login_page():
 @router.get("/admin/image/modify")
 async def login_page():
     return FileResponse("app/static/html/imageModify.html")
+
+
+@router.get("/chatting")
+async def login_page():
+    return FileResponse("app/static/html/chatting.html")

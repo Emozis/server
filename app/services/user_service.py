@@ -5,7 +5,7 @@ from ..models import User
 from ..crud import UserCRUD
 from ..mappers import UserMapper
 from ..schemas import UserCreate, UserUpdate, UserResponse, ResponseSchema, UserIdResponse
-from ..utils import password_hasher
+from ..utils.password_hasher import password_hasher
 from ..exceptions import NotFoundException, UserConflictException
 
 

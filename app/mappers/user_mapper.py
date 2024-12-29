@@ -9,7 +9,8 @@ class UserMapper:
             user_email=dto.user_email,
             user_password=dto.user_password,
             user_name=dto.user_name,
-            user_profile=dto.user_profile
+            user_profile=dto.user_profile,
+            user_gender=dto.user_gender
         )
     
     @staticmethod
