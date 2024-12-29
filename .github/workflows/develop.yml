@@ -85,7 +85,7 @@ jobs:
             port: ${{ secrets.SSH_PORT }}
             username: ${{ secrets.SSH_USERNAME }}
             password: ${{ secrets.SSH_PASSWORD }}
-            source: "scripts/health_check.sh"
+            source: "scripts/health-check-dev.sh"
             target: ${{ env.PROJECT_PATH }}
 
         - name: Execute health check script
@@ -97,7 +97,7 @@ jobs:
             password: ${{ secrets.SSH_PASSWORD }}
             script: |
               cd ${{ env.PROJECT_PATH }}
-              bash ./scripts/health_check.sh "${{ env.PROJECT_PATH }}"
+              bash ./scripts/health-check-dev.sh "${{ env.PROJECT_PATH }}"
 
   notify:
     needs: [build, deploy, health-check]
