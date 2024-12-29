@@ -1,7 +1,8 @@
-import pytest
 from fastapi.testclient import TestClient
+import pytest
 
 from app.main import app
+from app.core import settings
 from app.utils.constants import constants
 from app.database.database_manager import get_db
 from tests.database.database_manager import DatabaseManagerForTest
@@ -61,8 +62,8 @@ def admin_client(client: TestClient):
     """관리자 클라이언트를 반환하는 fixture"""
     # Login and get token
     response = client.post("/api/v1/auth/login/admin", json={
-        "userEmail": "admin@example.com",
-        "userPassword": "1234"
+        "userEmail": "emozis001@gmail.com",
+        "userPassword": settings.ADMIN_PASSWORD
     })
     token = response.json()["accessToken"]
     

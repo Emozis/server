@@ -27,8 +27,8 @@ class CharacterService:
         db_charater = self.character_crud.create(CharacterMapper.create_to_model(character, user_id))
 
         # 캐릭터 관계 생성
-        for relationship_id in character.relationships:
-            self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship_id))
+        for relationship in character.character_relationships:
+            self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship.relationship_id))
         
         logger.info(f"✨ Successfully created character: {db_charater.character_name} (ID: {db_charater.character_id})")
         return ResponseSchema(
@@ -128,8 +128,8 @@ class CharacterService:
         db_charater = self.character_crud.update(character_id, CharacterMapper.create_to_model(character, user_id))
 
         # 캐릭터 관계 재생성
-        for relationship_id in character.relationships:
-            self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship_id))
+        for relationship in character.character_relationships:
+            self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship.relationship_id))
         
         logger.info(f"🔄 Successfully updated character: {db_charater.character_name} (ID: {character_id})")
         return ResponseSchema(

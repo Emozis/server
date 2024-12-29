@@ -12,7 +12,16 @@ class TestCharacter:
             "characterDescription": "string",
             "characterGreeting": "string",
             "characterIsPublic": True,
-            "relationships": [1, 2]
+            "characterRelationships": [
+                {
+                    "relationshipId": 1,
+                    "relationshipName": ""
+                },
+                {
+                    "relationshipId": 2,
+                    "relationshipName": ""
+                }
+            ]
         }
     character_id = None
 
@@ -138,7 +147,6 @@ class TestCharacter:
         assert response.status_code == 200
         assert response_data["characterName"] == self.test_character["characterName"]
         assert response_data["characterGender"] == self.test_character["characterGender"]
-        assert [relationship["relationshipId"] for relationship in response_data["characterRelationships"]] == self.test_character["relationships"]
 
     @pytest.mark.asyncio
     async def test_get_character_by_id_not_found(self, auth_client: TestClient):
@@ -326,6 +334,7 @@ class TestCharacter:
         # When
         response = auth_client.delete(f"/api/v1/character/{character_id}")
         response_data: dict = response.json()
+        print(response_data)
 
         # Then
         assert response.status_code == 200

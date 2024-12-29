@@ -15,6 +15,7 @@ class BaseConfig(BaseSettings):
         case_sensitive=False,
         env_priority='higher'
     )
+    ADMIN_PASSWORD: str
 
     # DATABASE
     POSTGRES_HOST: str
