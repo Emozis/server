@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "test"
+name = "emogi"
 version = "1.0.0"
 description = ""
 authors = ["MinkyoDev <minkyo.dev@gmail.com>"]
