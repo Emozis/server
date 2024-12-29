@@ -1,62 +1,67 @@
-*{
+@import url('variables.css');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Pretendard', sans-serif;
+    font-family: var(--font-family);
 }
-@font-face {
-    font-family: 'Pretendard';
-    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
-    font-weight: 400;
-    font-style: normal;
-}
-.header{
+
+.header {
     width: 100vw;
-    height: 90px;
-    background-color: #8F62EA;
+    height: var(--header-height);
+    background-color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.container{
+
+.container {
     width: 100vw;
-    padding: 0 162px;
+    padding: 0 var(--container-padding);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.menu{
+
+.menu {
     list-style-type: none;
     display: flex;
     justify-content: space-between;
-    gap: 30px;
-    color: #fff;
-    font-size: 20px;
+    gap: var(--spacing-8);
+    color: var(--white);
+    font-size: var(--font-size-xl);
     font-weight: 600;
     cursor: pointer;
 }
+
 .menu li {
-    padding: 10px 30px;
-    border-radius: 50px;
-    transition: background-color 0.3s ease;
+    padding: var(--spacing-3) var(--spacing-8);
+    border-radius: var(--radius-full);
+    transition: background-color var(--transition-normal);
 }
+
 .menu li:hover {
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: var(--white-transparent);
 }
+
 .menu li.active {
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: var(--white-transparent);
 }
-.logout{
+
+.logout {
     width: 180px;
-    height: 50px;
-    background-color: #fff;
+    height: var(--spacing-12);
+    background-color: var(--white);
     border: none;
-    border-radius: 50px;
-    font-size: 20px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xl);
     font-weight: 600;
     cursor: pointer;
 }
-a{
+
+a {
     text-decoration: none;
-    color: #fff;
+    color: var(--white);
 }

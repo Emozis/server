@@ -1,90 +1,105 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
-*{
+@import url('variables.css');
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    font-family: var(--font-family);
 }
-body{
-    background-color: #8F62EA;
+
+body {
+    background-color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
-.login-container{
+
+.login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: var(--spacing-12);
     min-height: auto;
 }
-.loginTitle{
+
+.loginTitle {
     display: flex;
-    color: #fff;
+    color: var(--white);
     text-align: center;
-    font-size: 24px;
+    font-size: var(--font-size-2xl);
     font-weight: 500;
 }
-.logoCircle{
+
+.logoCircle {
     position: relative;
-    background-color: #fff;
-    width:146px;
+    background-color: var(--white);
+    width: 146px;
     height: 146px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     margin-bottom: -123px;
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1;
 }
-.logo{
+
+.logo {
     height: auto;
 }
-.loginBox{
+
+.loginBox {
     display: flex;
     width: 500px;
     height: 400px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 30px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    padding-top: 30px;
+    gap: var(--spacing-8);
+    border-radius: var(--radius-lg);
+    background-color: var(--white);
+    box-shadow: var(--shadow-md);
+    padding-top: var(--spacing-8);
 }
-label{
-    font-size: 16px;
+
+label {
+    font-size: var(--font-size-base);
 }
-.idBox{
+
+.idBox {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--spacing-3);
 }
-.idInput{
+
+.idInput {
     width: 380px;
     height: 50px;
-    border-radius: 5px;
-    border: 1px solid #C4C4C4;
-    padding-left: 10px;
+    border-radius: var(--radius-base);
+    border: 1px solid var(--gray-400);
+    padding-left: var(--spacing-3);
 }
+
 .idInput:focus {
     outline: none;
-    border: 1px solid #8F62EA;
+    border: 1px solid var(--primary-color);
 }
-.loginBtn{
+
+.loginBtn {
     width: 150px;
     height: 50px;
-    background-color: #8F62EA;
+    background-color: var(--primary-color);
     border: none;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 18px;
+    border-radius: var(--radius-base);
+    color: var(--white);
+    font-size: var(--font-size-lg);
     font-weight: 500;
     cursor: pointer;
+    transition: var(--transition-base);
 }
+
 .loginBtn:hover {
-    background-color: #7B4FD6;  
-    box-shadow: 0 4px 12px rgba(143, 98, 234, 0.3);
+    background-color: var(--primary-dark);
+    box-shadow: var(--shadow-primary);
 }

@@ -1,0 +1,53 @@
+:root {
+    /* Colors */
+    --primary-color: #8F62EA;
+    --primary-dark: #7B4FD6;
+    --secondary-color: #8A2BE2;
+    --white: #FFFFFF;
+    --black: #000000;
+    --gray-400: #C4C4C4;
+    --gray-border: #c7c7c7;
+    --text-dark: #2c2c2c;
+    --bg-light: #F4F8F9;
+    --white-transparent: rgba(255, 255, 255, 0.25);
+
+    /* Font */
+    --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    
+    /* Font Sizes */
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 24px;
+    
+    /* Heights */
+    --header-height: 90px;
+    --category-height: 70px;
+    
+    /* Layout */
+    --container-padding: 162px;
+    --table-cell-padding: 30px 5px;
+    --btn-padding: 5px 20px;
+    
+    /* Border Radius */
+    --radius-base: 5px;
+    --radius-lg: 10px;
+    --radius-full: 50px;
+    
+    /* Shadows */
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --shadow-primary: 0 4px 12px rgba(143, 98, 234, 0.3);
+    
+    /* Spacing */
+    --spacing-3: 10px;
+    --spacing-5: 20px;
+    --spacing-8: 30px;
+    --spacing-12: 50px;
+    --spacing-category: 70px;
+    
+    /* Borders */
+    --border-active: 3px;
+    
+    /* Transitions */
+    --transition-normal: 0.3s ease;
+}
