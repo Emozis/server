@@ -16,7 +16,8 @@ class RouterScanner:
         api_path = Path(__file__).parent.parent / "api"
         
         for version_dir in api_path.iterdir():
-            if version_dir.is_dir() and version_dir.name.startswith("v"):
+            if version_dir.is_dir():
+            # if version_dir.is_dir() and version_dir.name.startswith("v"):
                 self._register_routers_in_directory(version_dir, version_dir.name)
 
         if len(self.registered_routers) > 0:

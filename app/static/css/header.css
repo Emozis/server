@@ -1,0 +1,62 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard', sans-serif;
+}
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+.header{
+    width: 100vw;
+    height: 90px;
+    background-color: #8F62EA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    width: 100vw;
+    padding: 0 162px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.menu{
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.menu li {
+    padding: 10px 30px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+.menu li:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+.menu li.active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+.logout{
+    width: 180px;
+    height: 50px;
+    background-color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+a{
+    text-decoration: none;
+    color: #fff;
+}

@@ -1,0 +1,90 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+}
+body{
+    background-color: #8F62EA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+.login-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    min-height: auto;
+}
+.loginTitle{
+    display: flex;
+    color: #fff;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 500;
+}
+.logoCircle{
+    position: relative;
+    background-color: #fff;
+    width:146px;
+    height: 146px;
+    border-radius: 50%;
+    margin-bottom: -123px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+.logo{
+    height: auto;
+}
+.loginBox{
+    display: flex;
+    width: 500px;
+    height: 400px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    padding-top: 30px;
+}
+label{
+    font-size: 16px;
+}
+.idBox{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.idInput{
+    width: 380px;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid #C4C4C4;
+    padding-left: 10px;
+}
+.idInput:focus {
+    outline: none;
+    border: 1px solid #8F62EA;
+}
+.loginBtn{
+    width: 150px;
+    height: 50px;
+    background-color: #8F62EA;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.loginBtn:hover {
+    background-color: #7B4FD6;  
+    box-shadow: 0 4px 12px rgba(143, 98, 234, 0.3);
+}

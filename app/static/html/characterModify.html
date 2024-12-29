@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/character.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="header-container"></div>
+    <div class="category">
+      <ul>
+        <li class="category-item" data-link="/admin/character">캐릭터 조회</li>
+        <li class="category-item" data-link="/admin/character/create">캐릭터 생성</li>
+        <li class="category-item active" data-link="/admin/character/modify">캐릭터 수정/삭제</li>
+      </ul>
+    </div>
+
+    <div class="table-container">
+      <table class="character-table">
+        <thead>
+          <tr>
+            <th>이름</th>
+            <th>프로필 이미지</th>
+            <th>성별</th>
+            <th>성격</th>
+            <th>공개여부</th>
+            <th>삭제하기</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>뽀로로</td>
+            <td><img src="" alt="프로필 이미지" /></td>
+            <td>남자</td>
+            <td>노는게 제일 좋아</td>
+            <td>공개</td>
+            <td><button class="deleteBtn">삭제</button></td>
+          </tr>
+          <tr>
+            <td>뽀로로클론2</td>
+            <td><img src="" alt="프로필 이미지" /></td>
+            <td>남자</td>
+            <td>활발/발랄/용기</td>
+            <td>공개</td>
+            <td><button class="deleteBtn">삭제</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="/static/js/character.js"></script>
+  </body>
+</html>

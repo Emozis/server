@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/admin/character/characterCheck.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="header-container"></div>
+    <div class="category">
+      <ul>
+        <li class="category-item" data-link="imageCheck.html">이미지 조회</li>
+        <li class="category-item active" data-link="imageCreate.html">
+          이미지 생성
+        </li>
+        <li class="category-item" data-link="imageModify.html">
+          이미지 수정/삭제
+        </li>
+      </ul>
+    </div>
+
+    <div class="table-container">
+      <table class="character-table">
+        <thead>
+          <tr>
+            <th>이미지 등록</th>
+            <th>성별</th>
+            <th>나이대</th>
+            <th>감정</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="addFile">
+              <img id="preview" />
+              <input type="file" accept="image/*" onchange="readURL(this);" />
+            </td>
+            <td>
+              <select>
+                <option value="man">남자</option>
+                <option value="woman">여자</option>
+              </select>
+            </td>
+            <td>
+              <select>
+                <option value="10">10대</option>
+                <option value="20">20대</option>
+              </select>
+            </td>
+            <td>
+              <select>
+                <option value="happy">기쁨</option>
+                <option value="sad">슬픔</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="addFile">
+              <img id="preview" />
+              <input type="file" accept="image/*" onchange="readURL(this);" />
+            </td>
+            <td>
+              <select>
+                <option value="man">남자</option>
+                <option value="woman">여자</option>
+              </select>
+            </td>
+            <td>
+              <select>
+                <option value="man">남자</option>
+                <option value="woman">여자</option>
+              </select>
+            </td>
+            <td>
+              <select>
+                <option value="happy">기쁨</option>
+                <option value="sad">슬픔</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script src="/admin/character/character.js"></script>
+  </body>
+</html>
