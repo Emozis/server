@@ -1,8 +1,9 @@
 services:
   app:
-    image: isakin/emogi-app:latest
+    image: isakin/emogi-dev:latest
     container_name: emogi-app-2
     environment:
+      DROP_TABLES: true
       POSTGRES_HOST: ${POSTGRES_HOST}
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_DB: ${POSTGRES_DB}

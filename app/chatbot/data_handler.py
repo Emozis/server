@@ -7,6 +7,7 @@ async def data_converter(user: User, character: Character, chat_logs: list[ChatL
         "user_birthdate": user.user_birthdate,
         "user_gender": user.user_gender.value if user.user_gender else None
     }
+    print(user_info)
 
     character_info = {
         "character_name": character.character_name,
