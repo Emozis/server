@@ -47,12 +47,12 @@ docker-compose.override.yml
 .coverage
 .pytest_cache/
 htmlcov/
+tests/
 
 # Logs
 *.log
 
-# Scripts
+# ETC
 scripts/
-
-# Tests
-tests/
+docs/
+readme.md
