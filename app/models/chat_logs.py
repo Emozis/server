@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Enum, Text, ForeignKey, BigInteger, TIMESTAMP
+from sqlalchemy import Column, Enum, String, Text, ForeignKey, BigInteger, Integer, Numeric, TIMESTAMP
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -18,6 +18,12 @@ class ChatLog(Base):
     contents = Column(Text, nullable=True)
 
     log_create_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+
+    model_name = Column(String(255), nullable=True)
+    prompt_tokens = Column(Integer, nullable=True)
+    completion_tokens = Column(Integer, nullable=True)
+    total_tokens = Column(Integer, nullable=True)
+    token_cost = Column(Numeric(10, 4), nullable=True)
 
     chat = relationship("Chat", back_populates="chat_logs")
     user = relationship("User", back_populates="chat_logs")
