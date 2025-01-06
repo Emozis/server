@@ -40,6 +40,8 @@ services:
       start_period: 5s
     expose:
       - "5432"
+    ports:
+      - "8201:5432"
     volumes:
       - emogi-data:/var/lib/postgresql/data
     networks:

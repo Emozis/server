@@ -12,7 +12,7 @@ from .chatting_session_service import ChattingSessionService
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from ..database import get_db
+from ..database.database_manager import get_db
 
 def get_auth_service(db: Session = Depends(get_db)) -> AuthService:
     return AuthService(db)

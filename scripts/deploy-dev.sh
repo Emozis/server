@@ -16,5 +16,11 @@ sed -i "s|image: ${DOCKER_USERNAME}/${IMAGE_NAME}:.*|image: ${DOCKER_USERNAME}/$
 docker compose pull
 docker compose up -d
 
+# 컨테이너가 완전히 시작될 때까지 잠시 대기
+sleep 5
+
+# app 컨테이너 내에서 마이그레이션 실행
+docker compose exec -T app poetry run alembic upgrade head
+
 # 사용하지 않는 Docker 이미지 정리
 docker image prune -af
