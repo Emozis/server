@@ -37,7 +37,7 @@ body {
     background-color: var(--white);
     width: 146px;
     height: 146px;
-    border-radius: var(--radius-full);
+    border-radius: 50%;
     margin-bottom: -123px;
     display: flex;
     justify-content: center;
