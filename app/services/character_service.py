@@ -15,6 +15,31 @@ class CharacterService:
         self.relationship_crud = RelationshipCRUD(db)
         self.character_relationship_crud = CharacterRelationshipCRUD(db)
 
+    def _validate_relationship_ids(self, relationships: list) -> None:
+        """
+        캐릭터 관계 ID들의 유효성을 검증하는 내부 메서드
+        Args:
+            relationships (list): 검증할 관계 ID 목록
+        Raises:
+            NotFoundException: 존재하지 않는 관계 ID가 포함된 경우
+        """
+        # 모든 relationship ID 추출
+        relationship_ids = [rel.relationship_id for rel in relationships]
+        
+        # 존재하는 relationship ID 조회
+        existing_relationships = self.relationship_crud.get_relationships_by_ids(relationship_ids)
+        existing_ids = {rel.relationship_id for rel in existing_relationships}
+        
+        # 존재하지 않는 ID 확인
+        invalid_ids = set(relationship_ids) - existing_ids
+        if invalid_ids:
+            logger.warning(f"❌ Invalid relationship IDs found: {invalid_ids}")
+            raise NotFoundException(
+                "존재하지 않는 관계 ID가 포함되어 있습니다.",
+                "relationship_ids",
+                list(invalid_ids)
+            )
+
     def create_character(self, character: CharacterCreate, user_id: int) -> ResponseSchema:
         """
         새로운 캐릭터 생성 서비스
@@ -24,17 +49,34 @@ class CharacterService:
         Returns:
             ResponseSchema: 생성 성공 메시지
         """
-        db_charater = self.character_crud.create(CharacterMapper.create_to_model(character, user_id))
+        try:
+            # 트랜잭션 시작
+            self.db.begin_nested()
 
-        # 캐릭터 관계 생성
-        for relationship in character.character_relationships:
-            self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship.relationship_id))
+            # 관계 ID 유효성 검증
+            self._validate_relationship_ids(character.character_relationships)
+
+            # 캐릭터 생성
+            db_charater = self.character_crud.create(CharacterMapper.create_to_model(character, user_id))
+
+            # 캐릭터 관계 생성
+            unique_relationships = {rel.relationship_id: rel for rel in character.character_relationships}.values()
+
+            for relationship in unique_relationships:
+                self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship.relationship_id))
         
-        logger.info(f"✨ Successfully created character: {db_charater.character_name} (ID: {db_charater.character_id})")
-        return ResponseSchema(
-            message="캐릭터가 성공적으로 생성되었습니다.",
-            data=CharacterIdResponse(character_id=db_charater.character_id)
-        )
+            # 트랜잭션 커밋
+            self.db.commit()
+            
+            logger.info(f"✨ Successfully created character: {db_charater.character_name} (ID: {db_charater.character_id})")
+            return ResponseSchema(
+                message="캐릭터가 성공적으로 생성되었습니다.",
+                data=CharacterIdResponse(character_id=db_charater.character_id)
+            )
+        except Exception as e:
+            self.db.rollback()
+            logger.error(f"❌ Failed to create character: {str(e)}")
+            raise
     
     def get_all_characters(self) -> list[CharacterResponse]:
         """
@@ -115,27 +157,40 @@ class CharacterService:
         if not origin_character:
             logger.warning(f"❌ Failed to find character with id {character_id}")
             raise NotFoundException("캐릭터를 찾을 수 없습니다.", "character_id", character_id)
-        
+
         if user_id != origin_character.user_id:
             logger.warning(f"❌ User {user_id} attempted to modify character {character_id} owned by user {origin_character.user_id}")
             raise ForbiddenException("자신의 캐릭터만 수정할 수 있습니다.", "character_id", character_id)
-        
-        # 기존 캐릭터 관계 삭제
-        for cr in origin_character.character_relationships:
-            self.character_relationship_crud.delete(cr.character_relationship_id)
 
-        # 캐릭터 정보 업데이트
-        db_charater = self.character_crud.update(character_id, CharacterMapper.create_to_model(character, user_id))
+        try:
+            # 트랜잭션 시작
+            self.db.begin_nested()
 
-        # 캐릭터 관계 재생성
-        for relationship in character.character_relationships:
-            self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship.relationship_id))
+            # 관계 ID 유효성 검증
+            self._validate_relationship_ids(character.character_relationships)
+
+            # 기존 캐릭터 관계 삭제
+            for cr in origin_character.character_relationships:
+                self.character_relationship_crud.delete(cr.character_relationship_id)
+
+            # 캐릭터 정보 업데이트
+            db_charater = self.character_crud.update(character_id, CharacterMapper.create_to_model(character, user_id))
+
+            # 캐릭터 관계 재생성
+            unique_relationships = {rel.relationship_id: rel for rel in character.character_relationships}.values()
+
+            for relationship in unique_relationships:
+                self.character_relationship_crud.create(CharacterRelationship(character_id=db_charater.character_id, relationship_id=relationship.relationship_id))
         
-        logger.info(f"🔄 Successfully updated character: {db_charater.character_name} (ID: {character_id})")
-        return ResponseSchema(
-            message="캐릭터가 성공적으로 수정되었습니다.",
-            data=CharacterIdResponse(character_id=character_id)
-        )
+            logger.info(f"🔄 Successfully updated character: {db_charater.character_name} (ID: {character_id})")
+            return ResponseSchema(
+                message="캐릭터가 성공적으로 수정되었습니다.",
+                data=CharacterIdResponse(character_id=character_id)
+            )
+        except Exception as e:
+            self.db.rollback()
+            logger.error(f"❌ Failed to update character: {str(e)}")
+            raise
     
     def deactive_charactor(self, character_id: int, user_id: int) -> ResponseSchema:
         """

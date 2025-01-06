@@ -25,3 +25,20 @@ class RelationshipCRUD(BaseCRUD[Relationship]):
             Optional[Relationship]: 조회된 관계 객체. 존재하지 않을 경우 None 반환
         """
         return self.db.query(self.model).filter(self.model.relationship_name == relationship_name).first()
+
+    def get_relationships_by_ids(self, relationship_ids: list[int]) -> list[Relationship]:
+        """
+        여러 관계 ID로 관계 정보들을 조회합니다.
+        
+        Args:
+            relationship_ids (List[int]): 조회할 관계 ID 목록
+            
+        Returns:
+            List[Relationship]: 조회된 관계 객체들의 리스트
+        """
+        if not relationship_ids:
+            return []
+            
+        return self.db.query(self.model)\
+            .filter(self.model.relationship_id.in_(relationship_ids))\
+            .all()
