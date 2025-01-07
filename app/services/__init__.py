@@ -7,6 +7,7 @@ from .chat_service import ChatService
 from .chat_log_service import ChatLogService
 from .chatting_service import ChattingService
 from .chatting_session_service import ChattingSessionService
+from .feedback_service import FeedbackService
 
 
 from fastapi import Depends
@@ -37,3 +38,6 @@ def get_chat_log_service(db: Session = Depends(get_db)) -> ChatLogService:
 
 def get_chatting_service(db: Session = Depends(get_db)) -> ChattingService:
     return ChattingService(db)
+
+def get_feedback_service(db: Session = Depends(get_db)) -> FeedbackService:
+    return FeedbackService(db)

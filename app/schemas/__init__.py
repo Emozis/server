@@ -1,6 +1,6 @@
 from .error_schema import ErrorResponse
 from .message_response import MessageResponse
-from .response_schema import ResponseSchema, UserIdResponse, CharacterIdResponse, ChatIdResponse, ChatLogIdResponse, DefaultImageIdResponse, RelationshipIdResponse
+from .response_schema import ResponseSchema, UserIdResponse, CharacterIdResponse, ChatIdResponse, ChatLogIdResponse, DefaultImageIdResponse, RelationshipIdResponse, FeedbackIdResponse
 
 from .auth.login_request import LoginRequest
 from .auth.login_google_request import LoginGoogleRequest
@@ -29,3 +29,6 @@ from .chat_log.create_chat_log_request import ChatLogCreate
 from .chat_log.chat_log_response import ChatLogResponse
 
 from .chatting.chatting_schema import AuthMessage, SystemMessage, UserMessage, CharacterMessage
+
+from .feedback.create_feedback_request import FeedbackCreate
+from .feedback.feedback_response import FeedbackResponse

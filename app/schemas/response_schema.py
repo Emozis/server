@@ -26,3 +26,6 @@ class DefaultImageIdResponse(CamelModel):
 
 class RelationshipIdResponse(CamelModel):
     relationship_id: int
+
+class FeedbackIdResponse(CamelModel):
+    feedback_id: int

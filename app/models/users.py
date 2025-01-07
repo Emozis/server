@@ -25,3 +25,4 @@ class User(Base):
     chats = relationship("Chat", back_populates="user")
     chat_logs = relationship("ChatLog", back_populates="user")
     characters = relationship("Character", back_populates="user")
+    feedbacks = relationship("Feedback", back_populates="user")

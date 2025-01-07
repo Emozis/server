@@ -28,3 +28,4 @@ CharacterServiceDep = Annotated[services.CharacterService, Depends(services.get_
 ChatServiceDep = Annotated[services.ChatService, Depends(services.get_chat_service)]
 ChatLogServiceDep = Annotated[services.ChatLogService, Depends(services.get_chat_log_service)]
 ChattingServiceDep = Annotated[services.ChattingService, Depends(services.get_chatting_service)]
+FeedbackServiceDep = Annotated[services.FeedbackService, Depends(services.get_feedback_service)]

@@ -74,4 +74,15 @@ class ImageEmotionEnum(str, Enum):
     def get_korean_name(cls, emotion_code: str) -> list[str]:
         return cls.get_emotion_groups().get(emotion_code, [])
     
+# feedbacks.py
+class FeedbackType(str, Enum):
+    BUG = "BUG"
+    FEATURE = "FEATURE"
+    IMPROVEMENT = "IMPROVEMENT"
+    OTHER = "OTHER"
 
+class FeedbackStatus(str, Enum):
+    RECEIVED = "RECEIVED"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+    REJECTED = "REJECTED"

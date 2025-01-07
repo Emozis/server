@@ -52,6 +52,10 @@ class SwaggerConfig:
                 "description": "채팅 기록에 관한 API입니다."
             },
             {
+                "name": "Feedback",
+                "description": "유저 피드백에 관한 API입니다."
+            },
+            {
                 "name": "Health",
                 "description": "서버 상태 확인을 위한 health check API입니다."
             },

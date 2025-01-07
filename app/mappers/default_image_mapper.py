@@ -2,6 +2,7 @@ from ..models import DefaultImages
 from ..schemas import DefaultImageCreate, DefaultImageUpdate, DefaultImageResponse
 from ..utils.aws_manager import aws_managers
 
+
 class DefaultImageMapper:
     @staticmethod
     def create_to_model(dto: DefaultImageCreate) -> DefaultImages:

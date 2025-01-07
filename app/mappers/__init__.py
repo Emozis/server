@@ -4,3 +4,4 @@ from .default_image_mapper import DefaultImageMapper
 from .character_mapper import CharacterMapper
 from .chat_mapper import ChatMapper
 from .chat_log_mapper import ChatLogMapper
+from .feedback_mapper import FeedbackMapper
