@@ -32,3 +32,4 @@ from .chatting.chatting_schema import AuthMessage, SystemMessage, UserMessage, C
 
 from .feedback.create_feedback_request import FeedbackCreate
 from .feedback.feedback_response import FeedbackResponse
+from .feedback.feedback_reply_request import FeedbackReplyRequest

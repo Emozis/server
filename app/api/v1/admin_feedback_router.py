@@ -5,6 +5,7 @@ from app.core.dependencies import AdminUser, FeedbackServiceDep
 from app.schemas import (
     FeedbackResponse, 
     FeedbackIdResponse,
+    FeedbackReplyRequest,
     ResponseSchema,
     ErrorResponse, 
 )
@@ -52,3 +53,21 @@ async def get_image(feedback_id: int, feedback_service: FeedbackServiceDep, admi
 @handle_exceptions
 async def delete_image(feedback_id: int, feedback_service: FeedbackServiceDep, admin_id: AdminUser) -> ResponseSchema:
     return feedback_service.delete_feedback(feedback_id)
+
+@router.patch(
+    path="/{feedback_id}/reply",
+    description="관리자가 유저 피드백에 답변을 보내는 API입니다.",
+    responses={
+        200: {"model": ResponseSchema[FeedbackIdResponse], "description": "Successful Response"},
+        404: {"model": ErrorResponse, "description": "Not Found"},
+        500: {"model": ErrorResponse, "description": "Internal Server Error"}
+    }
+)
+@handle_exceptions
+async def update_feedback_comment(
+    feedback_id: int, 
+    reply: FeedbackReplyRequest, 
+    feedback_service: FeedbackServiceDep, 
+    admin_id: AdminUser
+) -> ResponseSchema:
+    return feedback_service.update_feedback_comment(feedback_id, reply)
