@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCharacters();
 });
 
+function getGenderBadge(gender) {
+    const genderMap = {
+        'female': '여성',
+        'male': '남성',
+        'other': '기타'
+    };
+    
+    return `<span class="gender-badge ${gender}">${genderMap[gender] || '기타'}</span>`;
+}
+
+
 // 캐릭터 목록을 불러오는 함수
 async function loadCharacters() {
     try {
@@ -20,9 +31,9 @@ async function loadCharacters() {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${index + 1}</td>
+                <td><img src="${'/static/image/characterDefault.png'}" alt="프로필 이미지" /></td>
                 <td>${character.characterName}</td>
-                <td><img src="${character.characterProfile || ''}" alt="프로필 이미지" /></td>
-                <td>${character.characterGender}</td>
+                <td>${getGenderBadge(character.characterGender)}</td>
                 <td>${character.characterPersonality}</td>
                 <td>${character.relationship || '-'}</td>
                 <td>${character.characterCreatedAt ? new Date(character.characterCreatedAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }) : ''}</td>

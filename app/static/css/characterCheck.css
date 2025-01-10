@@ -26,8 +26,8 @@ body {
 
 .category ul {
   display: flex;
-  gap: 70px;
-  font-size: 18px;
+  gap: 30px;
+  font-size: 16px;
 }
 
 .category .category-item {
@@ -37,6 +37,7 @@ body {
   position: relative;
   align-items: center;
   transition: color 0.3s;
+  padding: 10px 0px 10px 0px;
 }
 
 .category .category-item.active {
@@ -71,7 +72,7 @@ body {
 .character-table td,
 .image-table th,
 .image-table td {
-  padding: 30px 5px;
+  padding: 15px 5px;
 }
 
 .character-table th,
@@ -128,7 +129,7 @@ body {
 .sub-header {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .createBtn {
