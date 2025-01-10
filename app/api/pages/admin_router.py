@@ -19,7 +19,11 @@ async def login_page():
 
 @router.get("/admin/character")
 async def login_page():
-    return FileResponse("app/static/html/characterCheck.html")
+    return FileResponse("app/static/html/characterList.html")
+
+# ==========================================
+
+
 
 @router.get("/admin/character/create")
 async def login_page():

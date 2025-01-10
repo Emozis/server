@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  background-color: #F4F8F9;
+}
+
+.category {
+  padding: 0 162px;
+  height: 70px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.category ul {
+  display: flex;
+  gap: 70px;
+  font-size: 18px;
+}
+
+.category .category-item {
+  list-style: none;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+  align-items: center;
+  transition: color 0.3s;
+}
+
+.category .category-item.active {
+  color: #000;
+}
+
+.category .category-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  width: 100%;
+  background-color: #8A2BE2;
+}
+
+/*테이블 css*/
+.table-container {
+  padding: 20px 162px;
+}
+
+.character-table,
+.image-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  font-size: 16px;
+}
+
+.character-table th,
+.character-table td,
+.image-table th,
+.image-table td {
+  padding: 30px 5px;
+}
+
+.character-table th,
+.image-table th {
+  border: none;
+  color: #2c2c2c;
+  font-weight: 400;
+}
+
+.character-table td,
+.image-table td {
+  border-bottom: 1px solid #c7c7c7;
+  background-color: #fff;
+}
+
+.character-table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.character-table tbody tr:hover td {
+  background-color: #f8f2ff;
+}
+
+.character-table img,
+.image-table img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.deleteBtn {
+  cursor: pointer;
+  background-color: #8A2BE2;
+  color: #fff;
+  border: none;
+  padding: 5px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.addFile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#preview {
+  border: none;
+  margin-right: 10px;
+}
+
+.sub-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.createBtn {
+  cursor: pointer;
+  background-color: #8A2BE2;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+}

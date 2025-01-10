@@ -1,67 +1,83 @@
-@import url('variables.css');
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
-
-* {
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: var(--font-family);
+    font-family: 'Pretendard', sans-serif;
 }
-
-.header {
+@font-face {
+    font-family: 'Pretendard';
+    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
+.header{
     width: 100vw;
-    height: var(--header-height);
-    background-color: var(--primary-color);
+    height: 90px;
+    background-color: #8F62EA;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-.container {
+.container{
     width: 100vw;
-    padding: 0 var(--container-padding);
+    padding: 0 162px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
-.menu {
+.menu{
     list-style-type: none;
     display: flex;
     justify-content: space-between;
-    gap: var(--spacing-8);
-    color: var(--white);
-    font-size: var(--font-size-xl);
+    gap: 30px;
+    color: #fff;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
 }
-
 .menu li {
-    padding: var(--spacing-3) var(--spacing-8);
-    border-radius: var(--radius-full);
-    transition: background-color var(--transition-normal);
+    padding: 10px 30px;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
 }
-
 .menu li:hover {
-    background-color: var(--white-transparent);
+    background-color: rgba(255, 255, 255, 0.25);
 }
-
 .menu li.active {
-    background-color: var(--white-transparent);
+    background-color: rgba(255, 255, 255, 0.25);
 }
-
-.logout {
-    width: 180px;
-    height: var(--spacing-12);
-    background-color: var(--white);
+.logout{
+    width: 130px;
+    height: 40px;
+    background-color: #fff;
     border: none;
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xl);
+    border-radius: 50px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-a {
+a{
     text-decoration: none;
-    color: var(--white);
+    color: #fff;
 }
+#logo{
+    cursor: pointer;
+}
+.version-info {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  #logout{
+    height: 60%;
+    padding-right: 6px;
+  }

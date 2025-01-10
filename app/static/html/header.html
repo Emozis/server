@@ -9,21 +9,21 @@
   <body>
     <div class="header">
       <div class="container">
-        <img src="/static/image/LogoType.png" />
+        <img src="/static/image/LogoType.png" class="menu-item" id="logo" data-link="/admin/dashboard"/>
         <ul class="menu">
-          <li class="menu-item" data-link="/admin/dashboard">대시보드</li>
           <li class="menu-item" data-link="/admin/character">
             <a href="/admin/character">캐릭터</a>
           </li>
-          <li class="menu-item" data-link="/admin/image">
-            <a href="/admin/image">이미지</a>
+          <li class="menu-item" data-link="/admin/profile/">
+            <a href="/admin/profile/imageCheck.html">이미지</a>
           </li>
-          <li class="menu-item" data-link="/admin/relation">관계</li>
+          <li class="menu-item" data-link="/admin/relation">
+            <a href="/admin/relation/relationCheck.html">관계</a></li>
         </ul>
-        <button class="logout">Log out</button>
+        <button class="logout"><img src="/static/image/icon_logout.svg" id="logout">Log out</button>
       </div>
     </div>
 
-    <script src="/static/js/header.js"></script>
+    <script src="/admin/header/header.js"></script>
   </body>
 </html>
