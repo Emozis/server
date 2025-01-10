@@ -4,7 +4,7 @@ from ..core import logger
 from ..models import CharacterRelationship
 from ..crud import CharacterCRUD, CharacterRelationshipCRUD, RelationshipCRUD
 from ..mappers import CharacterMapper
-from ..schemas import CharacterCreate, CharacterUpdate, CharacterResponse, ResponseSchema, CharacterIdResponse
+from ..schemas import CharacterCreate, CharacterUpdate, CharacterResponse, ResponseSchema, CharacterIdResponse, AdminCharacterResponse
 from ..exceptions import NotFoundException, ForbiddenException
 
 
@@ -88,6 +88,15 @@ class CharacterService:
         logger.info(f"😊 Total {len(charaters)} public characters found")
         return CharacterMapper.to_dto_list(charaters)
     
+    def get_character_by_id(self, character_id: int) -> AdminCharacterResponse:
+        charater = self.character_crud.get_by_id(character_id)
+        if not charater:
+            logger.warning(f"❌ Failed to find character with id {character_id}")
+            raise NotFoundException("캐릭터를 찾을 수 없습니다.", "character_id", character_id)
+        
+        logger.info(f"😊 Found character: {charater.character_name} (ID: {character_id})")
+        return CharacterMapper.to_dto_for_admin(charater)
+    
     def get_public_characters(self) -> list[CharacterResponse]:
         """
         공개된 모든 캐릭터 조회
@@ -122,7 +131,7 @@ class CharacterService:
         logger.info(f"😊 Found {len(charaters)} characters for user {user_id}")
         return CharacterMapper.to_dto_list(charaters)
 
-    def get_character_by_id(self, character_id: int) -> CharacterResponse:
+    def get_public_character_by_id(self, character_id: int) -> CharacterResponse:
         """
         ID로 캐릭터 조회
         Args:

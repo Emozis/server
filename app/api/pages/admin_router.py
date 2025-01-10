@@ -21,6 +21,10 @@ async def login_page():
 async def login_page():
     return FileResponse("app/static/html/characterList.html")
 
+@router.get("/admin/character/detail/{character_id}")
+async def character_detail_page(character_id: int):
+    return FileResponse("app/static/html/characterDetail.html")
+
 # ==========================================
 
 

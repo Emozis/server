@@ -132,12 +132,24 @@ body {
   justify-content: flex-start;
 }
 
-.createBtn {
-  cursor: pointer;
-  background-color: #8A2BE2;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
+.gender-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.gender-badge.female {
+  background-color: #FFE2F3;
+  color: #FF2D92;
+}
+
+.gender-badge.male {
+  background-color: #E2F1FF;
+  color: #2D7FFF;
+}
+
+.gender-badge.other {
+  background-color: #F0F0F0;
+  color: #666666;
 }

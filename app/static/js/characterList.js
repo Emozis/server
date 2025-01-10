@@ -43,7 +43,7 @@ async function loadCharacters() {
             // 행 클릭 이벤트 추가
             tr.addEventListener('click', () => {
                 // character.id를 사용하여 상세 페이지로 이동
-                window.location.href = `/admin/character/detail/${character.id}`;
+                window.location.href = `/admin/character/detail/${character.characterId}`;
             });
 
             tbody.appendChild(tr);

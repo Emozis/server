@@ -76,7 +76,7 @@ async def get_characters_by_user_id(user_id: AuthenticatedUser, chararter_servic
 )
 @handle_exceptions
 async def get_character_by_id(character_id: int, character_service: CharacterServiceDep) -> CharacterResponse:
-    return character_service.get_character_by_id(character_id)
+    return character_service.get_public_character_by_id(character_id)
 
 @router.put(
     path="/{character_id}",

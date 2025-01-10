@@ -21,6 +21,7 @@ from .default_image.default_image_response import DefaultImageResponse
 from .character.create_character_request import CharacterCreate
 from .character.update_character_request import CharacterUpdate
 from .character.character_response import CharacterResponse
+from .character.admin_character_response import AdminCharacterResponse
 
 from .chat.create_chat_request import ChatCreate
 from .chat.chat_response import ChatResponse

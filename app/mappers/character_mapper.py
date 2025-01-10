@@ -1,5 +1,5 @@
 from ..models import Character
-from ..schemas import CharacterCreate, CharacterUpdate, CharacterResponse
+from ..schemas import CharacterCreate, CharacterUpdate, AdminCharacterResponse
 from ..schemas.character.character_response import CharacterResponse, RelationshipResponse, UserResponse
 
 
@@ -61,4 +61,41 @@ class CharacterMapper:
     
     @staticmethod
     def to_dto_list(models: list[Character]) -> list[CharacterResponse]:
+        return [CharacterMapper.to_dto(model) for model in models]
+    
+    @staticmethod
+    def to_dto_for_admin(model: Character) -> AdminCharacterResponse:
+        
+        relations_dto = [RelationshipResponse(
+            relationship_id=cr.relationship.relationship_id,
+            relationship_name=cr.relationship.relationship_name
+            ) for cr in model.character_relationships]
+
+        user_dto = UserResponse(
+            user_id=model.user.user_id,
+            user_email=model.user.user_email,
+            user_name=model.user.user_name,
+            user_profile=model.user.user_profile
+        ) if model.user else None
+
+        return AdminCharacterResponse(
+            character_id=model.character_id,
+            character_name=model.character_name,
+            character_profile=model.character_profile,
+            character_gender=model.character_gender,
+            character_personality=model.character_personality,
+            character_details=model.character_details,
+            character_description=model.character_description,
+            character_greeting=model.character_greeting,
+            character_relationships=relations_dto,
+            character_created_at=model.character_created_at,
+            character_updated_at=model.character_updated_at,
+            character_is_public=model.character_is_public,
+            character_likes=model.character_likes,
+            character_usage_count=model.character_usage_count,
+            user=user_dto
+        )
+    
+    @staticmethod
+    def to_dto_list_for_admin(models: list[Character]) -> list[CharacterResponse]:
         return [CharacterMapper.to_dto(model) for model in models]
