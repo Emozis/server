@@ -1,12 +1,10 @@
 import api from './service.js';
 
-// DOM이 로드되면 이미지 리스트를 가져옵니다
 document.addEventListener('DOMContentLoaded', () => {
     fetchImageList();
     setupEventListeners();
 });
 
-// 이미지 생성 버튼 클릭 이벤트 설정
 function setupEventListeners() {
     const createImgBtn = document.getElementById('createImg');
     if (createImgBtn) {
@@ -16,7 +14,6 @@ function setupEventListeners() {
     }
 }
 
-// 백엔드에서 이미지 리스트를 가져오는 함수
 async function fetchImageList() {
     try {
         const data = await api.get('/api/v1/default-image');
@@ -29,7 +26,7 @@ async function fetchImageList() {
 // 이미지 리스트를 화면에 렌더링하는 함수
 function renderImageList(images) {
     const container = document.querySelector('.image-grid-container');
-    container.innerHTML = ''; // 기존 내용 클리어
+    container.innerHTML = '';
 
     images.forEach(image => {
         const imageElement = createImageElement(image);
@@ -74,7 +71,10 @@ function createImageElement(image) {
     const imageItem = document.createElement('div');
     imageItem.className = 'image-item';
 
-    // 날짜 포맷팅
+    imageItem.addEventListener('click', () => {
+        window.location.href = `/admin/image/detail/${image.imageId}`;
+    });
+
     const createdDate = new Date(image.imageCreatedAt);
     const formattedDate = createdDate.toLocaleDateString('ko-KR', {
         year: 'numeric',
