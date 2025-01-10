@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const menuItems = document.querySelectorAll(".menu-item");
+  const logoutButton = document.querySelector("button.logout");
 
   const currentPath = window.location.pathname;
 
@@ -18,5 +19,10 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = link;
       }
     });
+  });
+
+  logoutButton.addEventListener("click", () => {
+    localStorage.removeItem("accessToken");
+    window.location.href = "/admin/login";
   });
 });

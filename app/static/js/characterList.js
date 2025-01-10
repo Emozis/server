@@ -15,7 +15,6 @@ function getGenderBadge(gender) {
     return `<span class="gender-badge ${gender}">${genderMap[gender] || '기타'}</span>`;
 }
 
-
 // 캐릭터 목록을 불러오는 함수
 async function loadCharacters() {
     try {
@@ -31,7 +30,7 @@ async function loadCharacters() {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${index + 1}</td>
-                <td><img src="${'/static/image/characterDefault.png'}" alt="프로필 이미지" /></td>
+                <td><img src="${character.characterProfile || '/static/image/characterDefault.png'}" alt="프로필 이미지" onerror="this.src='/static/image/characterDefault.png'" /></td>
                 <td>${character.characterName}</td>
                 <td>${getGenderBadge(character.characterGender)}</td>
                 <td>${character.characterPersonality}</td>
@@ -40,15 +39,13 @@ async function loadCharacters() {
                 <td>${character.user.userName}</td>
             `;
             
-            // 행 클릭 이벤트 추가
             tr.addEventListener('click', () => {
-                // character.id를 사용하여 상세 페이지로 이동
                 window.location.href = `/admin/character/detail/${character.characterId}`;
             });
 
             tbody.appendChild(tr);
         });
     } catch (error) {
-        console.error('데이터를 불러오는데 실패했습니다:', error);
+        console.error('캐릭터 데이터를 불러오는데 실패했습니다:');
     }
 }

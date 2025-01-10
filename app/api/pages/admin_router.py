@@ -16,6 +16,7 @@ async def login_page():
 async def login_page():
     return FileResponse("app/static/html/dashboard.html")
 
+# Character
 
 @router.get("/admin/character")
 async def login_page():
@@ -25,6 +26,10 @@ async def login_page():
 async def character_detail_page(character_id: int):
     return FileResponse("app/static/html/characterDetail.html")
 
+# Image
+@router.get("/admin/image")
+async def login_page():
+    return FileResponse("app/static/html/imageList.html")
 # ==========================================
 
 
@@ -38,9 +43,6 @@ async def login_page():
     return FileResponse("app/static/html/characterModify.html")
 
 
-@router.get("/admin/image")
-async def login_page():
-    return FileResponse("app/static/html/imageCheck.html")
 
 @router.get("/admin/image/create")
 async def login_page():

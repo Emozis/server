@@ -1,0 +1,173 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  background-color: #F4F8F9;
+}
+
+.category {
+  padding: 0 162px;
+  height: 70px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.category ul {
+  display: flex;
+  gap: 70px;
+  font-size: 18px;
+}
+
+.category .category-item {
+  list-style: none;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+  align-items: center;
+  transition: color 0.3s;
+}
+
+.category .category-item.active {
+  color: #000;
+}
+
+.category .category-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  width: 100%;
+  background-color: #8A2BE2;
+}
+
+.sub-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.image-grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+  padding: 20px 162px;
+}
+
+.image-item {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.image-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.image-item .image-item-content {
+  padding: 10px;
+}
+
+.image-item h3 {
+  font-size: 16px;
+  color: #333;
+}
+
+.image-item p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.createBtn {
+  cursor: pointer;
+  background-color: #8A2BE2;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+/* badges 스타일 */
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-right: 4px;
+  display: inline-block;
+}
+
+/* 성별 배지 */
+.gender-badge.female {
+  background-color: #FFE2F3;
+  color: #FF2D92;
+}
+
+.gender-badge.male {
+  background-color: #E2F1FF;
+  color: #2D7FFF;
+}
+
+.gender-badge.other {
+  background-color: #F0F0F0;
+  color: #666666;
+}
+
+/* 나이대 배지 */
+.age-badge.youth {
+  background-color: #FFF3E0;
+  color: #FF9800;
+}
+
+.age-badge.middle_age {
+  background-color: #E8F5E9;
+  color: #4CAF50;
+}
+
+.age-badge.elderly {
+  background-color: #E3F2FD;
+  color: #2196F3;
+}
+
+/* 감정 배지 */
+.emotion-badge.A {
+  background-color: #FFF3E0;  /* 밝은 주황색 배경 - 기쁨/행복/활기찬 */
+  color: #FF9800;
+}
+
+.emotion-badge.B {
+  background-color: #E0E0E0;  /* 회색 배경 - 슬픔 */
+  color: #616161;
+}
+
+.emotion-badge.C {
+  background-color: #E8EAF6;  /* 연한 남색 배경 - 우울/불안 */
+  color: #3F51B5;
+}
+
+.emotion-badge.D {
+  background-color: #FFEBEE;  /* 연한 빨간색 배경 - 버럭 */
+  color: #F44336;
+}
+
+.emotion-badge.E {
+  background-color: #F3E5F5;  /* 연한 보라색 배경 - 따분/까칠/도도 */
+  color: #9C27B0;
+}
