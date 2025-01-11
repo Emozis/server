@@ -28,26 +28,25 @@ function showModal(image) {
         </div>
     `;
 
-    if (!isImageEventSet) {
-        // 이미지 클릭 이벤트
-        imageContainer.addEventListener('click', () => {
-            document.getElementById('imageUpload').click();
-        });
+    // 이미지 컨테이너 이벤트 설정
+    const imageUploadInput = document.getElementById('imageUpload');
+    
+    // 이미지 클릭 이벤트
+    imageContainer.querySelector('.modal-image-overlay').addEventListener('click', () => {
+        imageUploadInput.click();
+    });
 
-        // 파일 선택 시 이벤트
-        document.getElementById('imageUpload').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                if (validateImageFile(file)) {
-                    previewImage(file);
-                } else {
-                    alert('이미지 파일만 업로드 가능합니다.');
-                }
+    // 파일 선택 시 이벤트
+    imageUploadInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (validateImageFile(file)) {
+                previewImage(file);
+            } else {
+                alert('이미지 파일만 업로드 가능합니다.');
             }
-        });
-
-        isImageEventSet = true;
-    }
+        }
+    });
 
     modalTitle.textContent = image.imageName;
 
