@@ -58,19 +58,92 @@ const api = {
     },
 
     // POST 요청
-    async post(url, data) {
-        return this.fetchWithAuth(url, {
-            method: 'POST',
-            body: JSON.stringify(data)
-        });
+    async postFormData(url, formData) {
+        const token = localStorage.getItem('accessToken');
+        
+        if (!token) {
+            window.location.href = '/admin/login';
+            throw new Error('No token found');
+        }
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (response.status === 401) {
+                window.location.href = '/admin/login';
+                throw new Error('Unauthorized');
+            }
+
+            if (response.status === 403) {
+                throw new Error('Permission denied');
+            }
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return await response.json();
+            }
+            
+            return response;
+
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
     },
 
     // PUT 요청
-    async put(url, data) {
-        return this.fetchWithAuth(url, {
-            method: 'PUT',
-            body: JSON.stringify(data)
-        });
+    async putFormData(url, formData) {
+        const token = localStorage.getItem('accessToken');
+        
+        if (!token) {
+            window.location.href = '/admin/login';
+            throw new Error('No token found');
+        }
+ 
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+ 
+            // 기존 에러 처리 로직...
+            if (response.status === 401) {
+                window.location.href = '/admin/login';
+                throw new Error('Unauthorized');
+            }
+ 
+            if (response.status === 403) {
+                throw new Error('Permission denied');
+            }
+ 
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+ 
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return await response.json();
+            }
+            
+            return response;
+ 
+        } catch (error) {
+            console.error('API Error:', error);
+            throw error;
+        }
     },
 
     // DELETE 요청

@@ -1,4 +1,7 @@
+import api from './service.js';
+
 let isEventListenerSet = false;
+let isImageEventSet = false;
 
 function showModal(image) {
     const modal = document.getElementById('imageModal');
@@ -15,7 +18,7 @@ function showModal(image) {
     modalImage.onerror = () => {
         modalImage.src = '/static/image/characterDefault.png';
     };
-    
+
     const imageContainer = document.querySelector('.modal-image-container');
     imageContainer.innerHTML = `
         <input type="file" id="imageUpload" accept="image/*" style="display: none;">
@@ -25,20 +28,26 @@ function showModal(image) {
         </div>
     `;
 
-    document.getElementById('imageUpload').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            if (validateImageFile(file)) {
-                previewImage(file);
-            } else {
-                alert('이미지 파일만 업로드 가능합니다.');
-            }
-        }
-    });
+    if (!isImageEventSet) {
+        // 이미지 클릭 이벤트
+        imageContainer.addEventListener('click', () => {
+            document.getElementById('imageUpload').click();
+        });
 
-    imageContainer.addEventListener('click', () => {
-        document.getElementById('imageUpload').click();
-    });
+        // 파일 선택 시 이벤트
+        document.getElementById('imageUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (validateImageFile(file)) {
+                    previewImage(file);
+                } else {
+                    alert('이미지 파일만 업로드 가능합니다.');
+                }
+            }
+        });
+
+        isImageEventSet = true;
+    }
 
     modalTitle.textContent = image.imageName;
 
@@ -68,8 +77,7 @@ function previewImage(file) {
     reader.onload = (e) => {
         const modalImage = document.getElementById('modalImage');
         modalImage.src = e.target.result;
-        
-        // 선택된 파일을 모달에 저장 (나중에 서버 전송시 사용)
+
         const modal = document.getElementById('imageModal');
         modal.dataset.selectedFile = file.name;
     };
@@ -167,7 +175,7 @@ function setupModalButtons() {
 
     deleteBtn.addEventListener('click', () => {
         if (confirm('정말 삭제하시겠습니까?')) {
-            console.log('Delete clicked');
+            deleteImage(modal.dataset.imageId);
         }
     });
 
@@ -180,17 +188,163 @@ function setupModalButtons() {
     });
 
     saveBtn.addEventListener('click', (e) => {
-        const activeGender = document.querySelector('.modal-gender-badge.active').dataset.gender;
-        const activeAge = document.querySelector('.modal-age-badge.active').dataset.age;
-        const activeEmotion = document.querySelector('.modal-emotion-badge.active').dataset.emotion;
+        const modal = document.getElementById('imageModal');
+        const activeGender = document.querySelector('.modal-gender-badge.active')?.dataset.gender;
+        const activeAge = document.querySelector('.modal-age-badge.active')?.dataset.age;
+        const activeEmotion = document.querySelector('.modal-emotion-badge.active')?.dataset.emotion;
 
-        console.log({
-            image_id: modal.dataset.imageId, // 이미지 ID를 저장하기 위해 showModal에서 설정 필요
+        const imageUpload = document.getElementById('imageUpload');
+        const selectedFile = imageUpload.files[0];
+
+        const isNewImage = modal.dataset.imageId === 'null';
+
+        const imageData = {
             gender: activeGender,
             ageGroup: activeAge,
-            emotion: activeEmotion
-        });
+            emotion: activeEmotion,
+            file: selectedFile
+        };
+
+        if (isNewImage) {
+            createNewImage(imageData);
+        } else {
+            updateImage(modal.dataset.imageId, imageData);
+        }
     });
+}
+
+async function createNewImage(imageData) {
+    if (!validateImageData(imageData)) {
+        return false;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('gender', imageData.gender);
+        formData.append('ageGroup', imageData.ageGroup);
+        formData.append('emotion', imageData.emotion);
+        formData.append('image', imageData.file);
+
+        await api.postFormData('/api/v1/admin/default-image', formData);
+
+        alert('이미지가 성공적으로 등록되었습니다.');
+        closeModal();
+        window.location.reload();
+        return true;
+
+    } catch (error) {
+        console.error('Image upload error:', error);
+        alert('이미지 등록에 실패했습니다.');
+        return false;
+    }
+}
+
+async function updateImage(imageId, imageData) {
+    if (!validateImageData(imageData, true)) {  // true는 이미지 수정모드
+        return false;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('gender', imageData.gender);
+        formData.append('ageGroup', imageData.ageGroup);
+        formData.append('emotion', imageData.emotion);
+
+        // 새 이미지가 선택된 경우 새 이미지를, 아닌 경우 기존 이미지를 사용
+        if (imageData.file) {
+            formData.append('image', imageData.file);
+        } else {
+            // 기존 이미지 URL에서 파일 생성
+            const modalImage = document.getElementById('modalImage');
+            const imageFile = await urlToFile(modalImage.src);
+            formData.append('image', imageFile);
+        }
+
+        await api.putFormData(`/api/v1/admin/default-image/${imageId}`, formData);
+
+        alert('이미지가 성공적으로 수정되었습니다.');
+        closeModal();
+        window.location.reload();
+        return true;
+
+    } catch (error) {
+        console.error('Image update error:', error);
+        alert('이미지 수정에 실패했습니다.');
+        return false;
+    }
+}
+
+async function deleteImage(imageId) {
+    try {
+        await api.delete(`/api/v1/admin/default-image/${imageId}`);
+        alert('이미지가 성공적으로 삭제되었습니다.');
+        closeModal();
+        window.location.reload();
+        return true;
+    } catch (error) {
+        console.error('Image delete error:', error);
+        alert('이미지 삭제에 실패했습니다.');
+        return false;
+    }
+}
+
+async function urlToFile(url) {
+    try {
+        const response = await fetch(url, {
+            mode: 'no-cors'
+        });
+        const blob = await response.blob();
+        return new File([blob], 'image.jpg', { type: blob.type });
+    } catch (error) {
+        console.error('Error converting URL to File:', error);
+        throw error;
+    }
+}
+
+// validateImageData 함수 수정 (이미지 필수 여부를 옵션으로)
+function validateImageData(data, isUpdate = false) {
+    // 성별 검증
+    if (!data.gender) {
+        alert('성별을 선택해주세요.');
+        return false;
+    }
+
+    // 나이대 검증
+    if (!data.ageGroup) {
+        alert('나이대를 선택해주세요.');
+        return false;
+    }
+
+    // 감정 검증
+    if (!data.emotion) {
+        alert('감정을 선택해주세요.');
+        return false;
+    }
+
+    // 이미지 검증 (수정 시에는 선택적)
+    if (!isUpdate && !data.file) {
+        alert('이미지를 선택해주세요.');
+        return false;
+    }
+
+    // 파일이 있는 경우에만 파일 검증
+    if (data.file) {
+        // 파일 타입 검증
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!validTypes.includes(data.file.type)) {
+            alert('유효한 이미지 파일이 아닙니다. (jpeg, png, gif만 가능)');
+            return false;
+        }
+
+        // 파일 크기 검증 (5MB 제한)
+        const maxSize = 5 * 1024 * 1024;
+        if (data.file.size > maxSize) {
+            alert('파일 크기가 너무 큽니다. (최대 5MB)');
+            return false;
+        }
+    }
+
+    return true;
 }
 
 function closeModal() {
