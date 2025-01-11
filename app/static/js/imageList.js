@@ -126,7 +126,9 @@ function createImageElement(image) {
     });
 
     imageItem.innerHTML = `
-        <img src="${image.imageUrl}" alt="프로필 이미지" class="profile-image" onerror="this.src='/static/image/characterDefault.png'"/>
+        <div class="image-wrapper">
+            <img src="${image.imageUrl}" alt="프로필 이미지" class="profile-image" onerror="this.src='/static/image/characterDefault.png'"/>
+        </div>
         <div class="image-item-content">
             <h3>${image.imageName}</h3>
             <p class="badges-container">

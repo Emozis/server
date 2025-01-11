@@ -112,10 +112,21 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.image-item img {
+.image-item .image-wrapper {
+  position: relative;
   width: 100%;
-  height: auto;
-  display: block;
+  padding-top: 100%; /* width와 같은 높이로 정사각형 생성 */
+  margin-bottom: 10px; /* 이미지와 컨텐츠 사이 간격 */
+  background-color: #f8f9fa;
+}
+
+.image-item .image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .image-item .image-item-content {
