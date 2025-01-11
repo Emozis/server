@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/static/css/variables.css" />
   <link rel="stylesheet" href="/static/css/image.css" />
   <link rel="icon" type="image/png" href="/static/image/logo.png" />
   <title>Image | EMOG!</title>
@@ -14,7 +15,6 @@
   <div class="category">
     <ul class="sub-header">
       <li class="category-item active" data-link="imageCheck.html">이미지 목록</li>
-      <li class="category-item"><button class="createBtn" id="createImg">이미지 생성</button></li>
     </ul>
   </div>
 
@@ -34,12 +34,28 @@
         </div>
         <div class="modal-right">
           <h2 id="modalTitle"></h2>
+          <p id="modalDate" class="modal-date"></p>
           <div class="modal-info">
             <div class="info-group">
               <span class="info-label">Gender</span>
               <div id="genderBadgeContainer"></div>
             </div>
+            <div class="info-group">
+              <span class="info-label">Age Group</span>
+              <div id="ageBadgeContainer"></div>
+            </div>
+            <div class="info-group">
+              <span class="info-label">Emotion</span>
+              <div id="emotionBadgeContainer"></div>
+            </div>
           </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn delete-btn"><img src="/static/image/icon-image-delete.png" alt="delete icon"></img>Delete</button>
+        <div class="modal-btn-group">
+          <button class="modal-btn close-btn">Close</button>
+          <button class="modal-btn save-btn">Save Chages</button>
         </div>
       </div>
     </div>

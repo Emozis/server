@@ -37,7 +37,7 @@ body {
   position: relative;
   align-items: center;
   transition: color 0.3s;
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0px;
 }
 
 .category .category-item.active {

@@ -5,29 +5,23 @@
   font-family: 'Pretendard', sans-serif;
 }
 
-@font-face {
-  font-family: 'Pretendard';
-  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-}
-
 body {
-  background-color: #F4F8F9;
+  background-color: var(--bg-light);
+  font-family: var(--font-family);
 }
 
 .category {
-  padding: 0 162px;
-  height: 70px;
-  background-color: #fff;
+  padding: 0 var(--container-padding);
+  height: var(--category-height);
+  background-color: var(--white);
   display: flex;
   align-items: center;
 }
 
 .category ul {
   display: flex;
-  gap: 70px;
-  font-size: 18px;
+  gap: var(--spacing-category);
+  font-size: var(--font-size-lg);
 }
 
 .category .category-item {
@@ -37,6 +31,7 @@ body {
   position: relative;
   align-items: center;
   transition: color 0.3s;
+  padding: 10px 0px;
 }
 
 .category .category-item.active {
@@ -51,7 +46,7 @@ body {
   right: 0;
   height: 3px;
   width: 100%;
-  background-color: #8A2BE2;
+  background-color: var(--primary-color);
 }
 
 .sub-header {
@@ -63,16 +58,16 @@ body {
 .image-grid-container {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
-  padding: 20px 162px;
+  gap: var(--spacing-5);
+  padding: var(--spacing-5) var(--container-padding);
 }
 
 .image-item {
-  border: 1px solid #ccc;
+  border: 1px solid #dee2e6;
   border-radius: 8px;
   overflow: hidden;
-  background-color: #fff;
-  transition: all 0.3s ease;
+  background-color: var(--white);
+  transition: var(--transition-normal);
   cursor: pointer;
 }
 .image-item:hover {
@@ -98,16 +93,6 @@ body {
   margin: 5px 0;
   font-size: 14px;
   color: #666;
-}
-
-.createBtn {
-  cursor: pointer;
-  background-color: #8A2BE2;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
 }
 
 /* badges 스타일 */
@@ -197,16 +182,16 @@ body {
 
 .modal-content {
   position: relative;
-  background-color: #fefefe;
+  background-color: var(--white);
   margin: 15% auto;
-  padding: 20px;
+  padding: var(--spacing-8) var(--spacing-8) var(--spacing-5) var(--spacing-8);
   border: 1px solid #888;
-  width: 80%;
-  max-width: 600px;
+  width: 90%;
+  max-width: 800px;
   border-radius: 8px;
   opacity: 0;
-  transform: translateY(-10px);
-  transition: all 0.2s ease;
+  transform: translateY(-20px);
+  transition: var(--transition-normal);
 }
 
 .modal.show .modal-content {
@@ -235,17 +220,49 @@ body {
 }
 
 .modal-body {
-  padding: 20px;
+  display: flex;
+  gap: 40px;
+}
+
+.modal-left {
+  flex: 0 0 400px; /* 좌측 영역 고정 너비 */
+}
+
+.modal-right {
+  flex: 1;
 }
 
 .modal-image-container {
-  width: 400px;  /* 정사각형 크기 설정 */
+  width: 400px;
   height: 400px;
-  margin: 0 auto 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5; /* 이미지가 작을 때 배경 표시 */
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.info-group {
+  margin-bottom: 26px;
+}
+
+.info-label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+#modalTitle {
+  font-size: var(--font-size-2xl);
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.modal-date {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 35px;
 }
 
 #modalImage {
@@ -266,4 +283,257 @@ body {
 
 #modalInfo .badges-container {
   margin: 15px 0;
+}
+
+/* 모달 내 성별 배지 그룹 */
+.modal-gender-group {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-gender-badge {
+  padding: 4px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #F0F0F0;
+  color: #666666;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.modal-gender-badge.active[data-gender="female"] {
+  background-color: #FFE2F3;
+  color: #FF2D92;
+}
+
+.modal-gender-badge.active[data-gender="male"] {
+  background-color: #E2F1FF;
+  color: #2D7FFF;
+}
+
+/* 모달 내 나이대 배지 그룹 */
+.modal-age-group {
+  display: flex;
+  gap: 8px;
+}
+
+/* 모달 내 나이대 배지 기본 스타일 (비활성화 상태) */
+.modal-age-badge {
+  padding: 4px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #F0F0F0;
+  color: #666666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 모달 내 활성화된 나이대 배지 */
+.modal-age-badge.active[data-age="youth"] {
+  background-color: #FFF3E0;
+  color: #FF9800;
+}
+
+.modal-age-badge.active[data-age="middle_age"] {
+  background-color: #E8F5E9;
+  color: #4CAF50;
+}
+
+.modal-age-badge.active[data-age="elderly"] {
+  background-color: #E3F2FD;
+  color: #2196F3;
+}
+
+/* 모달 내 감정 배지 그룹 */
+.modal-emotion-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;  /* 감정이 많아서 줄바꿈 추가 */
+}
+
+/* 모달 내 감정 배지 기본 스타일 (비활성화 상태) */
+.modal-emotion-badge {
+  padding: 4px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #F0F0F0;
+  color: #666666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* 모달 내 활성화된 감정 배지 */
+.modal-emotion-badge.active[data-emotion="A"] {
+  background-color: #FFF3E0;
+  color: #FF9800;
+}
+
+.modal-emotion-badge.active[data-emotion="B"] {
+  background-color: #E0E0E0;
+  color: #616161;
+}
+
+.modal-emotion-badge.active[data-emotion="C"] {
+  background-color: #E8EAF6;
+  color: #3F51B5;
+}
+
+.modal-emotion-badge.active[data-emotion="D"] {
+  background-color: #FFEBEE;
+  color: #F44336;
+}
+
+.modal-emotion-badge.active[data-emotion="E"] {
+  background-color: #F3E5F5;
+  color: #9C27B0;
+}
+
+
+/* 모달 바디와 푸터 구분선 */
+.modal-footer {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #E5E7EB;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 버튼 그룹 (우측 버튼들) */
+.modal-btn-group {
+  display: flex;
+  gap: 12px;
+}
+
+/* 버튼 기본 스타일 */
+.modal-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+  background-color: #FEE2E2;
+  color: #DC2626;
+  display: flex;
+
+}
+.delete-btn img {
+  width: 20px;
+  margin-right: 4px;
+}
+
+.delete-btn:hover {
+  background-color: #ffcbcb;
+}
+
+/* 닫기 버튼 */
+.close-btn {
+  background-color: #F3F4F6;
+  color: #4B5563;
+}
+
+.close-btn:hover {
+  background-color: #E5E7EB;
+}
+
+/* 저장 버튼 */
+.save-btn {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: var(--primary-dark);
+}
+
+/* 이미지 추가 부분 */
+
+.add-image-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border: 1px dashed #dee2e6;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-image-item:hover {
+  background-color: #ececec;
+  /* border-color: #8A2BE2; */
+}
+
+.add-image-content {
+  text-align: center;
+  color: #6c757d;
+}
+
+.add-icon {
+  font-size: 40px;
+  font-weight: 300;
+  margin-bottom: 8px;
+  color: #8A2BE2;
+}
+
+.add-image-content p {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* 이미지 컨테이너에 relative 포지션 추가 */
+.modal-image-container {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* 카메라 아이콘을 위한 오버레이 */
+.modal-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-image-overlay img {
+  width: 48px;  /* 아이콘 크기 조절 */
+  height: 48px;
+}
+
+/* hover 시 오버레이 표시 */
+.modal-image-container:hover .modal-image-overlay {
+  opacity: 1;
+}
+
+#modalImage {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.modal-image-container:hover #modalImage {
+  transform: scale(1.05);
 }

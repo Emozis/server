@@ -1,4 +1,5 @@
 import api from './service.js';
+import { showModal, closeModal } from './imageModal.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchImageList();
@@ -13,23 +14,14 @@ function setupEventListeners() {
         });
     }
 
-    // 모달 닫기 이벤트들
-    const modal = document.getElementById('imageModal');
-    const closeBtn = document.querySelector('.close');
-    
-    // X 버튼 클릭시 닫기
-    closeBtn.onclick = () => {
-        closeModal();
-    }
-
     // 모달 외부 클릭시 닫기
+    const modal = document.getElementById('imageModal');
     window.onclick = (event) => {
         if (event.target == modal) {
             closeModal();
         }
     }
 }
-
 
 async function fetchImageList() {
     try {
@@ -40,15 +32,49 @@ async function fetchImageList() {
     }
 }
 
-// 이미지 리스트를 화면에 렌더링하는 함수
 function renderImageList(images) {
     const container = document.querySelector('.image-grid-container');
     container.innerHTML = '';
+
+    const addImageElement = createAddImageElement();
+    container.appendChild(addImageElement);
 
     images.forEach(image => {
         const imageElement = createImageElement(image);
         container.appendChild(imageElement);
     });
+}
+
+function createAddImageElement() {
+    const addItem = document.createElement('div');
+    addItem.className = 'image-item add-image-item';
+    
+    addItem.addEventListener('click', () => {
+        showEmptyModal();  // 페이지 이동 대신 빈 모달 열기
+    });
+
+    addItem.innerHTML = `
+        <div class="add-image-content">
+            <div class="add-icon">+</div>
+            <p>새 이미지 추가</p>
+        </div>
+    `;
+
+    return addItem;
+}
+
+function showEmptyModal() {
+    const emptyImageData = {
+        imageId: null,
+        imageName: 'New Image',
+        imageUrl: '/static/image/icon-image.png',
+        imageGender: '',
+        imageAgeGroup: '',
+        imageEmotion: '',
+        imageCreatedAt: '-'
+    };
+    
+    showModal(emptyImageData);
 }
 
 // 성별 배지 생성 함수
@@ -81,47 +107,6 @@ function getEmotionBadge(emotion) {
         'E': '따분/까칠/도도'
     };
     return `<span class="badge emotion-badge ${emotion}">${emotions[emotion] || emotion}</span>`;
-}
-
-function showModal(image) {
-    const modal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
-    const modalInfo = document.getElementById('modalInfo');
-
-    modalImage.src = image.imageUrl;
-    modalImage.onerror = () => {
-        modalImage.src = '/static/image/characterDefault.png';
-    };
-
-    const createdDate = new Date(image.imageCreatedAt);
-    const formattedDate = createdDate.toLocaleDateString('ko-KR', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    });
-
-    modalInfo.innerHTML = `
-        <h2>${image.imageName}</h2>
-        <div class="badges-container">
-            ${getGenderBadge(image.imageGender)}
-            ${getAgeBadge(image.imageAgeGroup)}
-            ${getEmotionBadge(image.imageEmotion)}
-        </div>
-        <p>생성일: ${formattedDate}</p>
-    `;
-
-    modal.style.display = "block";
-    setTimeout(() => {
-        modal.classList.add('show');
-    }, 10);
-}
-
-function closeModal() {
-    const modal = document.getElementById('imageModal');
-    modal.classList.remove('show');
-    setTimeout(() => {
-        modal.style.display = "none";
-    }, 200); // transition 시간과 동일하게 설정
 }
 
 // 개별 이미지 요소를 생성하는 함수
