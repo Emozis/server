@@ -6,6 +6,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: 'Pretendard', sans-serif;
+  font-weight: 400;
 }
 
 body {
@@ -60,9 +61,44 @@ body {
 
 .image-grid-container {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, 1fr);  /* 기본값: 6열 */
   gap: var(--spacing-5);
   padding: var(--spacing-5) var(--container-padding);
+}
+
+/* 1400px 이하일 때 5열로 변경 */
+@media (max-width: 1400px) {
+  .image-grid-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* 1200px 이하일 때 4열로 변경 */
+@media (max-width: 1200px) {
+  .image-grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 992px 이하일 때 3열로 변경 */
+@media (max-width: 992px) {
+  .image-grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 768px 이하일 때 2열로 변경 */
+@media (max-width: 768px) {
+  .image-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 576px 이하일 때 1열로 변경 */
+@media (max-width: 576px) {
+  .image-grid-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .image-item {
@@ -104,6 +140,7 @@ body {
   border-radius: 4px;
   font-size: 12px;
   margin-right: 4px;
+  margin-bottom: 3px;
   display: inline-block;
 }
 
@@ -184,22 +221,23 @@ body {
 }
 
 .modal-content {
-  position: relative;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
   background-color: var(--white);
-  margin: 15% auto;
   padding: var(--spacing-8) var(--spacing-8) var(--spacing-5) var(--spacing-8);
   border: 1px solid #888;
   width: 90%;
   max-width: 800px;
   border-radius: 8px;
   opacity: 0;
-  transform: translateY(-20px);
-  transition: var(--transition-normal);
+  transition: all 0.3s ease;
 }
 
 .modal.show .modal-content {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .close {

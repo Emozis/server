@@ -85,19 +85,21 @@ class DefaultImageService:
             raise NotFoundException("이미지를 찾을 수 없습니다.", "image_id", image_id)
         
         old_image_key = db_default_image.image_key
+        default_image.image_key = db_default_image.image_key
 
-        # S3에 이미지 업로드
-        default_image.image_key = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
+        if image:
+            # S3에 이미지 업로드
+            default_image.image_key = await aws_managers.upload_to_s3(file=image, folder_path="default_images")
 
-        # 파일 이름 제작
-        cnt = self.default_image_crud.get_total_count()
-        default_image.image_name = f"{str(default_image.image_gender.value)[0].upper()}{str(default_image.image_age_group.value)[0].upper()}{str(default_image.image_emotion.value)[0].upper()}-{str(cnt).zfill(3)}"
+            # 파일 이름 제작
+            cnt = self.default_image_crud.get_total_count()
+            default_image.image_name = f"{str(default_image.image_gender.value)[0].upper()}{str(default_image.image_age_group.value)[0].upper()}{str(default_image.image_emotion.value)[0].upper()}-{str(cnt).zfill(3)}"
 
-        # DB에 이미지 저장
+            # S3 기존 이미지 삭제
+            if old_image_key:
+                aws_managers.delete_files([old_image_key])
+
         self.default_image_crud.update(image_id, DefaultImageMapper.update_to_model(default_image))
-
-        # S3 기존 이미지 삭제
-        aws_managers.delete_files([old_image_key])
 
         logger.info(f"🔄 Successfully updated default image: {default_image.image_name} (ID: {image_id})")
         return ResponseSchema(

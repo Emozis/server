@@ -253,11 +253,6 @@ async function updateImage(imageId, imageData) {
         // 새 이미지가 선택된 경우 새 이미지를, 아닌 경우 기존 이미지를 사용
         if (imageData.file) {
             formData.append('image', imageData.file);
-        } else {
-            // 기존 이미지 URL에서 파일 생성
-            const modalImage = document.getElementById('modalImage');
-            const imageFile = await urlToFile(modalImage.src);
-            formData.append('image', imageFile);
         }
 
         await api.putFormData(`/api/v1/admin/default-image/${imageId}`, formData);

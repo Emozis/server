@@ -76,9 +76,9 @@ async def update_image(
     gender: str = Form(...), 
     ageGroup: str = Form(...), 
     emotion: str = Form(...), 
-    image: UploadFile = File(...)
+    image: UploadFile = File(None)
 ) -> ResponseSchema:
-    if not image.content_type.startswith('image/'):
+    if image and not image.content_type.startswith('image/'):
         raise UnsupportedImageFormatException(content_type=image.content_type)
     
     try:
