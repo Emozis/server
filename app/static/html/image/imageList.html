@@ -1,29 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/css/image.css" />
-    <link rel="icon" type="image/png" href="/static/image/logo.png" />
-    <title>Image | EMOG!</title>
-  </head>
-  <body>
-    <div id="header-container"></div>
-    <div class="category">
-      <ul class="sub-header">
-        <li class="category-item active" data-link="imageCheck.html">이미지 목록</li>
-        <li class="category-item"><button class="createBtn" id="createImg">이미지 생성</button></li>
-      </ul>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/static/css/image.css" />
+  <link rel="icon" type="image/png" href="/static/image/logo.png" />
+  <title>Image | EMOG!</title>
+</head>
+
+<body>
+  <div id="header-container"></div>
+  <div class="category">
+    <ul class="sub-header">
+      <li class="category-item active" data-link="imageCheck.html">이미지 목록</li>
+      <li class="category-item"><button class="createBtn" id="createImg">이미지 생성</button></li>
+    </ul>
+  </div>
+
+  <div class="image-grid-container">
+  </div>
+
+  <div id="footer"></div>
+
+  <div id="imageModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="modal-body">
+        <div class="modal-left">
+          <div class="modal-image-container">
+            <img id="modalImage" src="" alt="상세 이미지">
+          </div>
+        </div>
+        <div class="modal-right">
+          <h2 id="modalTitle"></h2>
+          <div class="modal-info">
+            <div class="info-group">
+              <span class="info-label">Gender</span>
+              <div id="genderBadgeContainer"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="image-grid-container">
-    </div>
+  <div id="version-container"></div>
 
-    <div id="footer"></div>
-    <div id="version-container"></div>
+  <script src="/static/js/character.js"></script>
+  <script type="module" src="/static/js/imageList.js"></script>
+  <script src="/static/js/header.js"></script>
+</body>
 
-    <script src="/static/js/character.js"></script>
-    <script type="module" src="/static/js/imageList.js"></script>
-    <script src="/static/js/header.js"></script>
-  </body>
 </html>

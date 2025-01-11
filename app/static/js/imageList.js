@@ -12,7 +12,24 @@ function setupEventListeners() {
             window.location.href = 'imageCreate.html';
         });
     }
+
+    // 모달 닫기 이벤트들
+    const modal = document.getElementById('imageModal');
+    const closeBtn = document.querySelector('.close');
+    
+    // X 버튼 클릭시 닫기
+    closeBtn.onclick = () => {
+        closeModal();
+    }
+
+    // 모달 외부 클릭시 닫기
+    window.onclick = (event) => {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
 }
+
 
 async function fetchImageList() {
     try {
@@ -66,13 +83,54 @@ function getEmotionBadge(emotion) {
     return `<span class="badge emotion-badge ${emotion}">${emotions[emotion] || emotion}</span>`;
 }
 
+function showModal(image) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalInfo = document.getElementById('modalInfo');
+
+    modalImage.src = image.imageUrl;
+    modalImage.onerror = () => {
+        modalImage.src = '/static/image/characterDefault.png';
+    };
+
+    const createdDate = new Date(image.imageCreatedAt);
+    const formattedDate = createdDate.toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
+
+    modalInfo.innerHTML = `
+        <h2>${image.imageName}</h2>
+        <div class="badges-container">
+            ${getGenderBadge(image.imageGender)}
+            ${getAgeBadge(image.imageAgeGroup)}
+            ${getEmotionBadge(image.imageEmotion)}
+        </div>
+        <p>생성일: ${formattedDate}</p>
+    `;
+
+    modal.style.display = "block";
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+}
+
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.style.display = "none";
+    }, 200); // transition 시간과 동일하게 설정
+}
+
 // 개별 이미지 요소를 생성하는 함수
 function createImageElement(image) {
     const imageItem = document.createElement('div');
     imageItem.className = 'image-item';
 
     imageItem.addEventListener('click', () => {
-        window.location.href = `/admin/image/detail/${image.imageId}`;
+        showModal(image);
     });
 
     const createdDate = new Date(image.imageCreatedAt);
