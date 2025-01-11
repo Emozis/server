@@ -11,7 +11,7 @@
     font-style: normal;
 }
 .header{
-    width: 100vw;
+    /* width: 100vw; */
     height: 90px;
     background-color: #8F62EA;
     display: flex;
@@ -85,4 +85,7 @@ a{
   #logout{
     height: 60%;
     padding-right: 6px;
+  }
+  #footer {
+    height: 100px;
   }

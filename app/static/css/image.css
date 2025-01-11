@@ -62,7 +62,7 @@ body {
 
 .image-grid-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 20px;
   padding: 20px 162px;
 }
@@ -72,6 +72,11 @@ body {
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.image-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .image-item img {
