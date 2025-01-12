@@ -10,7 +10,7 @@ router = APIRouter(
 # Privacy
 @router.get("/privacy")
 async def login_page():
-    return FileResponse("app/static/privacy.html")
+    return FileResponse("app/static/html/privacy.html")
 
 # Login
 @router.get("/admin/login")
