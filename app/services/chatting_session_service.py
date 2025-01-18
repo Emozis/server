@@ -74,13 +74,13 @@ class ChattingSessionService:
             user_message = UserMessage(**json.loads(data))
 
             # 사용자 메세지 저장
-            self.chat_log_service.create_chat_log_for_socket(chat.chat_id, None, user_id, "user", user_message.content)
+            self.chat_log_service.create_chat_log_for_socket(chat.chat_id, chat.character_id, user_id, "user", user_message.content)
 
             # 챗봇 답변 생성
             output = await self.generate_bot_response(user_message.content)
 
             self.gemini.add_history(user_message.content, output)
-            self.chat_log_service.create_chat_log_for_socket(chat.chat_id, chat.character_id, None, "character", output)
+            self.chat_log_service.create_chat_log_for_socket(chat.chat_id, chat.character_id, user_id, "character", output)
 
             logger.info(
                 f"💬 Chat exchanged in room {chat.chat_id}:\n"
