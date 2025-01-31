@@ -98,6 +98,8 @@ def get_settings():
     settings = config_class.load_and_validate()
     settings.DROP_ALL_TABLES = drop_tables
 
+    print(settings.OPENAI_API_KEY)
+
     return settings
 
 settings = get_settings()
