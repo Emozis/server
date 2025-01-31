@@ -9,14 +9,14 @@ from ..utils.constants import constants
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     env = "prod" if isinstance(settings, ProdConfig) else "dev"
-    env_emoji = "🚀" if env == "prod" else "🛠️ "
+    # env_emoji = "🚀" if env == "prod" else "🛠️ "
 
     if settings.DROP_ALL_TABLES:
         db_manager.drop_all_tables(confirmation=True)
         db_manager.create_all_tables()
         db_manager.execute_sql_files(constants.SQL_FOLDER_PATH)
 
-    logger.info(f"{env_emoji} Server is ready! Environment: {env.upper()} ✨")
+    # logger.info(f"{env_emoji} Server is ready! Environment: {env.upper()} ✨")
 
     yield
 
