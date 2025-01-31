@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "emogi"
-version = "1.0.4"
+version = "1.0.5"
 description = ""
 authors = ["MinkyoDev <minkyo.dev@gmail.com>"]
 package-mode = false
