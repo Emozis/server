@@ -161,7 +161,10 @@
                 return;
             }
 
-            ws = new WebSocket(getWebSocketUrl());
+            wsUrl = getWebSocketUrl();
+            console.log(wsUrl)
+
+            ws = new WebSocket(wsUrl);
 
             ws.onopen = function () {
                 const token = localStorage.getItem('token');
