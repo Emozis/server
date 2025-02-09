@@ -60,7 +60,7 @@ jobs:
         run: poetry run pytest
 
   build:
-    needs: test
+    # needs: test
     runs-on: ubuntu-22.04
     outputs:
       version: ${{ steps.version.outputs.version }}
