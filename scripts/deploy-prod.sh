@@ -105,10 +105,10 @@ sudo aws ssm get-parameter \
     --name "/emogi/ec2/env-variables" \
     --with-decryption \
     --query "Parameter.Value" \
-    --output text | sudo tee .env.test
+    --output text | sudo tee .env.prod > /dev/null
 
-echo "✅ .env.test file created:"
-ls -la .env.test
+echo "✅ .env.prod file created successfully"
+sudo ls -la .env.prod | awk '{print $1, $3, $4, $5}'
 
 echo "🚀 Starting Docker image update for ${CONTAINER_NAME} with tag ${IMAGE_TAG}..."
 
@@ -124,6 +124,7 @@ sudo docker run -d \
     --name ${CONTAINER_NAME} \
     -e ENV=${ENV} \
     -v ~/.aws:/root/.aws \
+    -v $(pwd)/.env.prod:/app/.env.prod \
     -p ${PORT}:${PORT} \
     --health-cmd='python -c "import urllib.request; urllib.request.urlopen(\"http://localhost:${PORT}/health\")"' \
     --health-interval=10s \
