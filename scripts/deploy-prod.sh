@@ -105,7 +105,7 @@ sudo aws ssm get-parameter \
     --name "/emogi/ec2/env-variables" \
     --with-decryption \
     --query "Parameter.Value" \
-    --output text | sudo tee .env.prod > /dev/null
+    --output text | sudo tee /home/runner/work/server/server/.env.prod > /dev/null
 
 echo "✅ .env.prod file created successfully"
 sudo ls -la .env.prod | awk '{print $1, $3, $4, $5}'
@@ -124,7 +124,7 @@ sudo docker run -d \
     --name ${CONTAINER_NAME} \
     -e ENV=${ENV} \
     -v ~/.aws:/root/.aws \
-    -v $(pwd)/.env.prod:/app/.env.prod \
+    -v /home/runner/work/server/server/.env.prod:/app/.env.prod \
     -p ${PORT}:${PORT} \
     --health-cmd='python -c "import urllib.request; urllib.request.urlopen(\"http://localhost:${PORT}/health\")"' \
     --health-interval=10s \
