@@ -100,6 +100,13 @@ INSTANCE_ID=$(aws ec2 describe-instances \
 
 # Commands to execute
 read -r -d '' COMMANDS << EOF
+cd ~
+aws ssm get-parameter \
+    --name "/emogi/ec2/env-variables" \
+    --with-decryption \
+    --query "Parameter.Value" \
+    --output text > .env.test
+
 echo "🚀 Starting Docker image update for ${CONTAINER_NAME} with tag ${IMAGE_TAG}..."
 
 # Pull new image
