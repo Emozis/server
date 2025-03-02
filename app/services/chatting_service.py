@@ -44,7 +44,20 @@ class ChattingService:
             )
         return chat
 
-    async def chatting(self, websocket: WebSocket, chat_id: int, room_manager: RoomManager):
+    async def chatting(self, websocket: WebSocket, chat_id: int, room_manager: RoomManager) -> None:
+        """
+        채팅 시작 전 소켓 연결 및 채팅 방, 권한 체크 메서드
+
+        권한 체크 완료 시 채팅 세션 시작
+
+        Args:
+            websocket (WebSocket): 연결된 웹소켓 객체
+            chat_id (int): 채팅방 id
+            room_manager (RoomManager): 채팅방 매니저
+        Returns:
+            None
+        Raises:
+        """
         room = room_manager.get_room(chat_id)
         await room.connect(websocket)
 

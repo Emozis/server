@@ -57,6 +57,22 @@ class ChattingSessionService:
         await self.send_socket_response("[EOS]", response_id)
 
         return output
+    
+    async def _send_greetings(self, chat: Chat, user_id: int) -> None:
+        """
+        채팅 시작 시 채팅 내역이 비어있다면 첫 인사 전송하는 메소드
+
+        Args:
+            chat (Chat): 채팅 방 객체
+            user_id (int): 채팅하는 유저 id
+        Returns:
+            None
+        """
+        if not chat.chat_logs:
+            response_id = self.room.get_next_response_id()
+            content = chat.character.character_greeting
+            await self.send_socket_response(content, response_id)
+            self.chat_log_service.create_chat_log_for_socket(chat.chat_id, chat.character_id, user_id, "character", content)
 
     async def send_socket_response(self, content: str, response_id: int):
         response = CharacterMessage(
@@ -67,7 +83,22 @@ class ChattingSessionService:
         ).model_dump_json()
         await self.room.broadcast(response)
 
-    async def handle_session(self, websocket: WebSocket, chat: Chat, user_id: int):
+    async def handle_session(self, websocket: WebSocket, chat: Chat, user_id: int) -> None:
+        """
+        메인 채팅 로직
+
+        첫 인사 전송 후 사용자의 입력까지 대기 후 답변 생성
+
+        Args:
+            websocket (WebSocket): 연결된 웹소켓 객체
+            chat (Chat): 채팅이 이루어지는 채팅방 객체
+            user_id (int): 채팅 중인 유저 id
+        Returns:
+            None
+        """
+        # 첫 채팅일 시 첫인사 전송
+        await self._send_greetings(chat, user_id)
+
         while True:
             # 사용자 메세지 입력
             data = await websocket.receive_text()
