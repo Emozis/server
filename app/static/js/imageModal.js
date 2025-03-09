@@ -144,7 +144,8 @@ function setupEmotionBadges(imageEmotion) {
         'B': '슬픔',
         'C': '우울/불안',
         'D': '버럭',
-        'E': '따분/까칠/도도'
+        'E': '따분',
+        'F': '까칠/도도'
     };
 
     const emotionBadgeContainer = document.getElementById('emotionBadgeContainer');

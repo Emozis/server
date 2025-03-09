@@ -207,8 +207,13 @@ body {
 }
 
 .emotion-badge.E {
-  background-color: #F3E5F5;  /* 연한 보라색 배경 - 따분/까칠/도도 */
+  background-color: #F3E5F5;  /* 연한 보라색 배경 - 따분 */
   color: #9C27B0;
+}
+
+.emotion-badge.F {
+  background-color: #E3F2FD;  /* 까칠/도도 */
+  color: #2196F3;
 }
 
 /* 모달 스타일 */
@@ -441,6 +446,11 @@ body {
 .modal-emotion-badge.active[data-emotion="E"] {
   background-color: #F3E5F5;
   color: #9C27B0;
+}
+
+.modal-emotion-badge.active[data-emotion="F"] {
+  background-color: #E3F2FD;
+  color: #2196F3;
 }
 
 

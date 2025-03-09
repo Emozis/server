@@ -104,7 +104,8 @@ function getEmotionBadge(emotion) {
         'B': '슬픔',
         'C': '우울/불안',
         'D': '버럭',
-        'E': '따분/까칠/도도'
+        'E': '따분',
+        'F': '까칠/도도'
     };
     return `<span class="badge emotion-badge ${emotion}">${emotions[emotion] || emotion}</span>`;
 }
