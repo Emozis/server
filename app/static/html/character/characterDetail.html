@@ -3,30 +3,105 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/characterCheck.css" />
     <link rel="stylesheet" href="/static/css/characterDetail.css" />
-    <title>Document</title>
+    <link rel="icon" type="image/png" href="/static/image/logo.png" />
+    <title>Character | EMOG!</title>
   </head>
   <body>
     <div id="header-container"></div>
-    <div class="profile-container">
-      <div class="profile-image"><img class="profile" src=""></div>
-      <div class="profile-info">
-        <ul class="info">
-          <li><label>이름</label><input class="info-input" type="text"></li>
-          <li><label>성별</label><input class="info-input" type="text"></li>
-          <li><label>성격</label><input class="info-input" type="text"></li>
-          <li><label>상세내용</label><input class="info-input" type="text"></li>
-          <li><label>관계</label><input class="info-input" type="text"></li>
-          <li><label>만든날짜</label><input class="info-input" type="text"></li>
-          <li><label>만든사람</label><input class="info-input" type="text"></li>
-        </ul>
-      </div>
+    <div class="category">
+      <ul class="sub-header">
+        <li class="category-item active" data-link="character">캐릭터 목록</li>
+        <li class="category-item" data-link="character/create">캐릭터 생성</li>
+      </ul>
     </div>
-    <div class="button-container">
-      <button class="modifyBtn">수정</button>
-      <button class="deleteBtn">삭제</button>
+
+    <div class="profile-container">
+      <section class="image-container">
+        <img
+          id="character-image"
+          class="profile"
+          src="/static/image/characterDefault.png"
+          alt="프로필 이미지"
+        />
+      </section>
+      <section class="profile-box">
+        <div class="name-box">
+          <div class="name">
+            <span id="character-name"></span>
+            <div id="character-status" class="tag">public</div>
+          </div>
+          <div class="button-container">
+            <button class="modifyBtn">
+              <img src="/static/image/modify.png" alt="수정" class="btn-icon" />
+            </button>
+            <button class="deleteBtn">
+              <img src="/static/image/delete.png" alt="삭제" class="btn-icon" />
+            </button>
+          </div>
+        </div>
+        <p id="character-greeting" class="short-profile"></p>
+        <div class="count-box">
+          <div class="like-cnt">
+            <div id="character-like-count" class="num">100</div>
+            <div class="under-text">Likes</div>
+          </div>
+          <div class="use-cnt">
+            <div id="character-use-count" class="num">2013</div>
+            <div class="under-text">Used</div>
+          </div>
+          <div class="update-date">
+            <div id="character-update-date" class="num">25-1-10</div>
+            <div class="under-text">Last Update</div>
+          </div>
+        </div>
+        <hr />
+        <div class="basic-info">
+          <p>Basic Information</p>
+          <ul class="profile-list">
+            <li>
+              <span class="info">
+                Gender :
+              </span>
+              <span id="character-gender">남성</span>
+            </li>
+            <li>
+              <span class="info">
+                Personality :
+              </span>
+              <span id="character-personality">친근한, 노는게 좋은</span>
+            </li>
+            <li>
+              <span class="info">
+                Relationships :
+              </span>
+              <span id="character-relationships">친구, 비밀친구</span>
+            </li>
+            <li>
+              <span class="info">
+                Created At :
+              </span>
+              <span id="character-creator">Emozi</span>
+            </li>
+          </ul>
+        </div>
+        <div class="discription">
+          <p>Character Description</p>
+          <div id="character-description">뽀로로 간단 설명입니다.</div>
+        </div>
+        <div class="char-detail">
+          <p>Character Detail</p>
+          <div id="character-detail">
+            뽀로로 간단 설명입니다. 이렇게 작성되는게 맞을껍니다. 뽀로로 간단
+            설명입니다. 이렇게 작성되는게 맞을껍니다.뽀로로 간단 설명입니다.
+            이렇게 작성되는게 맞을껍니다.
+          </div>
+        </div>
+      </section>
     </div>
 
     <script src="/static/js/character.js"></script>
+    <script type="module" src="/static/js/characterDetail.js"></script>
   </body>
 </html>
