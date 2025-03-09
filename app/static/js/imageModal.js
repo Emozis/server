@@ -106,6 +106,7 @@ function setupGenderBadges(imageGender) {
         <div class="modal-gender-group">
             <span class="modal-gender-badge ${imageGender === 'female' ? 'active' : ''}" data-gender="female">여성</span>
             <span class="modal-gender-badge ${imageGender === 'male' ? 'active' : ''}" data-gender="male">남성</span>
+            <span class="modal-gender-badge ${imageGender === 'other' ? 'active' : ''}" data-gender="other">기타</span>
         </div>
     `;
 

@@ -361,6 +361,11 @@ body {
   color: #2D7FFF;
 }
 
+.modal-gender-badge.active[data-gender="other"] {
+  background-color: #E0E0E0;
+  color: #616161;
+}
+
 /* 모달 내 나이대 배지 그룹 */
 .modal-age-group {
   display: flex;
