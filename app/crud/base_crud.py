@@ -99,4 +99,4 @@ class BaseCRUD(Generic[ModelType]):
             skip: 건너뛸 레코드 수
             limit: 조회할 최대 레코드 수
         """
-        return self.db.query(self.model).offset(skip).limit(limit).all()
+        return self.db.query(self.model).offset(skip).all()
