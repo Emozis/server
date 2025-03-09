@@ -54,10 +54,12 @@ class ImageEmotionEnum(str, Enum):
     # D 그룹: 버럭
     ANGRY = "D"
     
-    # E 그룹: 따분/까칠/도도
+    # E 그룹: 따분
     BORED = "E"
-    GRUMPY = "E"
-    ARROGANT = "E"
+
+    # F 그룹: 까칠/도도
+    GRUMPY = "F"
+    ARROGANT = "F"
 
     @classmethod
     def get_emotion_groups(cls) -> dict[str, list[str]]:
