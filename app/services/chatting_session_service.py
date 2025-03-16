@@ -54,7 +54,7 @@ class ChattingSessionService:
             await self.send_socket_response(char, response_id)
                 # await asyncio.sleep(0.2)
 
-        await self.send_socket_response("[EOS]", response_id)
+        await self.send_socket_response("[EOS]", response_id, chatType="end")
 
         return output
     
@@ -71,15 +71,16 @@ class ChattingSessionService:
         if not chat.chat_logs:
             response_id = self.room.get_next_response_id()
             content = chat.character.character_greeting
-            await self.send_socket_response(content, response_id)
+            await self.send_socket_response(content, response_id, chatType="greeting")
             self.chat_log_service.create_chat_log_for_socket(chat.chat_id, chat.character_id, user_id, "character", content)
 
-    async def send_socket_response(self, content: str, response_id: int):
+    async def send_socket_response(self, content: str, response_id: int, chatType: str = "chat"):
         response = CharacterMessage(
             type="character",
             characterName=self.chat.character.character_name,
             responseId=response_id,
-            content=content
+            content=content,
+            chatType=chatType,
         ).model_dump_json()
         await self.room.broadcast(response)
 

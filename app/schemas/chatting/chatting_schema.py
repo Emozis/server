@@ -20,3 +20,4 @@ class CharacterMessage(BaseModel):
     characterName: str
     responseId: int
     content: str
+    chatType: str = "chat"
