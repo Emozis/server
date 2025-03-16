@@ -25,7 +25,6 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # app.mount("/docs", StaticFiles(directory="app/resources/docs"), name="project_docs")
     app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
     router_scanner = RouterScanner(app)

@@ -35,7 +35,7 @@ class ChatMapper:
             user=user_dto,
             character=character_dto,
             last_log=last_log,
-            chat_create_at=model.chat_create_at,
+            chat_create_at=model.created_at,
             last_message_at=model.last_message_at
         )
 

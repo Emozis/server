@@ -1,16 +1,17 @@
-from sqlalchemy import Column, BigInteger, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, BigInteger, ForeignKey, TIMESTAMP, String
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from ..database.base import Base
+from .base import TimeStampedModel
 
 
-class Chat(Base):
+class Chat(TimeStampedModel):
     __tablename__ = "chats"
 
     chat_id = Column(BigInteger, primary_key=True, autoincrement=True)
-    chat_create_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+    name = Column(String(255), nullable=True)
+
     last_message_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
 
     user_id = Column(BigInteger, ForeignKey('users.user_id'), nullable=True)
