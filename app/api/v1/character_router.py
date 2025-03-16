@@ -43,7 +43,7 @@ async def get_public_characters(chararter_service: CharacterServiceDep) -> list[
 
 @router.get(
     path="/rank",
-    description="사용 횟수가 높은 상위 5개의 공개된 캐릭터를 조회하는 API입니다.",
+    description="사용 횟수가 높은 상위 10개의 공개된 캐릭터를 조회하는 API입니다.",
     responses={
         200: {"model": list[CharacterResponse], "description": "Successful Response"},
         500: {"model": ErrorResponse, "description": "Internal Server Error"}
@@ -51,7 +51,7 @@ async def get_public_characters(chararter_service: CharacterServiceDep) -> list[
 )
 @handle_exceptions
 async def get_top_used_public_characters(chararter_service: CharacterServiceDep) -> list[CharacterResponse]:
-    return chararter_service.get_top_used_public_characters(limit=5)
+    return chararter_service.get_top_used_public_characters(limit=10)
 
 @router.get(
     path="/me",
